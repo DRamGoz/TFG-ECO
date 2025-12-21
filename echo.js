@@ -7,7 +7,7 @@ const NUM_VERTICES_MIN = 15;
 const NUM_VERTICES_MAX = 120;
 const RADIO_MIN = 10;
 const RADIO_MAX = 100;
-const ALPHA_COLOR = 60;
+const ALPHA_COLOR = random(20,255);
 const RUEDO_MOVIMIENTO = 20;
 const CRECIMIENTO = 0.5;
 
@@ -130,22 +130,3 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
