@@ -28,7 +28,8 @@ function cargarDatos() {
         if (!idsExistentes.has(d.timestamp)) { // si no está ya
           let ev = new EventoVisual(d);
           // Asignamos el color aqui
-          ev.color = color(255,0,0,200); // rojo
+          ev.color = color(random(255), random(255), random(255), 180);// color random
+
           entidades.push(ev);
           idsExistentes.add(d.timestamp);
         }
@@ -75,6 +76,7 @@ class EventoVisual {
     this.noiseOffsetY += 0.005;
   }
 }
+
 
 
 
