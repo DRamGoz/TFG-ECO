@@ -16,9 +16,6 @@ function setup() {
 function draw() {
  background(240);
 
-fill(0);
-textSize(16);
-text("ECHO — eventos registrados: " + entidades.length, 20, 20);
 
 
   for (let g of gotas) {
@@ -58,7 +55,18 @@ class GotaPintura {
 
     this.creciendo = true;
   }
-
+ // TEXTO AISLADO
+  push();
+  fill(0);
+  noStroke();
+  textSize(16);
+  textAlign(LEFT, TOP);
+  text(
+    "ECHO — eventos registrados: " + entidades.length,
+    20,
+    20
+  );
+  pop();
   mostrar() {
     if (this.creciendo) {
       this.radio += 0.8;
@@ -90,6 +98,7 @@ class GotaPintura {
     endShape(CLOSE);
   }
 }
+
 
 
 
