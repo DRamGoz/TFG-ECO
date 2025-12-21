@@ -46,6 +46,7 @@ class EventoVisual {
     // offsets para ruido de Perlin
     this.noiseOffsetX = random(1000);
     this.noiseOffsetY = random(1000);
+    this.color = color(52, 180);
   }
 
   mostrar() {
@@ -53,8 +54,8 @@ class EventoVisual {
     this.r = lerp(this.r, this.maxR, 0.05);
 
     // movimiento suave usando Perlin noise
-    let nx = noise(this.noiseOffsetX) * 10 - 5; // -5 a +5
-    let ny = noise(this.noiseOffsetY) * 10 - 5;
+    let nx = noise(this.noiseOffsetX) * 20 - 10; // -5 a +5
+    let ny = noise(this.noiseOffsetY) * 20 - 10;
 
     let x = this.baseX + nx;
     let y = this.baseY + ny;
@@ -71,6 +72,7 @@ class EventoVisual {
     this.noiseOffsetY += 0.005;
   }
 }
+
 
 
 
