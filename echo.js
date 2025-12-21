@@ -19,7 +19,7 @@ function setup() {
 }
 
 function draw() {
-  background(245);
+  background(245,50);
 
   // Contador de eventos
   fill(0);
@@ -86,6 +86,7 @@ class EventoVisual {
     this.noiseOffsetY += 0.005;
   }
 }
+
 
 
 
