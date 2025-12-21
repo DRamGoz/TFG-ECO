@@ -26,7 +26,10 @@ function cargarDatos() {
     .then(datos => {
       datos.forEach(d => {
         if (!idsExistentes.has(d.timestamp)) { // si no está ya
-          entidades.push(new EventoVisual(d));
+          let ev = new EventoVisual(d);
+          // Asignamos el color aqui
+          ev.color = color(255,0,0,200); // rojo
+          entidades.push(ev);
           idsExistentes.add(d.timestamp);
         }
       });
@@ -46,14 +49,10 @@ class EventoVisual {
     // offsets para ruido de Perlin
     this.noiseOffsetX = random(1000);
     this.noiseOffsetY = random(1000);
-    
+    this.color = null; // se asigna al crear la identidad
   }
 
   mostrar() {
-    if (!this.color) {
-      // Inicializar color la primera vez que se dibuja
-      this.color = color(255, 0, 0, 200); // rojo semi-transparente
-    }
     // crecer suavemente
     this.r = lerp(this.r, this.maxR, 0.05);
 
@@ -67,7 +66,7 @@ class EventoVisual {
     // verificar que no sea NaN
     if (!isNaN(x) && !isNaN(y) && !isNaN(this.r)) {
       noStroke();
-      /*fill(this.color);*/
+      fill(this.color);
       ellipse(x, y, this.r);
     }
 
@@ -76,6 +75,7 @@ class EventoVisual {
     this.noiseOffsetY += 0.005;
   }
 }
+
 
 
 
