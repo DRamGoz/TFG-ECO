@@ -1,7 +1,9 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpnsHnDcAIKQ-SWU8FoIpdu-PUwO0KsdIk3klratrjgCHfskg/exec";
 
 
+
 let entidades = [];
+let idsExistentes = new Set(); // para evitar duplicados
 
 function setup() {
   createCanvas(600, 400);
@@ -23,15 +25,13 @@ function cargarDatos() {
   fetch(API_URL)
     .then(r => r.json())
     .then(datos => {
-      reconstruirEntidades(datos);
+      datos.forEach(d => {
+        if (!idsExistentes.has(d.timestamp)) { // si no está ya
+          entidades.push(new EventoVisual(d));
+          idsExistentes.add(d.timestamp);
+        }
+      });
     });
-}
-
-function reconstruirEntidades(datos) {
-  entidades = [];
-  datos.forEach(d => {
-    entidades.push(new EventoVisual(d));
-  });
 }
 
 class EventoVisual {
@@ -49,3 +49,4 @@ class EventoVisual {
     ellipse(this.x, this.y, this.r);
   }
 }
+
