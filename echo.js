@@ -79,25 +79,25 @@ function cargarDatos() {
 // ==========================
 class GotaPintura {
   constructor() {
-    // Posición inicial dentro del marco A4
+    // Posición dentro del marco A4
     this.x = random(marcoX + RADIO_MAX, marcoX + marcoW - RADIO_MAX);
-    this.y = random(marcoY + RADIO_MAX, marcoY + marcoH / 3); // empiezan arriba del marco
+    this.y = random(marcoY + RADIO_MAX, marcoY + marcoH - RADIO_MAX);
 
     this.radio = 0;
     this.radioFinal = random(RADIO_MIN, RADIO_MAX);
 
-    this.pasos = int(random(20, 30));
+    // Más vértices para suavizar
+    this.pasos = int(random(20, 30)); 
     this.offset = random(1000);
 
     this.creciendo = true;
 
+    // Color aleatorio con alpha
     this.color = color(random(255), random(255), random(255), ALPHA_COLOR);
 
+    // Para movimiento tipo Perlin
     this.noiseX = random(1000);
     this.noiseY = random(1000);
-
-    // Velocidad de "chorreo"
-    this.velaY = random(0.2, 1.0);
   }
 
   mostrar() {
@@ -110,39 +110,31 @@ class GotaPintura {
       }
     }
 
-    // Movimiento tipo Perlin horizontal suave
+    // Movimiento suave tipo Perlin
     let nx = noise(this.noiseX) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO / 2;
+    let ny = noise(this.noiseY) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO / 2;
     let x = this.x + nx;
+    let y = this.y + ny;
 
-    // "Chorreo" vertical descendente
-    this.y += this.velaY;
-    if (this.y + this.radio > marcoY + marcoH) {
-      this.y = marcoY + marcoH - this.radio; // limitar al marco
-    }
-
-    let y = this.y;
-
-    // Dibujar forma irregular suavizada
+    // Dibujar forma irregular pero suavizada
     noStroke();
     fill(this.color);
     beginShape();
     for (let i = 0; i < this.pasos; i++) {
       let ang = map(i, 0, this.pasos, 0, TWO_PI);
+      // Reducir rango de ruido para bordes más suaves
       let ruido = noise(cos(ang) + this.offset, sin(ang) + this.offset);
       let r = this.radio * map(ruido, 0, 1, 0.9, 1.1);
       let px = x + cos(ang) * r;
       let py = y + sin(ang) * r;
-      curveVertex(px, py);
+      curveVertex(px, py); // suaviza el contorno
     }
     endShape(CLOSE);
 
-    // Actualizar offsets
     this.noiseX += 0.005;
     this.noiseY += 0.005;
   }
 }
-
-
 
 
 
