@@ -79,14 +79,14 @@ function cargarDatos() {
 // ==========================
 class GotaPintura {
   constructor() {
-    // Generar posición aleatoria **dentro del marco**
+    // Posición inicial dentro del marco A4
     this.x = random(marcoX + RADIO_MAX, marcoX + marcoW - RADIO_MAX);
-    this.y = random(marcoY + RADIO_MAX, marcoY + marcoH - RADIO_MAX);
+    this.y = random(marcoY + RADIO_MAX, marcoY + marcoH / 3); // empiezan arriba del marco
 
     this.radio = 0;
     this.radioFinal = random(RADIO_MIN, RADIO_MAX);
 
-    this.pasos = int(random(NUM_VERTICES_MIN, NUM_VERTICES_MAX));
+    this.pasos = int(random(20, 30));
     this.offset = random(1000);
 
     this.creciendo = true;
@@ -95,9 +95,13 @@ class GotaPintura {
 
     this.noiseX = random(1000);
     this.noiseY = random(1000);
+
+    // Velocidad de "chorreo"
+    this.velaY = random(0.2, 1.0);
   }
 
   mostrar() {
+    // Crecimiento gradual
     if (this.creciendo) {
       this.radio += CRECIMIENTO;
       if (this.radio >= this.radioFinal) {
@@ -106,31 +110,37 @@ class GotaPintura {
       }
     }
 
-    // Movimiento tipo Perlin
+    // Movimiento tipo Perlin horizontal suave
     let nx = noise(this.noiseX) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO / 2;
-    let ny = noise(this.noiseY) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO / 2;
     let x = this.x + nx;
-    let y = this.y + ny;
 
-    // Dibujar forma irregular
+    // "Chorreo" vertical descendente
+    this.y += this.velaY;
+    if (this.y + this.radio > marcoY + marcoH) {
+      this.y = marcoY + marcoH - this.radio; // limitar al marco
+    }
+
+    let y = this.y;
+
+    // Dibujar forma irregular suavizada
     noStroke();
     fill(this.color);
     beginShape();
     for (let i = 0; i < this.pasos; i++) {
       let ang = map(i, 0, this.pasos, 0, TWO_PI);
       let ruido = noise(cos(ang) + this.offset, sin(ang) + this.offset);
-      let r = this.radio * map(ruido, 0, 1, 0.7, 1.3);
+      let r = this.radio * map(ruido, 0, 1, 0.9, 1.1);
       let px = x + cos(ang) * r;
       let py = y + sin(ang) * r;
-      vertex(px, py);
+      curveVertex(px, py);
     }
     endShape(CLOSE);
 
+    // Actualizar offsets
     this.noiseX += 0.005;
     this.noiseY += 0.005;
   }
 }
-
 
 
 
