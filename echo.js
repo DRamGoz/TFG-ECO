@@ -1,4 +1,4 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbwnHiB9It1VjVa0WMqrehaJCEnBNOyNJaGwxuXJKnBw32aWi0vyF1KY66RTtITA7xqEOA/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpnsHnDcAIKQ-SWU8FoIpdu-PUwO0KsdIk3klratrjgCHfskg/exec";
 
 let entidades = [];
 let totalDatos = 0;
@@ -58,3 +58,4 @@ class EventoVisual {
     ellipse(this.x, this.y, this.r);
   }
 }
+
