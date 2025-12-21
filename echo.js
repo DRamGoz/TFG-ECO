@@ -31,7 +31,6 @@ function draw() {
   pop();
 }
 
-}
 
 /* =========================
    CARGA DE DATOS (UNA VEZ)
@@ -97,6 +96,7 @@ class GotaPintura {
     endShape(CLOSE);
   }
 }
+
 
 
 
