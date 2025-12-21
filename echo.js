@@ -66,10 +66,11 @@ class EventoVisual {
 
     // dibujar círculo
     noStroke();
-    fill(0, 180);
+    fill(255,0,0, 180);
     ellipse(x, y, this.r);
   }
 }
+
 
 
 
