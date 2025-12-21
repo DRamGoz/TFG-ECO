@@ -44,7 +44,7 @@ function draw() {
   background(0, 40);
 
   // Dibujar marco A4
-  fill(255);
+  fill(255,255,255,220);
   stroke(100);
   strokeWeight(2);
   rect(marcoX, marcoY, marcoW, marcoH);
@@ -130,6 +130,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
