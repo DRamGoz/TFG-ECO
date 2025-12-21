@@ -1,50 +1,87 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpnsHnDcAIKQ-SWU8FoIpdu-PUwO0KsdIk3klratrjgCHfskg/exec";
 
-let entidades = [];
-let idsExistentes = new Set(); // para evitar duplicados
+
+
+let gotas = [];
+let idsExistentes = new Set();
 
 function setup() {
-  createCanvas(600, 400);
-  cargarDatos();
-  setInterval(cargarDatos, 2000); // cada 2 segundos
+  createCanvas(800, 600);
+  background(245);
+
+  // Cargamos SOLO una vez al iniciar
+  cargarDatosIniciales();
 }
 
 function draw() {
   background(245);
 
-  fill(0);
-  textSize(14);
-  text("ECHO — eventos registrados: " + entidades.length, 20, 20);
-
-  entidades.forEach(e => e.mostrar());
+  for (let g of gotas) {
+    g.mostrar();
+  }
 }
 
-function cargarDatos() {
+/* =========================
+   CARGA DE DATOS (UNA VEZ)
+   ========================= */
+function cargarDatosIniciales() {
   fetch(API_URL)
     .then(r => r.json())
     .then(datos => {
       datos.forEach(d => {
-        if (!idsExistentes.has(d.timestamp)) { // si no está ya
-          entidades.push(new EventoVisual(d));
+        if (!idsExistentes.has(d.timestamp)) {
+          gotas.push(new GotaPintura());
           idsExistentes.add(d.timestamp);
         }
       });
     });
 }
 
-class EventoVisual {
-  constructor(data) {
-    this.x = random(50, width - 50);
-    this.y = random(50, height - 50);
-    this.r = 0;
-    this.maxR = random(12, 24);
+/* =========================
+   CLASE GOTA DE PINTURA
+   ========================= */
+class GotaPintura {
+  constructor() {
+    this.x = random(80, width - 80);
+    this.y = random(80, height - 80);
+
+    this.radio = 2;
+    this.radioFinal = random(30, 55);
+
+    this.pasos = int(random(12, 20));
+    this.offset = random(1000);
+
+    this.creciendo = true;
   }
 
   mostrar() {
-    this.r = lerp(this.r, this.maxR, 0.05);
+    if (this.creciendo) {
+      this.radio += 0.6;
+      if (this.radio >= this.radioFinal) {
+        this.radio = this.radioFinal;
+        this.creciendo = false; // 🔒 se queda fija
+      }
+    }
+
     noStroke();
     fill(0, 180);
-    ellipse(this.x, this.y, this.r);
+
+    beginShape();
+    for (let i = 0; i < this.pasos; i++) {
+      let ang = map(i, 0, this.pasos, 0, TWO_PI);
+
+      let ruido = noise(
+        cos(ang) + this.offset,
+        sin(ang) + this.offset
+      );
+
+      let r = this.radio * map(ruido, 0, 1, 0.7, 1.3);
+
+      let px = this.x + cos(ang) * r;
+      let py = this.y + sin(ang) * r;
+
+      vertex(px, py);
+    }
+    endShape(CLOSE);
   }
 }
-
