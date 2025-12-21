@@ -1,10 +1,10 @@
 body {
   margin: 0;
   display: flex;
-  .btn(color:red);
   justify-content: center;
   align-items: center;
   height: 100vh;
   background: #111;
 }
+
 
