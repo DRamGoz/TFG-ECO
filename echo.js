@@ -8,7 +8,7 @@ const NUM_VERTICES_MAX = 20;
 const RADIO_MIN = 20;
 const RADIO_MAX = 50;
 const ALPHA_COLOR = 180;
-const RUEDO_MOVIMIENTO = 10;
+const RUEDO_MOVIMIENTO = 20;
 const CRECIMIENTO = 0.5;
 
 // Proporción A4: 210 / 297 ≈ 0.707
@@ -130,6 +130,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
