@@ -54,13 +54,13 @@ class EventoVisual {
     this.baseY = random(50, height - 50);
 
     this.r = 0;
-    this.maxR = random(12, 50);
+    this.maxR = random(12, 100);
 
     this.noiseOffsetX = random(1000);
     this.noiseOffsetY = random(1000);
 
     // Color aleatorio para cada entidad
-    this.color = color(random(255), random(255), random(255), 180);
+    this.color = color(random(255), random(255), random(255), 50);
   }
 
   mostrar() {
@@ -86,6 +86,7 @@ class EventoVisual {
     this.noiseOffsetY += 0.005;
   }
 }
+
 
 
 
