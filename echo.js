@@ -50,7 +50,7 @@ class GotaPintura {
     this.x = random(80, width - 80);
     this.y = random(80, height - 80);
 
-    this.radio = 2;
+    this.radio = 10;
     this.radioFinal = random(30, 55);
 
     this.pasos = int(random(12, 20));
@@ -61,7 +61,7 @@ class GotaPintura {
 
   mostrar() {
     if (this.creciendo) {
-      this.radio += 0.6;
+      this.radio += 0.8;
       if (this.radio >= this.radioFinal) {
         this.radio = this.radioFinal;
         this.creciendo = false; // 🔒 se queda fija
@@ -90,5 +90,6 @@ class GotaPintura {
     endShape(CLOSE);
   }
 }
+
 
 
