@@ -16,11 +16,21 @@ function setup() {
 function draw() {
  background(240);
 
-
-
+  // DIBUJO DE GOTAS
   for (let g of gotas) {
     g.mostrar();
   }
+
+  // TEXTO AISLADO, fuera de la clase
+  push();
+  fill(0);
+  noStroke();
+  textSize(16);
+  textAlign(LEFT, TOP);
+  text("ECHO — eventos registrados: " + gotas.length, 20, 20);
+  pop();
+}
+
 }
 
 /* =========================
@@ -55,18 +65,7 @@ class GotaPintura {
 
     this.creciendo = true;
   }
- // TEXTO AISLADO
-  push();
-  fill(0);
-  noStroke();
-  textSize(16);
-  textAlign(LEFT, TOP);
-  text(
-    "ECHO — eventos registrados: " + entidades.length,
-    20,
-    20
-  );
-  pop();
+ 
   mostrar() {
     if (this.creciendo) {
       this.radio += 0.8;
@@ -98,6 +97,7 @@ class GotaPintura {
     endShape(CLOSE);
   }
 }
+
 
 
 
