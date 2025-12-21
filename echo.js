@@ -1,4 +1,3 @@
-console.log("ECHO NUEVO — GOTAS DE PINTURA ACTIVAS");
 
 const API_URL = "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpnsHnDcAIKQ-SWU8FoIpdu-PUwO0KsdIk3klratrjgCHfskg/exec";
 
@@ -40,15 +39,38 @@ class EventoVisual {
     this.y = random(50, height - 50);
     this.r = 0;
     this.maxR = random(12, 24);
+    
+    // offsets para Perlin noise
+    this.noiseOffsetX = random(1000);
+    this.noiseOffsetY = random(1000);
+
   }
 
   mostrar() {
+    //crecer suavemente
     this.r = lerp(this.r, this.maxR, 0.05);
+    // movimiento suave usando ruido de Perlin
+    let nx = noise(this.noiseOffsetX) * 10 - 5; // -5 a +5
+    let ny = noise(this.noiseOffsetY) * 10 - 5;
+
+    let x = this.baseX + nx;
+    let y = this.baseY + ny;
+
+     // actualizar offsets para el siguiente frame
+    this.noiseOffsetX += 0.01;
+    this.noiseOffsetY += 0.01;
+    
+    /*noStroke();
+    fill(0, 180);
+    ellipse(this.x, this.y, this.r);*/
+
+    // dibujar círculo
     noStroke();
     fill(0, 180);
-    ellipse(this.x, this.y, this.r);
+    ellipse(x, y, this.r);
   }
 }
+
 
 
 
