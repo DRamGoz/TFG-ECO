@@ -35,41 +35,43 @@ function cargarDatos() {
 
 class EventoVisual {
   constructor(data) {
-    this.x = random(50, width - 50);
-    this.y = random(50, height - 50);
+    // posición base fija
+    this.baseX = random(50, width - 50);
+    this.baseY = random(50, height - 50);
+
+    // radio inicial y máximo
     this.r = 0;
     this.maxR = random(12, 24);
-    
-    // offsets para Perlin noise
+
+    // offsets para ruido de Perlin
     this.noiseOffsetX = random(1000);
     this.noiseOffsetY = random(1000);
-
   }
 
   mostrar() {
-    //crecer suavemente
+    // crecer suavemente
     this.r = lerp(this.r, this.maxR, 0.05);
-    // movimiento suave usando ruido de Perlin
+
+    // movimiento suave usando Perlin noise
     let nx = noise(this.noiseOffsetX) * 10 - 5; // -5 a +5
     let ny = noise(this.noiseOffsetY) * 10 - 5;
 
     let x = this.baseX + nx;
     let y = this.baseY + ny;
 
-     // actualizar offsets para el siguiente frame
-    this.noiseOffsetX += 0.01;
-    this.noiseOffsetY += 0.01;
-    
-    /*noStroke();
-    fill(0, 180);
-    ellipse(this.x, this.y, this.r);*/
+    // verificar que no sea NaN
+    if (!isNaN(x) && !isNaN(y) && !isNaN(this.r)) {
+      noStroke();
+      fill(0, 180);
+      ellipse(x, y, this.r);
+    }
 
-    // dibujar círculo
-    noStroke();
-    fill(0,180);
-    ellipse(this.x, this.y, this.r);
+    // actualizar offsets para el siguiente frame
+    this.noiseOffsetX += 0.005;
+    this.noiseOffsetY += 0.005;
   }
 }
+
 
 
 
