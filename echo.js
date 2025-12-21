@@ -1,6 +1,6 @@
+console.log("ECHO NUEVO — GOTAS DE PINTURA ACTIVAS");
+
 const API_URL = "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpnsHnDcAIKQ-SWU8FoIpdu-PUwO0KsdIk3klratrjgCHfskg/exec";
-
-
 
 let gotas = [];
 let idsExistentes = new Set();
@@ -85,3 +85,4 @@ class GotaPintura {
     endShape(CLOSE);
   }
 }
+
