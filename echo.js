@@ -1,12 +1,12 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpnsHnDcAIKQ-SWU8FoIpdu-PUwO0KsdIk3klratrjgCHfskg/exec";
 
+
 let entidades = [];
-let totalDatos = 0;
 
 function setup() {
   createCanvas(600, 400);
   cargarDatos();
-  setInterval(cargarDatos, 2000);
+  setInterval(cargarDatos, 2000); // cada 2 segundos
 }
 
 function draw() {
@@ -24,29 +24,20 @@ function cargarDatos() {
     .then(r => r.json())
     .then(datos => {
       reconstruirEntidades(datos);
-      totalDatos = datos.length;
     });
 }
 
-
 function reconstruirEntidades(datos) {
-  console.log("DATOS RECIBIDOS:", datos);
-
   entidades = [];
   datos.forEach(d => {
     entidades.push(new EventoVisual(d));
   });
-
-  console.log("ENTIDADES CREADAS:", entidades.length);
 }
-
-
-// ===== CLASE VISUAL =====
 
 class EventoVisual {
   constructor(data) {
     this.x = random(50, width - 50);
-    this.y = random(80, height - 50);
+    this.y = random(50, height - 50);
     this.r = 0;
     this.maxR = random(12, 24);
   }
@@ -58,4 +49,3 @@ class EventoVisual {
     ellipse(this.x, this.y, this.r);
   }
 }
-
