@@ -3,13 +3,13 @@ console.log("ECHO — Gotas de pintura dentro de marco A4");
 // ==========================
 // CONFIGURACIÓN
 // ==========================
-const NUM_VERTICES_MIN = 12;
-const NUM_VERTICES_MAX = 20;
-const RADIO_MIN = 20;
-const RADIO_MAX = 50;
-const ALPHA_COLOR = 180;
-const RUEDO_MOVIMIENTO = 10;
-const CRECIMIENTO = 0.5;
+const NUM_VERTICES_MIN = 3;
+const NUM_VERTICES_MAX = 50;
+const RADIO_MIN = 10;
+const RADIO_MAX = 150;
+const ALPHA_COLOR = 100;
+const RUEDO_MOVIMIENTO = 20;
+const CRECIMIENTO = 0.3;
 
 // Proporción A4: 210 / 297 ≈ 0.707
 const A4_RATIO = 210 / 297;
@@ -130,6 +130,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
