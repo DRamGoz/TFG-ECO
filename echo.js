@@ -3,7 +3,7 @@ console.log("ECHO — Gotas de pintura dentro de marco A4");
 // ==========================
 // CONFIGURACIÓN
 // ==========================
-const NUM_VERTICES_MIN = 12;
+const NUM_VERTICES_MIN = 40;
 const NUM_VERTICES_MAX = 120;
 const RADIO_MIN = 20;
 const RADIO_MAX = 50;
@@ -130,6 +130,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
