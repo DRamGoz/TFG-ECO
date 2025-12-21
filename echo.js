@@ -41,7 +41,7 @@ class EventoVisual {
 
     // radio inicial y máximo
     this.r = 0;
-    this.maxR = random(12, 24);
+    this.maxR = random(12, 50);
 
     // offsets para ruido de Perlin
     this.noiseOffsetX = random(1000);
@@ -71,6 +71,7 @@ class EventoVisual {
     this.noiseOffsetY += 0.005;
   }
 }
+
 
 
 
