@@ -50,7 +50,7 @@ function draw() {
   rect(marcoX, marcoY, marcoW, marcoH);
 
   // Contador
-  fill(0);
+  fill(255);
   noStroke();
   textSize(16);
   text("ECHO — eventos registrados: " + gotas.length, 20, 20);
@@ -130,6 +130,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
