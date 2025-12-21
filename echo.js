@@ -23,7 +23,7 @@ let idsExistentes = new Set();
 let marcoX, marcoY, marcoW, marcoH;
 
 function setup() {
-  createCanvas(800, 600);
+  createCanvas(windowWidth, windowHeight);
 
   // Calcular marco A4 centrado
   if (width / height > A4_RATIO) {
@@ -130,6 +130,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
