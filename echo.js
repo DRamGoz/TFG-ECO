@@ -41,7 +41,7 @@ function setup() {
 }
 
 function draw() {
-  background(245, 40);
+  background(0, 40);
 
   // Dibujar marco A4
   noFill();
@@ -130,6 +130,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
