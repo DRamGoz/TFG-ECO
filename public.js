@@ -11,8 +11,8 @@ function setup() {
 }
 
 function draw() {
-  background(20);
-  fill(255);
+  background(0);
+  fill(255,0,0);
   textAlign(CENTER, CENTER);
   text("PUBLIC", width / 2, 40);
 }
@@ -29,3 +29,4 @@ function enviarDato() {
   .then(console.log)
   .catch(console.error);
 }
+
