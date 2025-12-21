@@ -1,33 +1,30 @@
 
 
-console.log("ECHO — Visualización de eventos activos");
+console.log("ECHO — Gotas de pintura activas");
 
 const API_URL = "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpnsHnDcAIKQ-SWU8FoIpdu-PUwO0KsdIk3klratrjgCHfskg/exec";
 
-let entidades = [];
+let gotas = [];
 let idsExistentes = new Set();
 
 function setup() {
   createCanvas(800, 600);
-  background(245);
 
-  // Cargar datos iniciales desde Google Sheets
   cargarDatos();
-
-  // Cada 2 segundos actualizar nuevos datos
   setInterval(cargarDatos, 2000);
 }
 
 function draw() {
-  background(245,50);
+  background(245, 40); // fondo semi-transparente
 
   // Contador de eventos
   fill(0);
+  noStroke();
   textSize(16);
-  text("ECHO — eventos registrados: " + entidades.length, 20, 20);
+  text("ECHO — eventos registrados: " + gotas.length, 20, 20);
 
-  // Dibujar todas las entidades
-  entidades.forEach(e => e.mostrar());
+  // Dibujar todas las gotas
+  gotas.forEach(g => g.mostrar());
 }
 
 function cargarDatos() {
@@ -36,8 +33,8 @@ function cargarDatos() {
     .then(datos => {
       datos.forEach(d => {
         if (!idsExistentes.has(d.timestamp)) {
-          let ev = new EventoVisual(d);      // crear entidad
-          entidades.push(ev);
+          let g = new GotaPintura();
+          gotas.push(g);
           idsExistentes.add(d.timestamp);
         }
       });
@@ -46,46 +43,65 @@ function cargarDatos() {
 }
 
 // ==========================
-// Clase EventoVisual
+// Clase GotaPintura
 // ==========================
-class EventoVisual {
-  constructor(data) {
-    this.baseX = random(50, width - 50);
-    this.baseY = random(50, height - 50);
+class GotaPintura {
+  constructor() {
+    this.x = random(80, width - 80);
+    this.y = random(80, height - 80);
 
-    this.r = 0;
-    this.maxR = random(12, 100);
+    this.radio = 0;
+    this.radioFinal = random(20, 50); // tamaño máximo de la gota
 
-    this.noiseOffsetX = random(1000);
-    this.noiseOffsetY = random(1000);
+    this.pasos = int(random(12, 20)); // número de vértices de la forma
+    this.offset = random(1000);
 
-    // Color aleatorio para cada entidad
-    this.color = color(random(255), random(255), random(255), 10);
+    this.creciendo = true;
+
+    // Color aleatorio con alpha
+    this.color = color(random(255), random(255), random(255), 180);
+
+    // Para movimiento tipo ruido
+    this.noiseX = random(1000);
+    this.noiseY = random(1000);
   }
 
   mostrar() {
     // Crecimiento gradual
-    this.r = lerp(this.r, this.maxR, 0.05);
-
-    // Movimiento tipo ruido
-    let nx = noise(this.noiseOffsetX) * 20 - 10;
-    let ny = noise(this.noiseOffsetY) * 20 - 10;
-
-    let x = this.baseX + nx;
-    let y = this.baseY + ny;
-
-    // Dibujar solo si no es NaN
-    if (!isNaN(x) && !isNaN(y) && !isNaN(this.r)) {
-      noStroke();
-      fill(this.color);
-      ellipse(x, y, this.r);
+    if (this.creciendo) {
+      this.radio += 0.5;
+      if (this.radio >= this.radioFinal) {
+        this.radio = this.radioFinal;
+        this.creciendo = false;
+      }
     }
 
-    // Incrementar offsets para el siguiente frame
-    this.noiseOffsetX += 0.005;
-    this.noiseOffsetY += 0.005;
+    // Movimiento suave tipo Perlin
+    let nx = noise(this.noiseX) * 10 - 5;
+    let ny = noise(this.noiseY) * 10 - 5;
+    let x = this.x + nx;
+    let y = this.y + ny;
+
+    // Dibujar la forma irregular
+    noStroke();
+    fill(this.color);
+    beginShape();
+    for (let i = 0; i < this.pasos; i++) {
+      let ang = map(i, 0, this.pasos, 0, TWO_PI);
+      let ruido = noise(cos(ang) + this.offset, sin(ang) + this.offset);
+      let r = this.radio * map(ruido, 0, 1, 0.7, 1.3);
+      let px = x + cos(ang) * r;
+      let py = y + sin(ang) * r;
+      vertex(px, py);
+    }
+    endShape(CLOSE);
+
+    this.noiseX += 0.005;
+    this.noiseY += 0.005;
   }
 }
+
+
 
 
 
