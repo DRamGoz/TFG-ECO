@@ -1,61 +1,41 @@
-console.log("ECHO — Gotas de pintura dentro de marco A4");
+console.log("ECHO — Gotas de pintura configurables");
 
 // ==========================
-// CONFIGURACIÓN
+// CONFIGURACIÓN DE PARÁMETROS
 // ==========================
-const NUM_VERTICES_MIN = 3;
-const NUM_VERTICES_MAX = 50;
-const RADIO_MIN = 10;
-const RADIO_MAX = 150;
-const ALPHA_COLOR = 100;
-const RUEDO_MOVIMIENTO = 20;
-const CRECIMIENTO = 0.3;
+const NUM_VERTICES_MIN = 12;   // mínimo número de vértices por gota
+const NUM_VERTICES_MAX = 20;   // máximo número de vértices por gota
+const RADIO_MIN = 20;          // tamaño mínimo de la gota
+const RADIO_MAX = 50;          // tamaño máximo de la gota
+const ALPHA_COLOR = 180;       // transparencia (0-255)
+const RUEDO_MOVIMIENTO = 10;   // rango de movimiento tipo Perlin
+const CRECIMIENTO = 0.5;       // velocidad de crecimiento de la gota
 
-// Proporción A4: 210 / 297 ≈ 0.707
-const A4_RATIO = 210 / 297;
-
+// ==========================
+// URL DE DATOS
+// ==========================
 const API_URL = "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpnsHnDcAIKQ-SWU8FoIpdu-PUwO0KsdIk3klratrjgCHfskg/exec";
 
 let gotas = [];
 let idsExistentes = new Set();
 
-// Marco A4 en pixels
-let marcoX, marcoY, marcoW, marcoH;
-
 function setup() {
   createCanvas(800, 600);
-
-  // Calcular marco A4 centrado
-  if (width / height > A4_RATIO) {
-    marcoH = height - 40;
-    marcoW = marcoH * A4_RATIO;
-  } else {
-    marcoW = width - 40;
-    marcoH = marcoW / A4_RATIO;
-  }
-  marcoX = (width - marcoW) / 2;
-  marcoY = (height - marcoH) / 2;
 
   cargarDatos();
   setInterval(cargarDatos, 2000);
 }
 
 function draw() {
-  background(245, 40);
+  background(245, 40); // fondo semi-transparente para ver alpha
 
-  // Dibujar marco A4
-  noFill();
-  stroke(0);
-  strokeWeight(2);
-  rect(marcoX, marcoY, marcoW, marcoH);
-
-  // Contador
+  // Contador de eventos
   fill(0);
   noStroke();
   textSize(16);
   text("ECHO — eventos registrados: " + gotas.length, 20, 20);
 
-  // Dibujar gotas
+  // Dibujar todas las gotas
   gotas.forEach(g => g.mostrar());
 }
 
@@ -79,15 +59,13 @@ function cargarDatos() {
 // ==========================
 class GotaPintura {
   constructor() {
-    // Posición dentro del marco A4
-    this.x = random(marcoX + RADIO_MAX, marcoX + marcoW - RADIO_MAX);
-    this.y = random(marcoY + RADIO_MAX, marcoY + marcoH - RADIO_MAX);
+    this.x = random(80, width - 80);
+    this.y = random(80, height - 80);
 
     this.radio = 0;
     this.radioFinal = random(RADIO_MIN, RADIO_MAX);
 
-    // Más vértices para suavizar
-    this.pasos = int(random(20, 30)); 
+    this.pasos = int(random(NUM_VERTICES_MIN, NUM_VERTICES_MAX));
     this.offset = random(1000);
 
     this.creciendo = true;
@@ -95,7 +73,7 @@ class GotaPintura {
     // Color aleatorio con alpha
     this.color = color(random(255), random(255), random(255), ALPHA_COLOR);
 
-    // Para movimiento tipo Perlin
+    // Para movimiento tipo ruido
     this.noiseX = random(1000);
     this.noiseY = random(1000);
   }
@@ -110,31 +88,33 @@ class GotaPintura {
       }
     }
 
-    // Movimiento suave tipo Perlin
+    // Movimiento tipo Perlin
     let nx = noise(this.noiseX) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO / 2;
     let ny = noise(this.noiseY) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO / 2;
     let x = this.x + nx;
     let y = this.y + ny;
 
-    // Dibujar forma irregular pero suavizada
+    // Dibujar forma irregular
     noStroke();
     fill(this.color);
     beginShape();
     for (let i = 0; i < this.pasos; i++) {
       let ang = map(i, 0, this.pasos, 0, TWO_PI);
-      // Reducir rango de ruido para bordes más suaves
       let ruido = noise(cos(ang) + this.offset, sin(ang) + this.offset);
-      let r = this.radio * map(ruido, 0, 1, 0.9, 1.1);
+      let r = this.radio * map(ruido, 0, 1, 0.7, 1.3);
       let px = x + cos(ang) * r;
       let py = y + sin(ang) * r;
-      curveVertex(px, py); // suaviza el contorno
+      vertex(px, py);
     }
     endShape(CLOSE);
 
+    // Actualizar offsets para movimiento
     this.noiseX += 0.005;
     this.noiseY += 0.005;
   }
 }
+
+
 
 
 
