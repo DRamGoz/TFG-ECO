@@ -1,14 +1,9 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpnsHnDcAIKQ-SWU8FoIpdu-PUwO0KsdIk3klratrjgCHfskg/exec";
 
-
-
 let entidades = [];
-let idsExistentes = new Set(); // para evitar duplicados
 
 function setup() {
   createCanvas(600, 400);
-  cargarDatos();
-  setInterval(cargarDatos, 2000); // cada 2 segundos
 }
 
 function draw() {
@@ -21,17 +16,9 @@ function draw() {
   entidades.forEach(e => e.mostrar());
 }
 
-function cargarDatos() {
-  fetch(API_URL)
-    .then(r => r.json())
-    .then(datos => {
-      datos.forEach(d => {
-        if (!idsExistentes.has(d.timestamp)) { // si no está ya
-          entidades.push(new EventoVisual(d));
-          idsExistentes.add(d.timestamp);
-        }
-      });
-    });
+// Llamar manualmente solo cuando quieras añadir un nuevo click
+function agregarEvento(data) {
+  entidades.push(new EventoVisual(data));
 }
 
 class EventoVisual {
@@ -49,4 +36,5 @@ class EventoVisual {
     ellipse(this.x, this.y, this.r);
   }
 }
+
 
