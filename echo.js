@@ -67,7 +67,7 @@ class EventoVisual {
     // verificar que no sea NaN
     if (!isNaN(x) && !isNaN(y) && !isNaN(this.r)) {
       noStroke();
-      fill(this.color);
+      /*fill(this.color);*/
       ellipse(x, y, this.r);
     }
 
@@ -76,17 +76,6 @@ class EventoVisual {
     this.noiseOffsetY += 0.005;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
