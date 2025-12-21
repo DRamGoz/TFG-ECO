@@ -1,22 +1,32 @@
 
+
+console.log("ECHO — Visualización de eventos activos");
+
 const API_URL = "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpnsHnDcAIKQ-SWU8FoIpdu-PUwO0KsdIk3klratrjgCHfskg/exec";
 
 let entidades = [];
-let idsExistentes = new Set(); // para evitar duplicados
+let idsExistentes = new Set();
 
 function setup() {
-  createCanvas(600, 400);
+  createCanvas(800, 600);
+  background(245);
+
+  // Cargar datos iniciales desde Google Sheets
   cargarDatos();
-  setInterval(cargarDatos, 2000); // cada 2 segundos
+
+  // Cada 2 segundos actualizar nuevos datos
+  setInterval(cargarDatos, 2000);
 }
 
 function draw() {
   background(245);
 
+  // Contador de eventos
   fill(0);
-  textSize(14);
+  textSize(16);
   text("ECHO — eventos registrados: " + entidades.length, 20, 20);
 
+  // Dibujar todas las entidades
   entidades.forEach(e => e.mostrar());
 }
 
@@ -25,53 +35,53 @@ function cargarDatos() {
     .then(r => r.json())
     .then(datos => {
       datos.forEach(d => {
-        if (!idsExistentes.has(d.timestamp)) { // si no está ya
-          let ev = new EventoVisual(d);
-          // Asignamos el color aqui
-          ev.color = color(random(255), random(255), random(255), 180);// color random
-
+        if (!idsExistentes.has(d.timestamp)) {
+          let ev = new EventoVisual(d);      // crear entidad
           entidades.push(ev);
           idsExistentes.add(d.timestamp);
         }
       });
-    });
+    })
+    .catch(err => console.error("Error al cargar datos:", err));
 }
 
+// ==========================
+// Clase EventoVisual
+// ==========================
 class EventoVisual {
   constructor(data) {
-    // posición base fija
     this.baseX = random(50, width - 50);
     this.baseY = random(50, height - 50);
 
-    // radio inicial y máximo
     this.r = 0;
     this.maxR = random(12, 50);
 
-    // offsets para ruido de Perlin
     this.noiseOffsetX = random(1000);
     this.noiseOffsetY = random(1000);
-    this.color = null; // se asigna al crear la identidad
+
+    // Color aleatorio para cada entidad
+    this.color = color(random(255), random(255), random(255), 180);
   }
 
   mostrar() {
-    // crecer suavemente
+    // Crecimiento gradual
     this.r = lerp(this.r, this.maxR, 0.05);
 
-    // movimiento suave usando Perlin noise
-    let nx = noise(this.noiseOffsetX) * 20 - 10; // -5 a +5
+    // Movimiento tipo ruido
+    let nx = noise(this.noiseOffsetX) * 20 - 10;
     let ny = noise(this.noiseOffsetY) * 20 - 10;
 
     let x = this.baseX + nx;
     let y = this.baseY + ny;
 
-    // verificar que no sea NaN
+    // Dibujar solo si no es NaN
     if (!isNaN(x) && !isNaN(y) && !isNaN(this.r)) {
       noStroke();
       fill(this.color);
       ellipse(x, y, this.r);
     }
 
-    // actualizar offsets para el siguiente frame
+    // Incrementar offsets para el siguiente frame
     this.noiseOffsetX += 0.005;
     this.noiseOffsetY += 0.005;
   }
