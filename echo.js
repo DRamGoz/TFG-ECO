@@ -14,7 +14,12 @@ function setup() {
 }
 
 function draw() {
-  background(245);
+ background(240);
+
+fill(0);
+textSize(16);
+text("ECHO — eventos registrados: " + entidades.length, 20, 20);
+
 
   for (let g of gotas) {
     g.mostrar();
@@ -85,4 +90,5 @@ class GotaPintura {
     endShape(CLOSE);
   }
 }
+
 
