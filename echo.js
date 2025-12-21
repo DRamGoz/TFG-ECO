@@ -1,9 +1,13 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpnsHnDcAIKQ-SWU8FoIpdu-PUwO0KsdIk3klratrjgCHfskg/exec";
-
+/*const API_URL = "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpnsHnDcAIKQ-SWU8FoIpdu-PUwO0KsdIk3klratrjgCHfskg/exec";
+*/
 let entidades = [];
 
 function setup() {
   createCanvas(600, 400);
+
+  // Cargar eventos previos desde localStorage (opcional)
+  const guardados = JSON.parse(localStorage.getItem("eventos") || "[]");
+  guardados.forEach(d => entidades.push(new EventoVisual(d)));
 }
 
 function draw() {
@@ -16,9 +20,14 @@ function draw() {
   entidades.forEach(e => e.mostrar());
 }
 
-// Llamar manualmente solo cuando quieras añadir un nuevo click
+// Función que PUBLIC llamará al hacer click
 function agregarEvento(data) {
   entidades.push(new EventoVisual(data));
+
+  // Guardar en localStorage para persistir en recarga
+  const guardados = JSON.parse(localStorage.getItem("eventos") || "[]");
+  guardados.push(data);
+  localStorage.setItem("eventos", JSON.stringify(guardados));
 }
 
 class EventoVisual {
