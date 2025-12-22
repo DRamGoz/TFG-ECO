@@ -1,4 +1,4 @@
-console.log("ECHO — Gotas de pintura dentro de marco A4");
+
 
 // ==========================
 // CONFIGURACIÓN
@@ -13,7 +13,16 @@ const CRECIMIENTO = 1.1;
 
 // Proporción A4: 210 / 297 ≈ 0.707
 const A4_RATIO = 210 / 297;
-
+// =========================
+// ESTADO GLOBAL (UI AUTOR)
+// =========================
+let estado = {
+  modo: "editorial",      // editorial | lienzo
+  fondoA4: "blanco",      // blanco | negro
+  mostrarTexto: true,
+  monocromo: false,
+  orientacion: "vertical"
+};
 const API_URL = "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpnsHnDcAIKQ-SWU8FoIpdu-PUwO0KsdIk3klratrjgCHfskg/exec";
 
 let gotas = [];
@@ -87,7 +96,56 @@ fill(0);
 text(contador, tx, ty);
 
 }
+// ==========================
+// FUNCIONES UI (BOTONES)
+// ==========================
+function imprimirA4() {
+  window.print();
+}
 
+function refrescarLienzo() {
+  gotas = [];
+  idsExistentes.clear();
+}
+
+function alternarFondo() {
+  estado.fondoA4 = estado.fondoA4 === "blanco" ? "negro" : "blanco";
+}
+
+function alternarTexto() {
+  estado.mostrarTexto = !estado.mostrarTexto;
+}
+
+function rotarLienzo() {
+  estado.orientacion =
+    estado.orientacion === "vertical" ? "horizontal" : "vertical";
+
+  recalcularMarco();
+}
+
+function alternarMonocromo() {
+  estado.monocromo = !estado.monocromo;
+}
+
+// 7. FUNCIONES AUXILIARES (A CONTINUACIÓN)
+// ==========================
+function recalcularMarco() {
+  let ratio =
+    estado.orientacion === "vertical"
+      ? 210 / 297
+      : 297 / 210;
+
+  if (width / height > ratio) {
+    marcoH = height - 40;
+    marcoW = marcoH * ratio;
+  } else {
+    marcoW = width - 40;
+    marcoH = marcoW / ratio;
+  }
+
+  marcoX = (width - marcoW) / 2;
+  marcoY = (height - marcoH) / 2;
+}
 
 function cargarDatos() {
   fetch(API_URL)
@@ -161,37 +219,4 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
