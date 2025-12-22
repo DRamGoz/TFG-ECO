@@ -66,7 +66,7 @@ function draw() {
 let contador = "Nº Interacción Usuarios: " + gotas.length;
 
 textSize(14);
-textAlign(LEFT, BOTTOM);
+textAlign(CENTER, BOTTOM);
 
 // Medidas del texto
 let padding = 8;
@@ -74,12 +74,12 @@ let tw = textWidth(contador);
 let th = 16;
 
 // Posición (pie de página dentro del A4)
-let tx = marcoX + 20;
+let tx = marcoX + 300;
 let ty = marcoY + marcoH - 20;
 
 // Fondo sutil
 noStroke();
-fill(0, 120); // negro translúcido
+fill(255, 120); // negro translúcido
 rect(
   tx - padding,
   ty - th - padding,
@@ -89,7 +89,7 @@ rect(
 );
 
 // Texto
-fill(255);
+fill(0);
 text(contador, tx, ty);
 }
 
@@ -165,6 +165,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
