@@ -126,8 +126,26 @@ function draw() {
 // FUNCIONES UI (BOTONES)
 // ==========================
 function imprimirA4() {
+  // Mostrar título y subtítulo solo si están activados
+  const tituloDiv = document.getElementById("titulo");
+  const subtituloDiv = document.getElementById("subtitulo");
+
+  if (estado.mostrarTexto) {
+    tituloDiv.style.display = "block";
+    subtituloDiv.style.display = "block";
+  } else {
+    tituloDiv.style.display = "none";
+    subtituloDiv.style.display = "none";
+  }
+
+  // Abrir el diálogo de impresión
   window.print();
+
+  // Ocultar después para volver a la vista normal
+  tituloDiv.style.display = "none";
+  subtituloDiv.style.display = "none";
 }
+
 
 function refrescarLienzo() {
   gotas = [];
@@ -245,6 +263,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
