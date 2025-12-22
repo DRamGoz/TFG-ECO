@@ -16,6 +16,9 @@ const A4_RATIO = 210 / 297;
 // =========================
 // ESTADO GLOBAL (UI AUTOR)
 // =========================
+let titulo = "ECO — Generación de Arte Digital";
+let subtitulo = "Interacción de usuarios en tiempo real";
+
 let estado = {
   modo: "editorial",      // editorial | lienzo
   fondoA4: "blanco",      // blanco | negro
@@ -50,52 +53,73 @@ function setup() {
 }
 
 function draw() {
+  // Fondo del canvas
   background(0, 40);
 
   // Dibujar marco A4
-  fill(255,255,255,220);
-  stroke(255);
+  fill(estado.fondoA4 === "blanco" ? 255 : 0, 220);
+  stroke(estado.fondoA4 === "blanco" ? 0 : 255);
   strokeWeight(4);
   rect(marcoX, marcoY, marcoW, marcoH);
 
+  // Clip para las gotas dentro del A4
   push();
   drawingContext.save();
   drawingContext.beginPath();
   drawingContext.rect(marcoX, marcoY, marcoW, marcoH);
   drawingContext.clip();
 
-  // GOTAS (recortadas al A4)
+  // Dibujar gotas
   gotas.forEach(g => g.mostrar());
 
-  // CERRAR CLIPPING
   drawingContext.restore();
   pop();
 
-// TEXTO DEL CONTADOR (franja inferior)
-let contador = "Nº Interacción Usuarios: " + gotas.length;
+  // ------------------------
+  // TÍTULO Y SUBTÍTULO
+  // ------------------------
+  if (estado.mostrarTexto) {
+    textAlign(CENTER, TOP);
 
-textSize(13);
-textAlign(CENTER, CENTER);
+    // Color del texto según fondo A4
+    let colorTitulo = estado.fondoA4 === "blanco" ? 0 : 255;
+    let colorSubtitulo = estado.fondoA4 === "blanco" ? 50 : 200;
 
-// Ajustes
-let franjaH = 26;
-let offsetY = 30; // 👈 SUBE LA FRANJA
+    // Título
+    textSize(24);
+    fill(colorTitulo);
+    text(titulo, marcoX + marcoW / 2, marcoY + 20);
 
-// Posición
-let franjaY = marcoY + marcoH - franjaH - offsetY;
-let tx = marcoX + marcoW / 2;
-let ty = franjaY + franjaH / 2;
+    // Subtítulo
+    textSize(16);
+    fill(colorSubtitulo);
+    text(subtitulo, marcoX + marcoW / 2, marcoY + 60);
+  }
 
-// Fondo blanco
-noStroke();
-fill(255, 240);
-rect(marcoX, franjaY, marcoW, franjaH);
+  // ------------------------
+  // CONTADOR (franja inferior)
+  // ------------------------
+  let contador = "Nº Interacción Usuarios: " + gotas.length;
 
-// Texto
-fill(0);
-text(contador, tx, ty);
+  textSize(13);
+  textAlign(CENTER, CENTER);
 
+  let franjaH = 26;
+  let offsetY = 30; // ajusta vertical
+  let franjaY = marcoY + marcoH - franjaH - offsetY;
+  let tx = marcoX + marcoW / 2;
+  let ty = franjaY + franjaH / 2;
+
+  // Fondo de la franja
+  noStroke();
+  fill(estado.fondoA4 === "blanco" ? 0, 120 : 255, 120); // sutil contraste
+  rect(marcoX, franjaY, marcoW, franjaH);
+
+  // Texto del contador
+  fill(estado.fondoA4 === "blanco" ? 255 : 0);
+  text(contador, tx, ty);
 }
+
 // ==========================
 // FUNCIONES UI (BOTONES)
 // ==========================
@@ -219,4 +243,5 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
