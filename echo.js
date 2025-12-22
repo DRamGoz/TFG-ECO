@@ -125,10 +125,6 @@ function draw() {
 // ==========================
 // FUNCIONES UI (BOTONES)
 // ==========================
-// ==========================
-// FUNCIONES UI (BOTONES)
-// ==========================
-
 function imprimirA4() {
   // Crear un contenedor temporal para imprimir
   const imprimirCont = document.createElement("div");
@@ -137,16 +133,29 @@ function imprimirA4() {
   imprimirCont.style.top = "0";
   imprimirCont.style.width = "100%";
   imprimirCont.style.background = estado.fondoA4 === "blanco" ? "#fff" : "#000";
+  imprimirCont.style.display = "flex";
+  imprimirCont.style.justifyContent = "center";
+  imprimirCont.style.alignItems = "center";
+  imprimirCont.style.flexDirection = "column";
 
   // Clonar canvas actual
   const canvas = document.getElementById("defaultCanvas0");
   const canvasClone = canvas.cloneNode(true);
+
+  // Ajustar tamaño del canvas clonado para impresión A4
+  let ratioA4 = estado.orientacion === "vertical" ? 210 / 297 : 297 / 210;
+  const maxWidth = 800; // ancho máximo en px para impresión
+  const maxHeight = maxWidth / ratioA4;
+  canvasClone.width = maxWidth;
+  canvasClone.height = maxHeight;
+  canvasClone.style.width = maxWidth + "px";
+  canvasClone.style.height = maxHeight + "px";
   canvasClone.style.display = "block";
-  canvasClone.style.margin = "0 auto";
+  canvasClone.style.margin = "20px 0";
   imprimirCont.appendChild(canvasClone);
 
-  // Añadir título y subtítulo si están activados
-  if (estado.mostrarTexto) {
+  // Añadir título y subtítulo si están activados y modo editorial
+  if (estado.mostrarTexto && estado.modo === "editorial") {
     const tituloDiv = document.createElement("div");
     tituloDiv.textContent = titulo;
     tituloDiv.style.textAlign = "center";
@@ -291,6 +300,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
