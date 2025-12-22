@@ -10,29 +10,31 @@
 
 <body>
 
-  <!-- PANEL IZQUIERDO -->
-  <div class="panel panel-left">
-    <button onclick="imprimirA4()">Imprimir A4</button>
-    <button onclick="refrescarLienzo()">Refrescar lienzo</button>
-    <button onclick="alternarFondo()">Fondo A4</button>
-    <button onclick="alternarTexto()">Texto on/off</button>
-    <button onclick="rotarLienzo()">Rotar lienzo</button>
-    <button onclick="alternarMonocromo()">Monocromo</button>
-  </div>
+ <!-- BOTONES IZQUIERDA -->
+<div id="botones-izquierda">
+  <button onclick="imprimirA4()">Imprimir A4</button>
+  <button onclick="refrescarLienzo()">Refrescar Lienzo</button>
+  <button onclick="alternarFondo()">Fondo A4</button>
+  <button onclick="alternarTexto()">Mostrar/Ocultar Texto</button>
+  <button onclick="rotarLienzo()">Rotar Lienzo</button>
+  <button onclick="alternarMonocromo()">Colores Monocromáticos</button>
+</div>
 
-  <!-- PANEL DERECHO -->
-  <div class="panel panel-right">
-    <button disabled>Reservado</button>
-    <button disabled>Reservado</button>
-    <button disabled>Reservado</button>
-    <button disabled>Reservado</button>
-    <button disabled>Reservado</button>
-    <button disabled>Reservado</button>
-  </div>
+<!-- BOTONES DERECHA -->
+<div id="botones-derecha">
+  <button disabled>Botón 7</button>
+  <button disabled>Botón 8</button>
+  <button disabled>Botón 9</button>
+  <button disabled>Botón 10</button>
+  <button disabled>Botón 11</button>
+  <button disabled>Botón 12</button>
+</div>
+
 
   <!-- p5 -->
   <script src="echo.js"></script>
 </body>
 </html>
+
 
 
