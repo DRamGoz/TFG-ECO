@@ -6,7 +6,7 @@ console.log("ECHO — Gotas de pintura dentro de marco A4");
 const NUM_VERTICES_MIN = 20;
 const NUM_VERTICES_MAX = 200;
 const RADIO_MIN = 10;
-const RADIO_MAX = 500;
+const RADIO_MAX = 120;
 const ALPHA_COLOR = 70;
 const RUEDO_MOVIMIENTO = 50;
 const CRECIMIENTO = 1.1;
@@ -45,8 +45,8 @@ function draw() {
 
   // Dibujar marco A4
   fill(255,255,255,220);
-  stroke(100);
-  strokeWeight(2);
+  stroke(255);
+  strokeWeight(4);
   rect(marcoX, marcoY, marcoW, marcoH);
 
   push();
@@ -161,6 +161,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
