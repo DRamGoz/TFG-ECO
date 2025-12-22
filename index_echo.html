@@ -3,11 +3,36 @@
 <head>
   <meta charset="utf-8" />
   <title>ECHO</title>
+
   <link rel="stylesheet" href="estilo_echo.css">
   <script src="https://cdn.jsdelivr.net/npm/p5@1.11.7/lib/p5.js"></script>
-  <script src="echo.js"></script>
 </head>
+
 <body>
+
+  <!-- PANEL IZQUIERDO -->
+  <div class="panel panel-left">
+    <button onclick="imprimirA4()">Imprimir A4</button>
+    <button onclick="refrescarLienzo()">Refrescar lienzo</button>
+    <button onclick="alternarFondo()">Fondo A4</button>
+    <button onclick="alternarTexto()">Texto on/off</button>
+    <button onclick="rotarLienzo()">Rotar lienzo</button>
+    <button onclick="alternarMonocromo()">Monocromo</button>
+  </div>
+
+  <!-- PANEL DERECHO -->
+  <div class="panel panel-right">
+    <button disabled>Reservado</button>
+    <button disabled>Reservado</button>
+    <button disabled>Reservado</button>
+    <button disabled>Reservado</button>
+    <button disabled>Reservado</button>
+    <button disabled>Reservado</button>
+  </div>
+
+  <!-- p5 -->
+  <script src="echo.js"></script>
 </body>
 </html>
+
 
