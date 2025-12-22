@@ -89,6 +89,7 @@ rect(
 // Texto
 fill(0);
 text(contador, tx, ty);
+}
 
 
 function cargarDatos() {
@@ -163,6 +164,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
