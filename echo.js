@@ -53,35 +53,33 @@ function setup() {
 }
 
 function draw() {
-  // Fondo del canvas
+  // 1. Fondo del canvas
   background(0, 40);
 
-  // Dibujar marco A4
-  fill(estado.fondoA4 === "blanco" ? 255 : 0, 220);
-  stroke(estado.fondoA4 === "blanco" ? 0 : 255);
+  // 2. Dibujar marco A4
+  if (estado.fondoA4 === "blanco") {
+    fill(255, 255, 255, 220);
+    stroke(0);
+  } else {
+    fill(0, 0, 0, 220);
+    stroke(255);
+  }
   strokeWeight(4);
   rect(marcoX, marcoY, marcoW, marcoH);
 
-  // Clip para las gotas dentro del A4
+  // 3. Clipping para gotas dentro del A4
   push();
-  drawingContext.save();
   drawingContext.beginPath();
   drawingContext.rect(marcoX, marcoY, marcoW, marcoH);
   drawingContext.clip();
 
-  // Dibujar gotas
   gotas.forEach(g => g.mostrar());
-
-  drawingContext.restore();
   pop();
 
-  // ------------------------
-  // TÍTULO Y SUBTÍTULO
-  // ------------------------
-  if (estado.mostrarTexto) {
+  // 4. Título y subtítulo (solo en modo editorial)
+  if (estado.mostrarTexto && estado.modo === "editorial") {
     textAlign(CENTER, TOP);
 
-    // Color del texto según fondo A4
     let colorTitulo = estado.fondoA4 === "blanco" ? 0 : 255;
     let colorSubtitulo = estado.fondoA4 === "blanco" ? 50 : 200;
 
@@ -96,29 +94,31 @@ function draw() {
     text(subtitulo, marcoX + marcoW / 2, marcoY + 60);
   }
 
-  // ------------------------
-  // CONTADOR (franja inferior)
-  // ------------------------
+  // 5. Contador (franja inferior)
   let contador = "Nº Interacción Usuarios: " + gotas.length;
-
   textSize(13);
   textAlign(CENTER, CENTER);
 
   let franjaH = 26;
-  let offsetY = 30; // ajusta vertical
+  let offsetY = 30; // ajuste vertical
   let franjaY = marcoY + marcoH - franjaH - offsetY;
   let tx = marcoX + marcoW / 2;
   let ty = franjaY + franjaH / 2;
 
   // Fondo de la franja
   noStroke();
-  fill(estado.fondoA4 === "blanco" ? 0, 120 : 255, 120); // sutil contraste
+  if (estado.fondoA4 === "blanco") {
+    fill(0, 0, 0, 120);
+  } else {
+    fill(255, 255, 255, 120);
+  }
   rect(marcoX, franjaY, marcoW, franjaH);
 
   // Texto del contador
   fill(estado.fondoA4 === "blanco" ? 255 : 0);
   text(contador, tx, ty);
 }
+
 
 // ==========================
 // FUNCIONES UI (BOTONES)
@@ -243,5 +243,6 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
