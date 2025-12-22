@@ -70,7 +70,7 @@ textAlign(CENTER, BOTTOM);
 
 let padding = 10;
 let tw = textWidth(contador);
-let th = 16;
+let th = 12;
 
 // Pie de página centrado dentro del A4
 let tx = marcoX + marcoW / 2;
@@ -164,6 +164,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
