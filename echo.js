@@ -125,26 +125,54 @@ function draw() {
 // ==========================
 // FUNCIONES UI (BOTONES)
 // ==========================
-function imprimirA4() {
-  // Mostrar título y subtítulo solo si están activados
-  const tituloDiv = document.getElementById("titulo");
-  const subtituloDiv = document.getElementById("subtitulo");
+// ==========================
+// FUNCIONES UI (BOTONES)
+// ==========================
 
+function imprimirA4() {
+  // Crear un contenedor temporal para imprimir
+  const imprimirCont = document.createElement("div");
+  imprimirCont.style.position = "absolute";
+  imprimirCont.style.left = "0";
+  imprimirCont.style.top = "0";
+  imprimirCont.style.width = "100%";
+  imprimirCont.style.background = estado.fondoA4 === "blanco" ? "#fff" : "#000";
+
+  // Clonar canvas actual
+  const canvas = document.getElementById("defaultCanvas0");
+  const canvasClone = canvas.cloneNode(true);
+  canvasClone.style.display = "block";
+  canvasClone.style.margin = "0 auto";
+  imprimirCont.appendChild(canvasClone);
+
+  // Añadir título y subtítulo si están activados
   if (estado.mostrarTexto) {
-    tituloDiv.style.display = "block";
-    subtituloDiv.style.display = "block";
-  } else {
-    tituloDiv.style.display = "none";
-    subtituloDiv.style.display = "none";
+    const tituloDiv = document.createElement("div");
+    tituloDiv.textContent = titulo;
+    tituloDiv.style.textAlign = "center";
+    tituloDiv.style.fontSize = "24px";
+    tituloDiv.style.color = estado.fondoA4 === "blanco" ? "#000" : "#fff";
+    tituloDiv.style.marginTop = "10px";
+    imprimirCont.appendChild(tituloDiv);
+
+    const subtituloDiv = document.createElement("div");
+    subtituloDiv.textContent = subtitulo;
+    subtituloDiv.style.textAlign = "center";
+    subtituloDiv.style.fontSize = "16px";
+    subtituloDiv.style.color = estado.fondoA4 === "blanco" ? "#333" : "#ccc";
+    imprimirCont.appendChild(subtituloDiv);
   }
 
-  // Abrir el diálogo de impresión
+  // Añadir temporalmente al body
+  document.body.appendChild(imprimirCont);
+
+  // Imprimir
   window.print();
 
-  // Ocultar después para volver a la vista normal
-  tituloDiv.style.display = "none";
-  subtituloDiv.style.display = "none";
+  // Eliminar después de imprimir
+  document.body.removeChild(imprimirCont);
 }
+
 
 
 function refrescarLienzo() {
@@ -263,6 +291,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
