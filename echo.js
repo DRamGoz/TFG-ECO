@@ -53,7 +53,7 @@ function draw() {
   fill(255);
   noStroke();
   textSize(16);
-  text("ECHO — eventos registrados: " + gotas.length, 20, 20);
+  text("ECHO — eventos registrados: " + gotas.length, windowWidth/2, 220);
 
   push();
   drawingContext.save();
@@ -141,6 +141,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
