@@ -70,7 +70,7 @@ textAlign(CENTER, CENTER);
 
 // Ajustes
 let franjaH = 26;
-let offsetY = 20; // 👈 SUBE LA FRANJA
+let offsetY = 30; // 👈 SUBE LA FRANJA
 
 // Posición
 let franjaY = marcoY + marcoH - franjaH - offsetY;
@@ -161,6 +161,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
