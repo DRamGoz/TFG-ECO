@@ -63,7 +63,35 @@ function draw() {
   pop();
 
 }
+// TEXTO DEL CONTADOR (encima de todo)
+let contador = "Nº Interacción Usuarios: " + gotas.length;
 
+textSize(14);
+textAlign(LEFT, BOTTOM);
+
+// Medidas del texto
+let padding = 8;
+let tw = textWidth(contador);
+let th = 16;
+
+// Posición (pie de página dentro del A4)
+let tx = marcoX + 20;
+let ty = marcoY + marcoH - 20;
+
+// Fondo sutil
+noStroke();
+fill(0, 120); // negro translúcido
+rect(
+  tx - padding,
+  ty - th - padding,
+  tw + padding * 2,
+  th + padding * 2,
+  4 // esquinas redondeadas
+);
+
+// Texto
+fill(255);
+text(contador, tx, ty);
 function cargarDatos() {
   fetch(API_URL)
     .then(r => r.json())
@@ -101,35 +129,7 @@ class GotaPintura {
     this.noiseX = random(1000);
     this.noiseY = random(1000);
   }
-// TEXTO DEL CONTADOR (encima de todo)
-let contador = "Nº Interacción Usuarios: " + gotas.length;
 
-textSize(14);
-textAlign(LEFT, BOTTOM);
-
-// Medidas del texto
-let padding = 8;
-let tw = textWidth(contador);
-let th = 16;
-
-// Posición (pie de página dentro del A4)
-let tx = marcoX + 20;
-let ty = marcoY + marcoH - 20;
-
-// Fondo sutil
-noStroke();
-fill(0, 120); // negro translúcido
-rect(
-  tx - padding,
-  ty - th - padding,
-  tw + padding * 2,
-  th + padding * 2,
-  4 // esquinas redondeadas
-);
-
-// Texto
-fill(255);
-text(contador, tx, ty);
 
   mostrar() {
     if (this.creciendo) {
@@ -164,6 +164,7 @@ text(contador, tx, ty);
     this.noiseY += 0.005;
   }
 }
+
 
 
 
