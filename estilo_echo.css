@@ -6,24 +6,6 @@ html, body {
 }
 
 
-/* CONTENEDORES DE BOTONES */
-#botones-izquierda, #botones-derecha {
-  position: fixed; /* Fijo respecto a la ventana */
-  top: 50%;        /* Centrado verticalmente */
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: column; /* Columna vertical */
-  gap: 10px;
-  z-index: 10; /* Por encima del canvas */
-}
-
-#botones-izquierda {
-  left: 10px; /* Separación desde el borde izquierdo */
-}
-
-#botones-derecha {
-  right: 10px; /* Separación desde el borde derecho */
-}
 
 /* ESTILO GENERAL DE LOS BOTONES */
 /* Contenedores de botones */
@@ -39,11 +21,11 @@ html, body {
 
 /* Separación horizontal de los botones respecto al canvas */
 #botones-izquierda {
-  left: 20px; /* separación desde borde izquierdo */
+  left: 50px; /* separación desde borde izquierdo */
 }
 
 #botones-derecha {
-  right: 20px; /* separación desde borde derecho */
+  right: 50px; /* separación desde borde derecho */
 }
 
 /* Estilo general de los botones */
@@ -63,6 +45,7 @@ html, body {
 #botones-derecha button:hover {
   background-color: #555;
 }
+
 
 
 
