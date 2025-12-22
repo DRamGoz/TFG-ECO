@@ -45,6 +45,27 @@ html, body {
 #botones-derecha button:hover {
   background-color: #555;
 }
+/* =======================
+   ESTILOS DE IMPRESIÓN
+   ======================= */
+@media print {
+  body * {
+    visibility: hidden; /* ocultar todo lo demás */
+  }
+
+  #a4-container, #titulo, #subtitulo {
+    visibility: visible; /* mostrar solo A4 y textos */
+  }
+
+  #a4-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: auto;
+  }
+}
+
 
 
 
