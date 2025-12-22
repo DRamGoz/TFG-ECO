@@ -62,8 +62,7 @@ function draw() {
   drawingContext.restore();
   pop();
 
-}
-// TEXTO DEL CONTADOR (encima de todo)
+  // TEXTO DEL CONTADOR (encima de todo)
 let contador = "Nº Interacción Usuarios: " + gotas.length;
 
 textSize(14);
@@ -92,6 +91,8 @@ rect(
 // Texto
 fill(255);
 text(contador, tx, ty);
+}
+
 function cargarDatos() {
   fetch(API_URL)
     .then(r => r.json())
@@ -164,6 +165,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
