@@ -53,7 +53,7 @@ function draw() {
 fill(0);
 noStroke();
 textSize(14);
-textAlign(CENTER, BOTTOM);
+textAlign(LEFT, BOTTOM);
 
 text(
   "ECHO — eventos registrados: " + gotas.length,
@@ -147,6 +147,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
