@@ -55,6 +55,18 @@ function draw() {
   textSize(16);
   text("ECHO — eventos registrados: " + gotas.length, 20, 20);
 
+  push();
+  drawingContext.save();
+  drawingContext.beginPath();
+  drawingContext.rect(marcoX, marcoY, marcoW, marcoH);
+  drawingContext.clip();
+
+  // GOTAS (recortadas al A4)
+  gotas.forEach(g => g.mostrar());
+
+  // CERRAR CLIPPING
+  drawingContext.restore();
+  pop();
   // Dibujar gotas
   gotas.forEach(g => g.mostrar());
 }
@@ -130,5 +142,6 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
