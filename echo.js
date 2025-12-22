@@ -86,11 +86,13 @@ function draw() {
     // Título
     textSize(24);
     fill(colorTitulo);
+    noStroke();
     text(titulo, marcoX + marcoW / 2, marcoY + 20);
 
     // Subtítulo
     textSize(16);
     fill(colorSubtitulo);
+    noStroke();
     text(subtitulo, marcoX + marcoW / 2, marcoY + 60);
   }
 
@@ -243,6 +245,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
