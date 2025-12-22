@@ -124,41 +124,36 @@ function draw() {
 // FUNCIÓN IMPRIMIR A4
 // ==========================
 function imprimirA4() {
-  const canvas = document.getElementById('defaultCanvas0');
-  const titulo = document.getElementById('titulo');
-  const subtitulo = document.getElementById('subtitulo');
-  const a4Container = document.getElementById('a4-container');
+  const a4Container = document.getElementById("a4-container");
+  const tituloDiv = document.getElementById("titulo");
+  const subtituloDiv = document.getElementById("subtitulo");
 
-  // Mostrar títulos solo si el estado lo indica
+  // Mostrar título y subtítulo si el estado lo permite
   if (window.estado && window.estado.mostrarTexto) {
-    titulo.style.display = 'block';
-    subtitulo.style.display = 'block';
-  } else {
-    titulo.style.display = 'none';
-    subtitulo.style.display = 'none';
+    tituloDiv.style.display = "block";
+    subtituloDiv.style.display = "block";
   }
 
-  // Crear imagen temporal del canvas
-  const imgData = canvas.toDataURL('image/png');
-  const img = document.createElement('img');
-  img.src = imgData;
-  img.style.width = '100%';
-  img.style.height = 'auto';
-  img.style.display = 'block';
+  // Convertir canvas en imagen para impresión
+  const canvas = document.querySelector("#defaultCanvas0");
+  const img = new Image();
+  img.src = canvas.toDataURL("image/png");
 
-  // Limpiar contenedor A4 y agregar títulos + imagen
-  a4Container.innerHTML = '';
-  if (window.estado && window.estado.mostrarTexto) {
-    a4Container.appendChild(titulo);
-    a4Container.appendChild(subtitulo);
-  }
+  // Limpiar container y añadir imagen + títulos
+  a4Container.innerHTML = "";
   a4Container.appendChild(img);
 
-  // Imprimir
+  if (window.estado && window.estado.mostrarTexto) {
+    a4Container.appendChild(tituloDiv);
+    a4Container.appendChild(subtituloDiv);
+  }
+
+  // Llamar a imprimir
   window.print();
 
-  // Restaurar el canvas recargando la página
-  location.reload();
+  // Restaurar canvas original
+  a4Container.innerHTML = "";
+  a4Container.appendChild(canvas);
 }
 
 
