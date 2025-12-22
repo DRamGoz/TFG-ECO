@@ -49,35 +49,6 @@ function draw() {
   strokeWeight(2);
   rect(marcoX, marcoY, marcoW, marcoH);
 
-  // ==========================
-// FRANJA INFERIOR + CONTADOR
-// ==========================
-
-let franjaH = 36; // altura de la franja
-
-// Fondo blanco de lado a lado del marco A4
-noStroke();
-fill(255); 
-rect(
-  marcoX,
-  marcoY + marcoH - franjaH,
-  marcoW,
-  franjaH
-);
-
-
- // CONTADOR — pie de página dentro del A4
-fill(0);
-noStroke();
-textSize(14);
-textAlign(CENTER, BOTTOM);
-
-text(
-  "ECHO — eventos registrados: " + gotas.length,
-  marcoX + marcoW - 300,
-  marcoY + marcoH - 20
-);
-
   push();
   drawingContext.save();
   drawingContext.beginPath();
@@ -131,7 +102,7 @@ class GotaPintura {
     this.noiseY = random(1000);
   }
 // TEXTO DEL CONTADOR (encima de todo)
-let contador = "ECHO — eventos registrados: " + gotas.length;
+let contador = "Nº Interacción Usuarios: " + gotas.length;
 
 textSize(14);
 textAlign(LEFT, BOTTOM);
