@@ -49,11 +49,17 @@ function draw() {
   strokeWeight(2);
   rect(marcoX, marcoY, marcoW, marcoH);
 
-  // Contador
-  fill(0);
-  noStroke();
-  textSize(16);
-  text("ECHO — eventos registrados: " + gotas.length, windowWidth/2, 500);
+ // CONTADOR — pie de página dentro del A4
+fill(255);
+noStroke();
+textSize(14);
+textAlign(CENTER, BOTTOM);
+
+text(
+  "ECHO — eventos registrados: " + gotas.length,
+  marcoX + 20,
+  marcoY + marcoH - 20
+);
 
   push();
   drawingContext.save();
@@ -141,6 +147,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
