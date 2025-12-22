@@ -21,11 +21,11 @@ html, body {
 
 /* Separación horizontal de los botones respecto al canvas */
 #botones-izquierda {
-  left: 50px; /* separación desde borde izquierdo */
+  left: 100px; /* separación desde borde izquierdo */
 }
 
 #botones-derecha {
-  right: 50px; /* separación desde borde derecho */
+  right: 100px; /* separación desde borde derecho */
 }
 
 /* Estilo general de los botones */
@@ -45,6 +45,7 @@ html, body {
 #botones-derecha button:hover {
   background-color: #555;
 }
+
 
 
 
