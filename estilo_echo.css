@@ -4,9 +4,9 @@ html, body {
   background: #111;
   font-family: system-ui, sans-serif;
 }
-/*
+
 /* PANELES */
-/*.panel {
+.panel {
   position: fixed;
   top: 50%;
   transform: translateY(-50%);
@@ -25,7 +25,7 @@ html, body {
 }
 
 /* BOTONES */
-/*button {
+button {
   width: 160px;
   padding: 10px;
   background: #222;
@@ -96,5 +96,6 @@ button:hover {
 #botones-derecha button:hover {
   background-color: #555;
 }
+
 
 
