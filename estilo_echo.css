@@ -1,8 +1,7 @@
 html, body {
   margin: 0;
   padding: 0;
-  background: #111;
-  font-family: system-ui, sans-serif;
+  overflow: hidden; /* Evita scroll en toda la página */
 }
 
 
@@ -65,6 +64,7 @@ html, body {
     height: auto;
   }
 }
+
 
 
 
