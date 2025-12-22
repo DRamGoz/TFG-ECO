@@ -2,3 +2,32 @@ body {
   margin: 0;
   background: #eee;
 }
+.controls {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 20;
+}
+
+.controls button {
+  width: 150px;
+  padding: 8px 12px;
+  font-size: 13px;
+  background: #ffffff;
+  color: #000;
+  border: 1px solid #000;
+  cursor: pointer;
+  text-align: left;
+}
+
+.controls button:hover:not(:disabled) {
+  background: #000;
+  color: #fff;
+}
+
+.controls button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
