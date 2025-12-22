@@ -62,33 +62,29 @@ function draw() {
   drawingContext.restore();
   pop();
 
- // TEXTO DEL CONTADOR (encima de todo)
+ // TEXTO DEL CONTADOR (franja inferior)
 let contador = "Nº Interacción Usuarios: " + gotas.length;
 
-textSize(14);
-textAlign(CENTER, BOTTOM);
+textSize(13);
+textAlign(CENTER, CENTER);
 
-let padding = 10;
-let tw = textWidth(contador);
-let th = 12;
+// Altura fija de la franja
+let franjaH = 26;
 
-// Pie de página centrado dentro del A4
+// Posición
+let franjaY = marcoY + marcoH - franjaH;
 let tx = marcoX + marcoW / 2;
-let ty = marcoY + marcoH - 12;
+let ty = franjaY + franjaH / 2;
 
-// Fondo blanco de lado a lado del marco
+// Fondo blanco estrecho
 noStroke();
 fill(255, 240);
-rect(
-  marcoX,
-  marcoY + marcoH - th - padding * 2,
-  marcoW,
-  th + padding * 2
-);
+rect(marcoX, franjaY, marcoW, franjaH);
 
 // Texto
 fill(0);
 text(contador, tx, ty);
+
 }
 
 
@@ -164,6 +160,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
