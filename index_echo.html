@@ -1,12 +1,67 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <title>ECHO</title>
-
+  <meta charset="UTF-8">
+  <title>ECHO — Arte Digital Interactivo</title>
   <link rel="stylesheet" href="estilo_echo.css">
   <script src="https://cdn.jsdelivr.net/npm/p5@1.11.7/lib/p5.js"></script>
+  <script src="echo.js" defer></script>
+  <style>
+    /* Ajustes para impresión */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #a4-container, #a4-container * {
+        visibility: visible;
+      }
+      #a4-container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+      }
+    }
+  </style>
 </head>
+<body>
+
+  <!-- CONTENEDOR DEL A4 -->
+  <div id="a4-container">
+    <canvas id="defaultCanvas0"></canvas>
+    <div id="titulo" style="display:none">ECO — Generación de Arte Digital</div>
+    <div id="subtitulo" style="display:none">Interacción de usuarios en tiempo real</div>
+  </div>
+
+  <!-- BOTONES -->
+  <div class="botones-externos">
+    <button onclick="imprimirA4()">Imprimir A4</button>
+    <!-- Aquí añadirás el resto de botones verticales junto al A4 -->
+  </div>
+
+  <script>
+    // Función para imprimir A4 con título y subtítulo solo si está activado
+    function imprimirA4() {
+      const titulo = document.getElementById("titulo");
+      const subtitulo = document.getElementById("subtitulo");
+
+      // Mostrar solo si el estado de texto está activo
+      if (window.estado && window.estado.mostrarTexto) {
+        titulo.style.display = "block";
+        subtitulo.style.display = "block";
+      }
+
+      window.print();
+
+      // Ocultar después de imprimir
+      titulo.style.display = "none";
+      subtitulo.style.display = "none";
+    }
+  </script>
+
+</body>
+</html>
+
 
 <body>
 
@@ -40,6 +95,7 @@
   <script src="echo.js"></script>
 </body>
 </html>
+
 
 
 
