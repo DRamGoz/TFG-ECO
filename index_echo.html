@@ -33,19 +33,31 @@
     <div id="subtitulo" style="display:none">Interacción de usuarios en tiempo real</div>
   </div>
 
-  <!-- BOTONES -->
-  <div class="botones-externos">
+  <!-- BOTONES IZQUIERDA -->
+  <div id="botones-izquierda">
     <button onclick="imprimirA4()">Imprimir A4</button>
-    <!-- Aquí añadirás el resto de botones verticales junto al A4 -->
+    <button onclick="refrescarLienzo()">Refrescar Lienzo</button>
+    <button onclick="alternarFondo()">Fondo A4</button>
+    <button onclick="alternarTexto()">Mostrar/Ocultar Texto</button>
+    <button onclick="rotarLienzo()">Rotar Lienzo</button>
+    <button onclick="alternarMonocromo()">Colores Monocromáticos</button>
+  </div>
+
+  <!-- BOTONES DERECHA -->
+  <div id="botones-derecha">
+    <button disabled>Botón 7</button>
+    <button disabled>Botón 8</button>
+    <button disabled>Botón 9</button>
+    <button disabled>Botón 10</button>
+    <button disabled>Botón 11</button>
+    <button disabled>Botón 12</button>
   </div>
 
   <script>
-    // Función para imprimir A4 con título y subtítulo solo si está activado
     function imprimirA4() {
       const titulo = document.getElementById("titulo");
       const subtitulo = document.getElementById("subtitulo");
 
-      // Mostrar solo si el estado de texto está activo
       if (window.estado && window.estado.mostrarTexto) {
         titulo.style.display = "block";
         subtitulo.style.display = "block";
@@ -53,7 +65,6 @@
 
       window.print();
 
-      // Ocultar después de imprimir
       titulo.style.display = "none";
       subtitulo.style.display = "none";
     }
@@ -62,39 +73,6 @@
 </body>
 </html>
 
-
-<body>
-
- <!-- BOTONES IZQUIERDA -->
-<div id="botones-izquierda">
-  <div id="a4-container">
-  <canvas id="defaultCanvas0"></canvas>
-  <div id="titulo" style="display:none">ECO — Generación de Arte Digital</div>
-  <div id="subtitulo" style="display:none">Interacción de usuarios en tiempo real</div>
-</div>
-  <button onclick="imprimirA4()">Imprimir A4</button>
-  <button onclick="refrescarLienzo()">Refrescar Lienzo</button>
-  <button onclick="alternarFondo()">Fondo A4</button>
-  <button onclick="alternarTexto()">Mostrar/Ocultar Texto</button>
-  <button onclick="rotarLienzo()">Rotar Lienzo</button>
-  <button onclick="alternarMonocromo()">Colores Monocromáticos</button>
-</div>
-
-<!-- BOTONES DERECHA -->
-<div id="botones-derecha">
-  <button disabled>Botón 7</button>
-  <button disabled>Botón 8</button>
-  <button disabled>Botón 9</button>
-  <button disabled>Botón 10</button>
-  <button disabled>Botón 11</button>
-  <button disabled>Botón 12</button>
-</div>
-
-
-  <!-- p5 -->
-  <script src="echo.js"></script>
-</body>
-</html>
 
 
 
