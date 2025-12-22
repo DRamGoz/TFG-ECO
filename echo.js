@@ -50,14 +50,14 @@ function draw() {
   rect(marcoX, marcoY, marcoW, marcoH);
 
  // CONTADOR — pie de página dentro del A4
-fill(255);
+fill(0);
 noStroke();
 textSize(14);
 textAlign(CENTER, BOTTOM);
 
 text(
   "ECHO — eventos registrados: " + gotas.length,
-  marcoX + 20,
+  marcoX + marcoW - 20,
   marcoY + marcoH - 20
 );
 
@@ -147,6 +147,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
