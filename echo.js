@@ -69,7 +69,7 @@ textSize(13);
 textAlign(CENTER, CENTER);
 
 // Altura fija de la franja
-let franjaH = 26;
+let franjaH = 15;
 
 // Posición
 let franjaY = marcoY + marcoH - franjaH;
@@ -160,6 +160,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
