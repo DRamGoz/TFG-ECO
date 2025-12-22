@@ -57,7 +57,7 @@ textAlign(CENTER, BOTTOM);
 
 text(
   "ECHO — eventos registrados: " + gotas.length,
-  marcoX + marcoW - 120,
+  marcoX + marcoW - 220,
   marcoY + marcoH - 20
 );
 
@@ -147,6 +147,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
