@@ -67,8 +67,7 @@ function draw() {
   // CERRAR CLIPPING
   drawingContext.restore();
   pop();
-  // Dibujar gotas
-  gotas.forEach(g => g.mostrar());
+
 }
 
 function cargarDatos() {
@@ -142,6 +141,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
