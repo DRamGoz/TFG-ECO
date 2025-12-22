@@ -120,66 +120,45 @@ function draw() {
   fill(estado.fondoA4 === "blanco" ? 255 : 0);
   text(contador, tx, ty);
 }
-
-
 // ==========================
-// FUNCIONES UI (BOTONES)
+// FUNCIÓN IMPRIMIR A4
 // ==========================
 function imprimirA4() {
-  // Crear un contenedor temporal para imprimir
-  const imprimirCont = document.createElement("div");
-  imprimirCont.style.position = "absolute";
-  imprimirCont.style.left = "0";
-  imprimirCont.style.top = "0";
-  imprimirCont.style.width = "100%";
-  imprimirCont.style.background = estado.fondoA4 === "blanco" ? "#fff" : "#000";
-  imprimirCont.style.display = "flex";
-  imprimirCont.style.justifyContent = "center";
-  imprimirCont.style.alignItems = "center";
-  imprimirCont.style.flexDirection = "column";
+  const canvas = document.getElementById('defaultCanvas0');
+  const titulo = document.getElementById('titulo');
+  const subtitulo = document.getElementById('subtitulo');
+  const a4Container = document.getElementById('a4-container');
 
-  // Clonar canvas actual
-  const canvas = document.getElementById("defaultCanvas0");
-  const canvasClone = canvas.cloneNode(true);
-
-  // Ajustar tamaño del canvas clonado para impresión A4
-  let ratioA4 = estado.orientacion === "vertical" ? 210 / 297 : 297 / 210;
-  const maxWidth = 800; // ancho máximo en px para impresión
-  const maxHeight = maxWidth / ratioA4;
-  canvasClone.width = maxWidth;
-  canvasClone.height = maxHeight;
-  canvasClone.style.width = maxWidth + "px";
-  canvasClone.style.height = maxHeight + "px";
-  canvasClone.style.display = "block";
-  canvasClone.style.margin = "20px 0";
-  imprimirCont.appendChild(canvasClone);
-
-  // Añadir título y subtítulo si están activados y modo editorial
-  if (estado.mostrarTexto && estado.modo === "editorial") {
-    const tituloDiv = document.createElement("div");
-    tituloDiv.textContent = titulo;
-    tituloDiv.style.textAlign = "center";
-    tituloDiv.style.fontSize = "24px";
-    tituloDiv.style.color = estado.fondoA4 === "blanco" ? "#000" : "#fff";
-    tituloDiv.style.marginTop = "10px";
-    imprimirCont.appendChild(tituloDiv);
-
-    const subtituloDiv = document.createElement("div");
-    subtituloDiv.textContent = subtitulo;
-    subtituloDiv.style.textAlign = "center";
-    subtituloDiv.style.fontSize = "16px";
-    subtituloDiv.style.color = estado.fondoA4 === "blanco" ? "#333" : "#ccc";
-    imprimirCont.appendChild(subtituloDiv);
+  // Mostrar títulos solo si el estado lo indica
+  if (window.estado && window.estado.mostrarTexto) {
+    titulo.style.display = 'block';
+    subtitulo.style.display = 'block';
+  } else {
+    titulo.style.display = 'none';
+    subtitulo.style.display = 'none';
   }
 
-  // Añadir temporalmente al body
-  document.body.appendChild(imprimirCont);
+  // Crear imagen temporal del canvas
+  const imgData = canvas.toDataURL('image/png');
+  const img = document.createElement('img');
+  img.src = imgData;
+  img.style.width = '100%';
+  img.style.height = 'auto';
+  img.style.display = 'block';
+
+  // Limpiar contenedor A4 y agregar títulos + imagen
+  a4Container.innerHTML = '';
+  if (window.estado && window.estado.mostrarTexto) {
+    a4Container.appendChild(titulo);
+    a4Container.appendChild(subtitulo);
+  }
+  a4Container.appendChild(img);
 
   // Imprimir
   window.print();
 
-  // Eliminar después de imprimir
-  document.body.removeChild(imprimirCont);
+  // Restaurar el canvas recargando la página
+  location.reload();
 }
 
 
@@ -300,6 +279,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
