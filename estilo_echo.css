@@ -5,40 +5,7 @@ html, body {
   font-family: system-ui, sans-serif;
 }
 
-/* PANELES */
-.panel {
-  position: fixed;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  z-index: 10;
-}
 
-.panel-left {
-  left: 20px;
-}
-
-.panel-right {
-  right: 20px;
-}
-
-/* BOTONES */
-button {
-  width: 160px;
-  padding: 10px;
-  background: #222;
-  color: #fff;
-  border: 1px solid #444;
-  cursor: pointer;
-  text-align: left;
-}
-
-button:hover {
-  background: #333;
-}
-*/
 /* CONTENEDORES DE BOTONES */
 #botones-izquierda, #botones-derecha {
   position: fixed; /* Fijo respecto a la ventana */
@@ -96,6 +63,7 @@ button:hover {
 #botones-derecha button:hover {
   background-color: #555;
 }
+
 
 
 
