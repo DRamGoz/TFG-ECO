@@ -62,21 +62,22 @@ function draw() {
   drawingContext.restore();
   pop();
 
- // TEXTO DEL CONTADOR (franja inferior)
+// TEXTO DEL CONTADOR (franja inferior)
 let contador = "Nº Interacción Usuarios: " + gotas.length;
 
 textSize(13);
 textAlign(CENTER, CENTER);
 
-// Altura fija de la franja
+// Ajustes
 let franjaH = 26;
+let offsetY = 20; // 👈 SUBE LA FRANJA
 
 // Posición
-let franjaY = marcoY + marcoH + franjaH;
+let franjaY = marcoY + marcoH - franjaH - offsetY;
 let tx = marcoX + marcoW / 2;
 let ty = franjaY + franjaH / 2;
 
-// Fondo blanco estrecho
+// Fondo blanco
 noStroke();
 fill(255, 240);
 rect(marcoX, franjaY, marcoW, franjaH);
@@ -160,6 +161,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
