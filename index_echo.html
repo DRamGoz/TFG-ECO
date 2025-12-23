@@ -3,18 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <title>ECHO — Arte Digital Interactivo</title>
+
   <link rel="stylesheet" href="estilo_echo.css">
+
+  <!-- p5 -->
   <script src="https://cdn.jsdelivr.net/npm/p5@1.11.7/lib/p5.js"></script>
   <script src="echo.js" defer></script>
 </head>
 <body>
 
-  <!-- CONTENEDOR DEL A4 -->
-  <div id="a4-container">
-    <canvas id="defaultCanvas0"></canvas>
-    <div id="titulo" style="display:none">ECO — Generación de Arte Digital</div>
-    <div id="subtitulo" style="display:none">Interacción de usuarios en tiempo real</div>
-  </div>
+  <!-- CONTENEDOR A4 (solo para impresión) -->
+  <div id="a4-container"></div>
 
   <!-- BOTONES IZQUIERDA -->
   <div id="botones-izquierda">
@@ -26,7 +25,7 @@
     <button onclick="alternarMonocromo()">Colores Monocromáticos</button>
   </div>
 
-  <!-- BOTONES DERECHA -->
+  <!-- BOTONES DERECHA (RESERVADOS) -->
   <div id="botones-derecha">
     <button disabled>Botón 7</button>
     <button disabled>Botón 8</button>
@@ -38,6 +37,8 @@
 
 </body>
 </html>
+
+
 
 
 
