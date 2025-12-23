@@ -15,8 +15,8 @@ html, body {
   z-index: 10;
 }
 
-#botones-izquierda { left: 100px; }
-#botones-derecha { right: 100px; }
+#botones-izquierda { left: 150px; }
+#botones-derecha { right: 150px; }
 
 #botones-izquierda button,
 #botones-derecha button {
@@ -74,6 +74,7 @@ html, body {
     height: 297mm;
   }
 }
+
 
 
 
