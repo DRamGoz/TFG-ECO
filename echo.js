@@ -93,75 +93,89 @@ function draw() {
   }
 
   // CONTADOR
-  if (estado.mostrarTexto && estado.modo === "editorial") {
-    let contador = "Nº Interacción Usuarios: " + gotas.length;
-    let franjaH = 26;
-    let offsetY = 30;
-    let franjaY = marcoY + marcoH - franjaH - offsetY;
+  let contador = "Nº Interacción Usuarios: " + gotas.length;
+  let franjaH = 26;
+  let offsetY = 30;
+  let franjaY = marcoY + marcoH - franjaH - offsetY;
 
-    noStroke();
-    fill(estado.fondoA4 === "blanco" ? 0 : 255, 120);
-    rect(marcoX, franjaY, marcoW, franjaH);
+  noStroke();
+  fill(estado.fondoA4 === "blanco" ? 0 : 255, 120);
+  rect(marcoX, franjaY, marcoW, franjaH);
 
-    fill(estado.fondoA4 === "blanco" ? 255 : 0);
-    textAlign(CENTER, CENTER);
-    textSize(13);
-    text(contador, marcoX + marcoW / 2, franjaY + franjaH / 2);
-  }
+  fill(estado.fondoA4 === "blanco" ? 255 : 0);
+  textAlign(CENTER, CENTER);
+  textSize(13);
+  text(contador, marcoX + marcoW / 2, franjaY + franjaH / 2);
 }
 
 // ==========================
-// IMPRIMIR A4 (CAPTURA)
+// EXPORTAR A4 COMO IMAGEN
 // ==========================
-function imprimirA4() {
-  const canvasEl = document.querySelector("#a4-container canvas");
-  const img = new Image();
-  img.src = canvasEl.toDataURL("image/png");
+function exportarA4() {
+  // Resolución A4 300 DPI
+  const dpi = 300;
+  const anchoMM = 210;
+  const altoMM = 297;
+  const pxPorMM = dpi / 25.4;
+  const w = Math.round(anchoMM * pxPorMM);
+  const h = Math.round(altoMM * pxPorMM);
 
-  // Ajustar tamaño según orientación
-  if (estado.orientacion === "horizontal") {
-    img.style.width = "297mm";
-    img.style.height = "210mm";
-  } else {
-    img.style.width = "210mm";
-    img.style.height = "297mm";
-  }
-  img.style.display = "block";
+  let pg = createGraphics(w, h);
 
-  const a4 = document.getElementById("a4-container");
-  const backup = a4.innerHTML;
-  a4.innerHTML = "";
-  a4.appendChild(img);
+  // Fondo
+  if (estado.fondoA4 === "blanco") pg.background(255);
+  else pg.background(0);
 
-  // Añadir texto si está activado
+  // Marco
+  pg.noFill();
+  pg.stroke(estado.fondoA4 === "blanco" ? 0 : 255);
+  pg.strokeWeight(12);
+  pg.rect(0, 0, w, h);
+
+  // Escala y traducción
+  const scaleX = w / marcoW;
+  const scaleY = h / marcoH;
+  pg.push();
+  pg.scale(scaleX, scaleY);
+  pg.translate(-marcoX, -marcoY);
+
+  // Dibujar gotas
+  gotas.forEach(g => dibujarGotaEnGraphics(pg, g));
+
+  pg.pop();
+
+  // Texto
   if (estado.mostrarTexto && estado.modo === "editorial") {
-    const t = document.createElement("div");
-    t.innerText = titulo;
-    t.style.position = "absolute";
-    t.style.top = "20mm";
-    t.style.width = "100%";
-    t.style.textAlign = "center";
-    t.style.fontSize = "24px";
-    t.style.color = estado.fondoA4 === "blanco" ? "#000" : "#fff";
+    pg.textAlign(CENTER, TOP);
+    pg.noStroke();
 
-    const s = document.createElement("div");
-    s.innerText = subtitulo;
-    s.style.position = "absolute";
-    s.style.top = "35mm";
-    s.style.width = "100%";
-    s.style.textAlign = "center";
-    s.style.fontSize = "16px";
-    s.style.color = estado.fondoA4 === "blanco" ? "#333" : "#ccc";
+    pg.fill(estado.fondoA4 === "blanco" ? 0 : 255);
+    pg.textSize(72);
+    pg.text(titulo, w / 2, 60);
 
-    a4.appendChild(t);
-    a4.appendChild(s);
+    pg.fill(estado.fondoA4 === "blanco" ? 60 : 200);
+    pg.textSize(42);
+    pg.text(subtitulo, w / 2, 140);
   }
 
-  window.print();
+  save(pg, "ECO_A4.png");
+}
 
-  // Restaurar canvas
-  a4.innerHTML = backup;
-  a4.appendChild(canvasEl);
+// Auxiliar para dibujar gotas en graphics offscreen
+function dibujarGotaEnGraphics(pg, g) {
+  pg.noStroke();
+  pg.fill(g.color);
+
+  pg.beginShape();
+  for (let i = 0; i < g.pasos; i++) {
+    let ang = map(i, 0, g.pasos, 0, TWO_PI);
+    let ruido = noise(cos(ang) + g.offset, sin(ang) + g.offset);
+    let r = g.radio * map(ruido, 0, 1, 0.7, 1.3);
+    let px = g.x + cos(ang) * r;
+    let py = g.y + sin(ang) * r;
+    pg.vertex(px, py);
+  }
+  pg.endShape(CLOSE);
 }
 
 // ==========================
@@ -275,12 +289,6 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
-
-
-
-
-
-
 
 
 
