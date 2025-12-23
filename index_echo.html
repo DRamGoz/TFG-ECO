@@ -1,25 +1,28 @@
-xportar<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <title>ECHO — Arte Digital Interactivo</title>
-
   <link rel="stylesheet" href="estilo_echo.css">
-
-  <!-- p5 -->
+  
+  <!-- p5.js -->
   <script src="https://cdn.jsdelivr.net/npm/p5@1.11.7/lib/p5.js"></script>
-  <script src="echo.js" defer></script>
+  <!-- jsPDF para exportar PDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
+  
+  <script src="echo.js" defer></script>
 </head>
 <body>
 
-  <!-- CONTENEDOR A4 (solo para impresión) -->
-  <div id="a4-container"></div>
+  <!-- CONTENEDOR DEL A4 -->
+  <div id="a4-container">
+    <canvas id="defaultCanvas0"></canvas>
+    <div id="titulo" style="display:none">ECO — Generación de Arte Digital</div>
+    <div id="subtitulo" style="display:none">Interacción de usuarios en tiempo real</div>
+  </div>
 
   <!-- BOTONES IZQUIERDA -->
   <div id="botones-izquierda">
-    <button onclick="exportarA4()">Exportar A4</button>
     <button onclick="refrescarLienzo()">Refrescar Lienzo</button>
     <button onclick="alternarFondo()">Fondo A4</button>
     <button onclick="alternarTexto()">Mostrar/Ocultar Texto</button>
@@ -27,7 +30,7 @@ xportar<!DOCTYPE html>
     <button onclick="alternarMonocromo()">Colores Monocromáticos</button>
   </div>
 
-  <!-- BOTONES DERECHA (RESERVADOS) -->
+  <!-- BOTONES DERECHA (reservados) -->
   <div id="botones-derecha">
     <button disabled>Botón 7</button>
     <button disabled>Botón 8</button>
@@ -37,8 +40,19 @@ xportar<!DOCTYPE html>
     <button disabled>Botón 12</button>
   </div>
 
+  <!-- EXPORTAR A4 -->
+  <div id="exportar-a4">
+    <div id="exportar-texto">EXPORTAR A4</div>
+    <div id="exportar-botones">
+      <button onclick="exportar('pdf')">.PDF</button>
+      <button onclick="exportar('png')">.PNG</button>
+    </div>
+  </div>
+
 </body>
 </html>
+
+
 
 
 
