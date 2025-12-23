@@ -58,7 +58,7 @@ function draw() {
     fill(255, 255, 255, 220);
     stroke(0);
   } else {
-    fill(0, 0, 0, 220);
+    fill(0, 0, 0);
     stroke(255);
   }
   strokeWeight(4);
@@ -210,8 +210,8 @@ function alternarMonocromo() {
     info = document.createElement("div");
     info.id = "info-monocromo";
     info.style.fontSize = "12px";
-    info.style.color = "#fff";
-    info.style.marginTop = "4px";
+    info.style.color = "#0ff";
+    info.style.marginTop = "2px";
     btn.parentNode.insertBefore(info, btn.nextSibling);
   }
   info.innerText = estado.monocromo ? "Refrescar Lienzo para activar modo" : "";
@@ -299,6 +299,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
