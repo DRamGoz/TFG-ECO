@@ -92,7 +92,8 @@ function draw() {
     text(subtitulo, marcoX + marcoW / 2, marcoY + 60);
   }
 
-  // CONTADOR
+  // CONTADOR (franja inferior)
+if (estado.mostrarTexto && estado.modo === "editorial") {
   let contador = "Nº Interacción Usuarios: " + gotas.length;
   let franjaH = 26;
   let offsetY = 30;
@@ -107,6 +108,7 @@ function draw() {
   textSize(13);
   text(contador, marcoX + marcoW / 2, franjaY + franjaH / 2);
 }
+
 //============================
 // FUNCION EXPORTAR A4
 //============================
@@ -296,4 +298,5 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
