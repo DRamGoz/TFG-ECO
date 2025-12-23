@@ -11,52 +11,53 @@ const ALPHA_COLOR = 70;
 const RUEDO_MOVIMIENTO = 50;
 const CRECIMIENTO = 1.1;
 
-// Proporción A4: 210 / 297 ≈ 0.707
+// Proporción A4
 const A4_RATIO = 210 / 297;
+
 // =========================
 // ESTADO GLOBAL (UI AUTOR)
 // =========================
 let titulo = "ECO — Generación de Arte Digital";
 let subtitulo = "Interacción de usuarios en tiempo real";
 
-let estado = {
+window.estado = {
   modo: "editorial",      // editorial | lienzo
   fondoA4: "blanco",      // blanco | negro
   mostrarTexto: true,
   monocromo: false,
   orientacion: "vertical"
 };
-const API_URL = "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpnsHnDcAIKQ-SWU8FoIpdu-PUwO0KsdIk3klratrjgCHfskg/exec";
+
+const API_URL =
+  "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpnsHnDcAIKQ-SWU8FoIpdu-PUwO0KsdIk3klratrjgCHfskg/exec";
 
 let gotas = [];
 let idsExistentes = new Set();
 
-// Marco A4 en pixels
+// Marco A4
 let marcoX, marcoY, marcoW, marcoH;
+let canvas;
 
+// ==========================
+// SETUP
+// ==========================
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  canvas = createCanvas(windowWidth, windowHeight);
+  canvas.parent("a4-container");
 
-  // Calcular marco A4 centrado
-  if (width / height > A4_RATIO) {
-    marcoH = height - 40;
-    marcoW = marcoH * A4_RATIO;
-  } else {
-    marcoW = width - 40;
-    marcoH = marcoW / A4_RATIO;
-  }
-  marcoX = (width - marcoW) / 2;
-  marcoY = (height - marcoH) / 2;
+  recalcularMarco();
 
   cargarDatos();
   setInterval(cargarDatos, 2000);
 }
 
+// ==========================
+// DRAW
+// ==========================
 function draw() {
-  // 1. Fondo del canvas
   background(0, 40);
 
-  // 2. Dibujar marco A4
+  // Marco A4
   if (estado.fondoA4 === "blanco") {
     fill(255, 255, 255, 220);
     stroke(0);
@@ -67,101 +68,98 @@ function draw() {
   strokeWeight(4);
   rect(marcoX, marcoY, marcoW, marcoH);
 
-  // 3. Clipping para gotas dentro del A4
+  // Clipping gotas
   push();
+  drawingContext.save();
   drawingContext.beginPath();
   drawingContext.rect(marcoX, marcoY, marcoW, marcoH);
   drawingContext.clip();
 
   gotas.forEach(g => g.mostrar());
+
+  drawingContext.restore();
   pop();
 
-  // 4. Título y subtítulo (solo en modo editorial)
+  // TÍTULO / SUBTÍTULO (solo editorial)
   if (estado.mostrarTexto && estado.modo === "editorial") {
     textAlign(CENTER, TOP);
-
-    let colorTitulo = estado.fondoA4 === "blanco" ? 0 : 255;
-    let colorSubtitulo = estado.fondoA4 === "blanco" ? 50 : 200;
-
-    // Título
-    textSize(24);
-    fill(colorTitulo);
     noStroke();
+
+    fill(estado.fondoA4 === "blanco" ? 0 : 255);
+    textSize(24);
     text(titulo, marcoX + marcoW / 2, marcoY + 20);
 
-    // Subtítulo
+    fill(estado.fondoA4 === "blanco" ? 50 : 200);
     textSize(16);
-    fill(colorSubtitulo);
-    noStroke();
     text(subtitulo, marcoX + marcoW / 2, marcoY + 60);
   }
 
-  // 5. Contador (franja inferior)
+  // CONTADOR
   let contador = "Nº Interacción Usuarios: " + gotas.length;
-  textSize(13);
-  textAlign(CENTER, CENTER);
-
   let franjaH = 26;
-  let offsetY = 30; // ajuste vertical
+  let offsetY = 30;
   let franjaY = marcoY + marcoH - franjaH - offsetY;
-  let tx = marcoX + marcoW / 2;
-  let ty = franjaY + franjaH / 2;
 
-  // Fondo de la franja
   noStroke();
-  if (estado.fondoA4 === "blanco") {
-    fill(0, 0, 0, 120);
-  } else {
-    fill(255, 255, 255, 120);
-  }
+  fill(estado.fondoA4 === "blanco" ? 0 : 255, 120);
   rect(marcoX, franjaY, marcoW, franjaH);
 
-  // Texto del contador
   fill(estado.fondoA4 === "blanco" ? 255 : 0);
-  text(contador, tx, ty);
+  textAlign(CENTER, CENTER);
+  textSize(13);
+  text(contador, marcoX + marcoW / 2, franjaY + franjaH / 2);
 }
+
 // ==========================
-// FUNCIÓN IMPRIMIR A4
+// IMPRIMIR A4 (CORREGIDO)
 // ==========================
 function imprimirA4() {
-  const a4Container = document.getElementById("a4-container");
-  const tituloDiv = document.getElementById("titulo");
-  const subtituloDiv = document.getElementById("subtitulo");
+  const canvasEl = document.querySelector("#a4-container canvas");
 
-  // Mostrar título y subtítulo si el estado lo permite
-  if (window.estado && window.estado.mostrarTexto) {
-    tituloDiv.style.display = "block";
-    subtituloDiv.style.display = "block";
-  }
-
-  // Convertir canvas en imagen para impresión
-  const canvas = document.querySelector("#defaultCanvas0");
   const img = new Image();
-img.src = canvas.toDataURL("image/png");
-img.style.display = "block";
-img.style.width = "100%";
-img.style.margin = "0";
+  img.src = canvasEl.toDataURL("image/png");
+  img.style.width = "210mm";
+  img.style.height = "297mm";
+  img.style.display = "block";
 
+  const a4 = document.getElementById("a4-container");
 
-  // Limpiar container y añadir imagen + títulos
-  a4Container.innerHTML = "";
-  a4Container.appendChild(img);
+  const backup = a4.innerHTML;
+  a4.innerHTML = "";
+  a4.appendChild(img);
 
-  if (window.estado && window.estado.mostrarTexto) {
-    a4Container.appendChild(tituloDiv);
-    a4Container.appendChild(subtituloDiv);
+  if (estado.mostrarTexto && estado.modo === "editorial") {
+    const t = document.createElement("div");
+    t.innerText = titulo;
+    t.style.position = "absolute";
+    t.style.top = "20mm";
+    t.style.width = "100%";
+    t.style.textAlign = "center";
+    t.style.fontSize = "24px";
+    t.style.color = estado.fondoA4 === "blanco" ? "#000" : "#fff";
+
+    const s = document.createElement("div");
+    s.innerText = subtitulo;
+    s.style.position = "absolute";
+    s.style.top = "35mm";
+    s.style.width = "100%";
+    s.style.textAlign = "center";
+    s.style.fontSize = "16px";
+    s.style.color = estado.fondoA4 === "blanco" ? "#333" : "#ccc";
+
+    a4.appendChild(t);
+    a4.appendChild(s);
   }
 
-  // Llamar a imprimir
   window.print();
 
-  // Restaurar canvas original
-  a4Container.innerHTML = "";
-  a4Container.appendChild(canvas);
+  a4.innerHTML = backup;
+  a4.appendChild(canvasEl);
 }
 
-
-
+// ==========================
+// BOTONES
+// ==========================
 function refrescarLienzo() {
   gotas = [];
   idsExistentes.clear();
@@ -178,7 +176,6 @@ function alternarTexto() {
 function rotarLienzo() {
   estado.orientacion =
     estado.orientacion === "vertical" ? "horizontal" : "vertical";
-
   recalcularMarco();
 }
 
@@ -186,13 +183,12 @@ function alternarMonocromo() {
   estado.monocromo = !estado.monocromo;
 }
 
-// 7. FUNCIONES AUXILIARES (A CONTINUACIÓN)
+// ==========================
+// AUXILIARES
 // ==========================
 function recalcularMarco() {
   let ratio =
-    estado.orientacion === "vertical"
-      ? 210 / 297
-      : 297 / 210;
+    estado.orientacion === "vertical" ? 210 / 297 : 297 / 210;
 
   if (width / height > ratio) {
     marcoH = height - 40;
@@ -212,38 +208,37 @@ function cargarDatos() {
     .then(datos => {
       datos.forEach(d => {
         if (!idsExistentes.has(d.timestamp)) {
-          let g = new GotaPintura();
-          gotas.push(g);
+          gotas.push(new GotaPintura());
           idsExistentes.add(d.timestamp);
         }
       });
     })
-    .catch(err => console.error("Error al cargar datos:", err));
+    .catch(() => {});
 }
 
 // ==========================
-// Clase GotaPintura
+// CLASE GOTA
 // ==========================
 class GotaPintura {
   constructor() {
-    // Generar posición aleatoria **dentro del marco**
     this.x = random(marcoX + RADIO_MAX, marcoX + marcoW - RADIO_MAX);
     this.y = random(marcoY + RADIO_MAX, marcoY + marcoH - RADIO_MAX);
-
     this.radio = 0;
     this.radioFinal = random(RADIO_MIN, RADIO_MAX);
-
     this.pasos = int(random(NUM_VERTICES_MIN, NUM_VERTICES_MAX));
     this.offset = random(1000);
-
     this.creciendo = true;
 
-    this.color = color(random(255), random(255), random(255), ALPHA_COLOR);
+    if (estado.monocromo) {
+      let g = random(80, 200);
+      this.color = color(g, g, g, ALPHA_COLOR);
+    } else {
+      this.color = color(random(255), random(255), random(255), ALPHA_COLOR);
+    }
 
     this.noiseX = random(1000);
     this.noiseY = random(1000);
   }
-
 
   mostrar() {
     if (this.creciendo) {
@@ -254,23 +249,18 @@ class GotaPintura {
       }
     }
 
-    // Movimiento tipo Perlin
-    let nx = noise(this.noiseX) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO / 2;
-    let ny = noise(this.noiseY) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO / 2;
-    let x = this.x + nx;
-    let y = this.y + ny;
+    let x = this.x + noise(this.noiseX) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO / 2;
+    let y = this.y + noise(this.noiseY) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO / 2;
 
-    // Dibujar forma irregular
     noStroke();
     fill(this.color);
     beginShape();
     for (let i = 0; i < this.pasos; i++) {
       let ang = map(i, 0, this.pasos, 0, TWO_PI);
-      let ruido = noise(cos(ang) + this.offset, sin(ang) + this.offset);
-      let r = this.radio * map(ruido, 0, 1, 0.7, 1.3);
-      let px = x + cos(ang) * r;
-      let py = y + sin(ang) * r;
-      vertex(px, py);
+      let r =
+        this.radio *
+        map(noise(cos(ang) + this.offset, sin(ang) + this.offset), 0, 1, 0.7, 1.3);
+      vertex(x + cos(ang) * r, y + sin(ang) * r);
     }
     endShape(CLOSE);
 
@@ -278,6 +268,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
