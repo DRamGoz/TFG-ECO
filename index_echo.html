@@ -3,80 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <title>ECHO — Arte Digital Interactivo</title>
+
   <link rel="stylesheet" href="estilo_echo.css">
+
+  <!-- p5 -->
   <script src="https://cdn.jsdelivr.net/npm/p5@1.11.7/lib/p5.js"></script>
   <script src="echo.js" defer></script>
-  <style>
-    /* Ajustes para impresión */
-    @media print {
-      body * {
-        visibility: hidden;
-      }
-      #a4-container, #a4-container * {
-        visibility: visible;
-      }
-      #a4-container {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-      }
-    }
-  </style>
 </head>
 <body>
 
-  <!-- CONTENEDOR DEL A4 -->
- <div id="a4-container">
-  <canvas id="defaultCanvas0"></canvas>
-  <div id="titulo" style="display:none">ECO — Generación de Arte Digital</div>
-  <div id="subtitulo" style="display:none">Interacción de usuarios en tiempo real</div>
-</div>
+  <!-- CONTENEDOR A4 (solo para impresión) -->
+  <div id="a4-container"></div>
 
-<!-- Botones izquierda -->
-<div id="botones-izquierda">
-  <button onclick="imprimirA4()">Imprimir A4</button>
-  <button onclick="refrescarLienzo()">Refrescar Lienzo</button>
-  <button onclick="alternarFondo()">Fondo A4</button>
-  <button onclick="alternarTexto()">Mostrar/Ocultar Texto</button>
-  <button onclick="rotarLienzo()">Rotar Lienzo</button>
-  <button onclick="alternarMonocromo()">Colores Monocromáticos</button>
-</div>
+  <!-- BOTONES IZQUIERDA -->
+  <div id="botones-izquierda">
+    <button onclick="imprimirA4()">Imprimir A4</button>
+    <button onclick="refrescarLienzo()">Refrescar Lienzo</button>
+    <button onclick="alternarFondo()">Fondo A4</button>
+    <button onclick="alternarTexto()">Mostrar/Ocultar Texto</button>
+    <button onclick="rotarLienzo()">Rotar Lienzo</button>
+    <button onclick="alternarMonocromo()">Colores Monocromáticos</button>
+  </div>
 
-<!-- Botones derecha (reservados) -->
-<div id="botones-derecha">
-  <button disabled>Botón 7</button>
-  <button disabled>Botón 8</button>
-  <button disabled>Botón 9</button>
-  <button disabled>Botón 10</button>
-  <button disabled>Botón 11</button>
-  <button disabled>Botón 12</button>
-</div>
-
-
-  <script>
-    function imprimirA4() {
-      const titulo = document.getElementById("titulo");
-      const subtitulo = document.getElementById("subtitulo");
-
-      if (window.estado && window.estado.mostrarTexto) {
-        titulo.style.display = "block";
-        subtitulo.style.display = "block";
-      }
-
-      window.print();
-
-      titulo.style.display = "none";
-      subtitulo.style.display = "none";
-    }
-  </script>
+  <!-- BOTONES DERECHA (RESERVADOS) -->
+  <div id="botones-derecha">
+    <button disabled>Botón 7</button>
+    <button disabled>Botón 8</button>
+    <button disabled>Botón 9</button>
+    <button disabled>Botón 10</button>
+    <button disabled>Botón 11</button>
+    <button disabled>Botón 12</button>
+  </div>
 
 </body>
 </html>
-
-
-
-
-
-
-
