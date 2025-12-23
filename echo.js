@@ -114,8 +114,14 @@ function draw() {
 function exportarA4() {
   // Resolución A4 300 DPI
   const dpi = 300;
-  const anchoMM = 210;
-  const altoMM = 297;
+  let anchoMM = 210;
+  let altoMM = 297;
+
+  if (estado.orientacion === "horizontal") {
+    // Invertimos dimensiones si es horizontal
+    [anchoMM, altoMM] = [altoMM, anchoMM];
+  }
+
   const pxPorMM = dpi / 25.4;
   const w = Math.round(anchoMM * pxPorMM);
   const h = Math.round(altoMM * pxPorMM);
@@ -289,6 +295,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
