@@ -53,6 +53,18 @@ html, body {
 
 /* IMPRESIÓN */
 @media print {
+
+  @page {
+    size: A4;
+    margin: 0; /* CLAVE: elimina márgenes del navegador */
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
   body * {
     visibility: hidden;
   }
@@ -63,12 +75,22 @@ html, body {
 
   #a4-container {
     position: absolute;
-    left: 0;
     top: 0;
+    left: 0;
+    width: 210mm;
+    height: 297mm;
+  }
+
+  #a4-container img {
+    display: block; /* ELIMINA la franja blanca */
     width: 100%;
     height: auto;
   }
 }
+
+  }
+}
+
 
 
 
