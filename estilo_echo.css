@@ -1,10 +1,16 @@
+/* ========================
+   RESET GENERAL
+   ======================== */
 html, body {
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  overflow: hidden; /* evita scroll */
+  height: 100%;
 }
 
-/* CONTENEDORES DE BOTONES */
+/* ========================
+   BOTONES
+   ======================== */
 #botones-izquierda, #botones-derecha {
   position: absolute;
   top: 50%;
@@ -28,67 +34,63 @@ html, body {
   color: #fff;
   transition: background-color 0.3s;
 }
-
 #botones-izquierda button:hover,
-#botones-derecha button:hover {
-  background-color: #555;
-}
+#botones-derecha button:hover { background-color: #555; }
 
-/* CONTENEDOR A4 */
+/* ========================
+   CONTENEDOR A4
+   ======================== */
 #a4-container {
   position: relative;
-  width: 100%;
-  height: 100%;
+  width: 210mm;
+  height: 297mm;
+  margin: 0;
+  padding: 0;
 }
 
-/* TÍTULO Y SUBTÍTULO */
+#a4-container canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
 #a4-container #titulo,
-#a4-container #subtitulo {
+#a4-container #subtitulo,
+#a4-container #contador {
   position: absolute;
   width: 100%;
   text-align: center;
   pointer-events: none;
 }
 
-/* EXPORTAR A4 */
-#exportar-a4 {
-  position: absolute;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-  z-index: 10;
-}
+/* ========================
+   IMPRESIÓN
+   ======================== */
+@media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
 
-#exportar-texto {
-  font-weight: bold;
-  font-size: 16px;
-  color: #333;
-}
+  html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
 
-#exportar-botones {
-  display: flex;
-  gap: 10px;
-}
+  body * { visibility: hidden; }
+  #a4-container, #a4-container * { visibility: visible; }
 
-#exportar-botones button {
-  padding: 6px 12px;
-  font-size: 14px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  background-color: #333;
-  color: #fff;
-  transition: background-color 0.3s;
-}
+  #a4-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 210mm;
+    height: 297mm;
+  }
 
-#exportar-botones button:hover {
-  background-color: #555;
+  #a4-container canvas { display: block; width: 100%; height: 100%; }
 }
-
 
 
 
