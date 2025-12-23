@@ -27,7 +27,6 @@ html, body {
   cursor: pointer;
   background-color: #333;
   color: #fff;
-  transition: background-color 0.3s;
 }
 
 #botones-izquierda button:hover,
@@ -42,27 +41,28 @@ html, body {
   height: 100%;
 }
 
-/* TÍTULO Y SUBTÍTULO */
-#a4-container #titulo,
-#a4-container #subtitulo {
-  position: absolute;
-  width: 100%;
-  text-align: center;
-  pointer-events: none;
-}
-
-/* IMPRESIÓN */
+/* =======================
+   IMPRESIÓN
+   ======================= */
 @media print {
+
   @page {
     size: A4;
     margin: 0;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
   }
 
   body * {
     visibility: hidden;
   }
 
-  #a4-container, #a4-container * {
+  #a4-container, 
+  #a4-container * {
     visibility: visible;
   }
 
@@ -74,6 +74,8 @@ html, body {
     height: 297mm;
   }
 }
+
+
 
 
 
