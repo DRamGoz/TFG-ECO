@@ -14,7 +14,6 @@ html, body {
   gap: 10px;
   z-index: 10;
 }
-
 #botones-izquierda { left: 100px; }
 #botones-derecha { right: 100px; }
 
@@ -27,6 +26,7 @@ html, body {
   cursor: pointer;
   background-color: #333;
   color: #fff;
+  transition: background-color 0.3s;
 }
 
 #botones-izquierda button:hover,
@@ -41,39 +41,54 @@ html, body {
   height: 100%;
 }
 
-/* =======================
-   IMPRESIÓN
-   ======================= */
-@media print {
-
-  @page {
-    size: A4;
-    margin: 0;
-  }
-
-  html, body {
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-  }
-
-  body * {
-    visibility: hidden;
-  }
-
-  #a4-container, 
-  #a4-container * {
-    visibility: visible;
-  }
-
-  #a4-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 210mm;
-    height: 297mm;
-  }
+/* TÍTULO Y SUBTÍTULO */
+#a4-container #titulo,
+#a4-container #subtitulo {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  pointer-events: none;
 }
+
+/* EXPORTAR A4 */
+#exportar-a4 {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  z-index: 10;
+}
+
+#exportar-texto {
+  font-weight: bold;
+  font-size: 16px;
+  color: #333;
+}
+
+#exportar-botones {
+  display: flex;
+  gap: 10px;
+}
+
+#exportar-botones button {
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background-color: #333;
+  color: #fff;
+  transition: background-color 0.3s;
+}
+
+#exportar-botones button:hover {
+  background-color: #555;
+}
+
 
 
 
