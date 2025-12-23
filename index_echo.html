@@ -3,35 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <title>ECHO — Arte Digital Interactivo</title>
-
-  <!-- CSS -->
   <link rel="stylesheet" href="estilo_echo.css">
-
-  <!-- p5.js -->
   <script src="https://cdn.jsdelivr.net/npm/p5@1.11.7/lib/p5.js"></script>
-
-  <!-- jsPDF para exportar PDF -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-  <!-- JS principal -->
   <script src="echo.js" defer></script>
 </head>
 <body>
 
-  <!-- CONTENEDOR A4 -->
+  <!-- CONTENEDOR DEL A4 -->
   <div id="a4-container">
-    <!-- Canvas p5.js se crea automáticamente dentro de este contenedor -->
+    <canvas id="defaultCanvas0"></canvas>
+    <div id="titulo" style="display:none">ECO — Generación de Arte Digital</div>
+    <div id="subtitulo" style="display:none">Interacción de usuarios en tiempo real</div>
   </div>
 
   <!-- BOTONES IZQUIERDA -->
   <div id="botones-izquierda">
-
-    <!-- EXPORTACIÓN A4 -->
-    <div style="text-align:center; margin-bottom:5px; font-weight:bold;">EXPORTAR A4</div>
-    <button onclick="exportar('pdf')">.PDF</button>
-    <button onclick="exportar('png')">.PNG</button>
-
-    <!-- FUNCIONES DEL LADO IZQUIERDO -->
+    <button onclick="imprimirA4()">Imprimir A4</button>
     <button onclick="refrescarLienzo()">Refrescar Lienzo</button>
     <button onclick="alternarFondo()">Fondo A4</button>
     <button onclick="alternarTexto()">Mostrar/Ocultar Texto</button>
@@ -39,7 +26,7 @@
     <button onclick="alternarMonocromo()">Colores Monocromáticos</button>
   </div>
 
-  <!-- BOTONES DERECHA (reservados) -->
+  <!-- BOTONES DERECHA -->
   <div id="botones-derecha">
     <button disabled>Botón 7</button>
     <button disabled>Botón 8</button>
@@ -51,6 +38,8 @@
 
 </body>
 </html>
+
+
 
 
 
