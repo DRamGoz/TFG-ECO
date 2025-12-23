@@ -111,57 +111,65 @@ function draw() {
 }
 
 // ==========================
-// IMPRIMIR A4 (CAPTURA)
+// EXPORTAR A4 (PNG / PDF)
 // ==========================
-function imprimirA4() {
-  const canvasEl = document.querySelector("#a4-container canvas");
-  const img = new Image();
-  img.src = canvasEl.toDataURL("image/png");
+function exportarA4() {
+  const opcion = prompt("Elige formato de exportación: PNG o PDF", "PNG");
+  if (!opcion) return;
 
-  // Ajustar tamaño según orientación
-  if (estado.orientacion === "horizontal") {
-    img.style.width = "297mm";
-    img.style.height = "210mm";
-  } else {
-    img.style.width = "210mm";
-    img.style.height = "297mm";
-  }
-  img.style.display = "block";
+  const a4Canvas = createGraphics(marcoW, marcoH);
+  // Fondo
+  a4Canvas.noStroke();
+  a4Canvas.fill(estado.fondoA4 === "blanco" ? 255 : 0);
+  a4Canvas.rect(0, 0, marcoW, marcoH);
 
-  const a4 = document.getElementById("a4-container");
-  const backup = a4.innerHTML;
-  a4.innerHTML = "";
-  a4.appendChild(img);
+  // Gotas
+  gotas.forEach(g => {
+    g.mostrarEnCanvas(a4Canvas);
+  });
 
-  // Añadir texto si está activado
+  // Título / Subtítulo / Franja
   if (estado.mostrarTexto && estado.modo === "editorial") {
-    const t = document.createElement("div");
-    t.innerText = titulo;
-    t.style.position = "absolute";
-    t.style.top = "20mm";
-    t.style.width = "100%";
-    t.style.textAlign = "center";
-    t.style.fontSize = "24px";
-    t.style.color = estado.fondoA4 === "blanco" ? "#000" : "#fff";
+    // Título
+    a4Canvas.textAlign(CENTER, TOP);
+    a4Canvas.textSize(24);
+    a4Canvas.fill(estado.fondoA4 === "blanco" ? 0 : 255);
+    a4Canvas.text(titulo, marcoW / 2, 20);
 
-    const s = document.createElement("div");
-    s.innerText = subtitulo;
-    s.style.position = "absolute";
-    s.style.top = "35mm";
-    s.style.width = "100%";
-    s.style.textAlign = "center";
-    s.style.fontSize = "16px";
-    s.style.color = estado.fondoA4 === "blanco" ? "#333" : "#ccc";
+    // Subtítulo
+    a4Canvas.textSize(16);
+    a4Canvas.fill(estado.fondoA4 === "blanco" ? 50 : 200);
+    a4Canvas.text(subtitulo, marcoW / 2, 60);
 
-    a4.appendChild(t);
-    a4.appendChild(s);
+    // Franja contador
+    let franjaH = 26;
+    let offsetY = 30;
+    let franjaY = marcoH - franjaH - offsetY;
+    a4Canvas.fill(estado.fondoA4 === "blanco" ? 0 : 255, 120);
+    a4Canvas.rect(0, franjaY, marcoW, franjaH);
+
+    a4Canvas.fill(estado.fondoA4 === "blanco" ? 255 : 0);
+    a4Canvas.textAlign(CENTER, CENTER);
+    a4Canvas.textSize(13);
+    a4Canvas.text("Nº Interacción Usuarios: " + gotas.length, marcoW / 2, franjaY + franjaH / 2);
   }
 
-  window.print();
-
-  // Restaurar canvas
-  a4.innerHTML = backup;
-  a4.appendChild(canvasEl);
+  // Exportación
+  if (opcion.toUpperCase() === "PNG") {
+    const link = document.createElement("a");
+    link.download = "ECO_A4.png";
+    link.href = a4Canvas.elt.toDataURL("image/png");
+    link.click();
+  } else if (opcion.toUpperCase() === "PDF") {
+    const pdf = new jsPDF({
+      orientation: estado.orientacion === "vertical" ? "portrait" : "landscape",
+      unit: "mm",
+      format: "a4"
+    });
+    const imgData = a4Canvas.elt.toDataURL("image/png");
+    pdf.addImage(imgData, "PNG", 0, 0, 210, 297);
+    pdf.save("ECO_A4.pdf");
+  }
 }
 
 // ==========================
@@ -194,9 +202,7 @@ function alternarMonocromo() {
 // AUXILIARES
 // ==========================
 function recalcularMarco() {
-  let ratio =
-    estado.orientacion === "vertical" ? 210 / 297 : 297 / 210;
-
+  let ratio = estado.orientacion === "vertical" ? 210 / 297 : 297 / 210;
   if (width / height > ratio) {
     marcoH = height - 40;
     marcoW = marcoH * ratio;
@@ -204,7 +210,6 @@ function recalcularMarco() {
     marcoW = width - 40;
     marcoH = marcoW / ratio;
   }
-
   marcoX = (width - marcoW) / 2;
   marcoY = (height - marcoH) / 2;
 }
@@ -274,7 +279,39 @@ class GotaPintura {
     this.noiseX += 0.005;
     this.noiseY += 0.005;
   }
+
+  mostrarEnCanvas(pg) {
+    if (this.creciendo) {
+      this.radio += CRECIMIENTO;
+      if (this.radio >= this.radioFinal) {
+        this.radio = this.radioFinal;
+        this.creciendo = false;
+      }
+    }
+
+    let x = this.x - marcoX; // relativo a A4
+    let y = this.y - marcoY;
+    let nx = noise(this.noiseX) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO / 2;
+    let ny = noise(this.noiseY) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO / 2;
+
+    pg.noStroke();
+    pg.fill(this.color);
+    pg.beginShape();
+    for (let i = 0; i < this.pasos; i++) {
+      let ang = map(i, 0, this.pasos, 0, TWO_PI);
+      let r =
+        this.radio *
+        map(noise(cos(ang) + this.offset, sin(ang) + this.offset), 0, 1, 0.7, 1.3);
+      pg.vertex(x + cos(ang) * r + nx, y + sin(ang) * r + ny);
+    }
+    pg.endShape(CLOSE);
+
+    this.noiseX += 0.005;
+    this.noiseY += 0.005;
+  }
 }
+
+
 
 
 
