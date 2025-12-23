@@ -210,8 +210,8 @@ function alternarMonocromo() {
     info = document.createElement("div");
     info.id = "info-monocromo";
     info.style.fontSize = "12px";
-    info.style.color = "#0ff";
-    info.style.marginTop = "2px";
+    info.style.color = "#A9A9A9";
+    info.style.marginTop = "1px";
     btn.parentNode.insertBefore(info, btn.nextSibling);
   }
   info.innerText = estado.monocromo ? "Refrescar Lienzo para activar modo" : "";
@@ -299,6 +299,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
