@@ -9,11 +9,12 @@ const ALPHA_COLOR = 70;
 const RUEDO_MOVIMIENTO = 50;
 const CRECIMIENTO = 1.1;
 
+// Proporción A4
 const A4_RATIO = 210 / 297;
 
-// ==========================
-// ESTADO GLOBAL
-// ==========================
+// =========================
+// ESTADO GLOBAL (UI AUTOR)
+// =========================
 let titulo = "ECO — Generación de Arte Digital";
 let subtitulo = "Interacción de usuarios en tiempo real";
 
@@ -25,12 +26,15 @@ window.estado = {
   orientacion: "vertical"
 };
 
-const API_URL = "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpnsHnDcAIKQ-SWU8FoIpdu-PUwO0KsdIk3klratrjgCHfskg/exec";
+const API_URL =
+  "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpnsHnDcAIKQ-SWU8FoIpdu-PUwO0KsdIk3klratrjgCHfskg/exec";
 
 let gotas = [];
 let idsExistentes = new Set();
-let canvas;
+
+// Marco A4
 let marcoX, marcoY, marcoW, marcoH;
+let canvas;
 
 // ==========================
 // SETUP
@@ -40,6 +44,7 @@ function setup() {
   canvas.parent("a4-container");
 
   recalcularMarco();
+
   cargarDatos();
   setInterval(cargarDatos, 2000);
 }
@@ -63,33 +68,41 @@ function draw() {
 
   // Clipping gotas
   push();
+  drawingContext.save();
   drawingContext.beginPath();
   drawingContext.rect(marcoX, marcoY, marcoW, marcoH);
   drawingContext.clip();
+
   gotas.forEach(g => g.mostrar());
+
+  drawingContext.restore();
   pop();
 
-  // Título / subtítulo
+  // TÍTULO / SUBTÍTULO (solo editorial)
   if (estado.mostrarTexto && estado.modo === "editorial") {
     textAlign(CENTER, TOP);
     noStroke();
+
     fill(estado.fondoA4 === "blanco" ? 0 : 255);
     textSize(24);
     text(titulo, marcoX + marcoW / 2, marcoY + 20);
+
     fill(estado.fondoA4 === "blanco" ? 50 : 200);
     textSize(16);
     text(subtitulo, marcoX + marcoW / 2, marcoY + 60);
   }
 
-  // Contador
-  if (estado.mostrarTexto) {
+  // CONTADOR
+  if (estado.mostrarTexto && estado.modo === "editorial") {
     let contador = "Nº Interacción Usuarios: " + gotas.length;
     let franjaH = 26;
     let offsetY = 30;
     let franjaY = marcoY + marcoH - franjaH - offsetY;
+
     noStroke();
     fill(estado.fondoA4 === "blanco" ? 0 : 255, 120);
     rect(marcoX, franjaY, marcoW, franjaH);
+
     fill(estado.fondoA4 === "blanco" ? 255 : 0);
     textAlign(CENTER, CENTER);
     textSize(13);
@@ -98,22 +111,29 @@ function draw() {
 }
 
 // ==========================
-// IMPRIMIR A4
+// IMPRIMIR A4 (CAPTURA)
 // ==========================
 function imprimirA4() {
   const canvasEl = document.querySelector("#a4-container canvas");
-  const a4Container = document.getElementById("a4-container");
-
   const img = new Image();
   img.src = canvasEl.toDataURL("image/png");
-  img.style.width = "210mm";
-  img.style.height = "297mm";
+
+  // Ajustar tamaño según orientación
+  if (estado.orientacion === "horizontal") {
+    img.style.width = "297mm";
+    img.style.height = "210mm";
+  } else {
+    img.style.width = "210mm";
+    img.style.height = "297mm";
+  }
   img.style.display = "block";
 
-  const backup = a4Container.innerHTML;
-  a4Container.innerHTML = "";
-  a4Container.appendChild(img);
+  const a4 = document.getElementById("a4-container");
+  const backup = a4.innerHTML;
+  a4.innerHTML = "";
+  a4.appendChild(img);
 
+  // Añadir texto si está activado
   if (estado.mostrarTexto && estado.modo === "editorial") {
     const t = document.createElement("div");
     t.innerText = titulo;
@@ -133,14 +153,15 @@ function imprimirA4() {
     s.style.fontSize = "16px";
     s.style.color = estado.fondoA4 === "blanco" ? "#333" : "#ccc";
 
-    a4Container.appendChild(t);
-    a4Container.appendChild(s);
+    a4.appendChild(t);
+    a4.appendChild(s);
   }
 
   window.print();
 
-  a4Container.innerHTML = backup;
-  a4Container.appendChild(canvasEl);
+  // Restaurar canvas
+  a4.innerHTML = backup;
+  a4.appendChild(canvasEl);
 }
 
 // ==========================
@@ -160,7 +181,8 @@ function alternarTexto() {
 }
 
 function rotarLienzo() {
-  estado.orientacion = estado.orientacion === "vertical" ? "horizontal" : "vertical";
+  estado.orientacion =
+    estado.orientacion === "vertical" ? "horizontal" : "vertical";
   recalcularMarco();
 }
 
@@ -172,7 +194,9 @@ function alternarMonocromo() {
 // AUXILIARES
 // ==========================
 function recalcularMarco() {
-  let ratio = estado.orientacion === "vertical" ? 210 / 297 : 297 / 210;
+  let ratio =
+    estado.orientacion === "vertical" ? 210 / 297 : 297 / 210;
+
   if (width / height > ratio) {
     marcoH = height - 40;
     marcoW = marcoH * ratio;
@@ -180,6 +204,7 @@ function recalcularMarco() {
     marcoW = width - 40;
     marcoH = marcoW / ratio;
   }
+
   marcoX = (width - marcoW) / 2;
   marcoY = (height - marcoH) / 2;
 }
@@ -239,7 +264,9 @@ class GotaPintura {
     beginShape();
     for (let i = 0; i < this.pasos; i++) {
       let ang = map(i, 0, this.pasos, 0, TWO_PI);
-      let r = this.radio * map(noise(cos(ang) + this.offset, sin(ang) + this.offset), 0, 1, 0.7, 1.3);
+      let r =
+        this.radio *
+        map(noise(cos(ang) + this.offset, sin(ang) + this.offset), 0, 1, 0.7, 1.3);
       vertex(x + cos(ang) * r, y + sin(ang) * r);
     }
     endShape(CLOSE);
@@ -248,6 +275,8 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
+
 
 
 
