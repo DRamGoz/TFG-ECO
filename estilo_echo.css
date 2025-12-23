@@ -8,8 +8,6 @@ html, body {
 #botones-izquierda, #botones-derecha {
   position: absolute;
   top: 50%;
-  #botones-izquierda { left: 100px; }
-#botones-derecha { right: 100px; }
   transform: translateY(-50%);
   display: flex;
   flex-direction: column;
@@ -17,8 +15,8 @@ html, body {
   z-index: 10;
 }
 
-#botones-izquierda { left: 150px; }
-#botones-derecha { right: 150px; }
+#botones-izquierda { left: 100px; }
+#botones-derecha { right: 100px; }
 
 #botones-izquierda button,
 #botones-derecha button {
@@ -76,6 +74,7 @@ html, body {
     height: 297mm;
   }
 }
+
 
 
 
