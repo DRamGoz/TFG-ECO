@@ -137,7 +137,11 @@ function imprimirA4() {
   // Convertir canvas en imagen para impresión
   const canvas = document.querySelector("#defaultCanvas0");
   const img = new Image();
-  img.src = canvas.toDataURL("image/png");
+img.src = canvas.toDataURL("image/png");
+img.style.display = "block";
+img.style.width = "100%";
+img.style.margin = "0";
+
 
   // Limpiar container y añadir imagen + títulos
   a4Container.innerHTML = "";
@@ -274,6 +278,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
