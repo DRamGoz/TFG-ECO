@@ -18,8 +18,8 @@ let titulo = "ECO — Generación de Arte Digital";
 let subtitulo = "Interacción de usuarios en tiempo real";
 
 window.estado = {
-  modo: "editorial",
-  fondoA4: "blanco",
+  modo: "editorial",      // editorial | lienzo
+  fondoA4: "blanco",      // blanco | negro
   mostrarTexto: true,
   monocromo: false,
   orientacion: "vertical"
@@ -29,17 +29,17 @@ const API_URL = "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpn
 
 let gotas = [];
 let idsExistentes = new Set();
-let marcoX, marcoY, marcoW, marcoH;
 let canvas;
+let marcoX, marcoY, marcoW, marcoH;
 
 // ==========================
 // SETUP
 // ==========================
 function setup() {
-  canvas = createCanvas(2100, 2970); // Canvas grande para alta resolución
+  canvas = createCanvas(windowWidth, windowHeight);
   canvas.parent("a4-container");
-  recalcularMarco();
 
+  recalcularMarco();
   cargarDatos();
   setInterval(cargarDatos, 2000);
 }
@@ -63,90 +63,125 @@ function draw() {
 
   // Clipping gotas
   push();
-  drawingContext.save();
   drawingContext.beginPath();
   drawingContext.rect(marcoX, marcoY, marcoW, marcoH);
   drawingContext.clip();
   gotas.forEach(g => g.mostrar());
-  drawingContext.restore();
   pop();
 
-  // TÍTULO / SUBTÍTULO
+  // Título / subtítulo
   if (estado.mostrarTexto && estado.modo === "editorial") {
     textAlign(CENTER, TOP);
     noStroke();
-
     fill(estado.fondoA4 === "blanco" ? 0 : 255);
     textSize(24);
     text(titulo, marcoX + marcoW / 2, marcoY + 20);
-
     fill(estado.fondoA4 === "blanco" ? 50 : 200);
     textSize(16);
     text(subtitulo, marcoX + marcoW / 2, marcoY + 60);
+  }
 
-    // CONTADOR
+  // Contador
+  if (estado.mostrarTexto) {
     let contador = "Nº Interacción Usuarios: " + gotas.length;
-    textSize(13);
+    let franjaH = 26;
+    let offsetY = 30;
+    let franjaY = marcoY + marcoH - franjaH - offsetY;
+    noStroke();
+    fill(estado.fondoA4 === "blanco" ? 0 : 255, 120);
+    rect(marcoX, franjaY, marcoW, franjaH);
+    fill(estado.fondoA4 === "blanco" ? 255 : 0);
     textAlign(CENTER, CENTER);
-    fill(estado.fondoA4 === "blanco" ? 0 : 255);
-    text(contador, marcoX + marcoW / 2, marcoY + marcoH - 50);
+    textSize(13);
+    text(contador, marcoX + marcoW / 2, franjaY + franjaH / 2);
   }
 }
 
 // ==========================
-// EXPORTACIÓN A4
+// IMPRIMIR A4
 // ==========================
-function exportar(tipo) {
-  // tipo = 'png' o 'pdf'
+function imprimirA4() {
   const canvasEl = document.querySelector("#a4-container canvas");
-  const dataURL = canvasEl.toDataURL("image/png");
+  const a4Container = document.getElementById("a4-container");
 
-  if (tipo === "png") {
-    const link = document.createElement("a");
-    link.download = "ECO_A4.png";
-    link.href = dataURL;
-    link.click();
-  } else if (tipo === "pdf") {
-    if (typeof jsPDF === "undefined") {
-      alert("jsPDF no está cargado. Incluye https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js");
-      return;
-    }
+  const img = new Image();
+  img.src = canvasEl.toDataURL("image/png");
+  img.style.width = "210mm";
+  img.style.height = "297mm";
+  img.style.display = "block";
 
-    const { jsPDF } = window.jspdf;
-    let pdf = new jsPDF({
-      orientation: estado.orientacion === "vertical" ? "portrait" : "landscape",
-      unit: "mm",
-      format: "a4"
-    });
+  const backup = a4Container.innerHTML;
+  a4Container.innerHTML = "";
+  a4Container.appendChild(img);
 
-    pdf.addImage(dataURL, "PNG", 0, 0, 210, 297);
-    pdf.save("ECO_A4.pdf");
+  if (estado.mostrarTexto && estado.modo === "editorial") {
+    const t = document.createElement("div");
+    t.innerText = titulo;
+    t.style.position = "absolute";
+    t.style.top = "20mm";
+    t.style.width = "100%";
+    t.style.textAlign = "center";
+    t.style.fontSize = "24px";
+    t.style.color = estado.fondoA4 === "blanco" ? "#000" : "#fff";
+
+    const s = document.createElement("div");
+    s.innerText = subtitulo;
+    s.style.position = "absolute";
+    s.style.top = "35mm";
+    s.style.width = "100%";
+    s.style.textAlign = "center";
+    s.style.fontSize = "16px";
+    s.style.color = estado.fondoA4 === "blanco" ? "#333" : "#ccc";
+
+    a4Container.appendChild(t);
+    a4Container.appendChild(s);
   }
+
+  window.print();
+
+  a4Container.innerHTML = backup;
+  a4Container.appendChild(canvasEl);
 }
 
 // ==========================
 // BOTONES
 // ==========================
-function refrescarLienzo() { gotas = []; idsExistentes.clear(); }
-function alternarFondo() { estado.fondoA4 = estado.fondoA4 === "blanco" ? "negro" : "blanco"; }
-function alternarTexto() { estado.mostrarTexto = !estado.mostrarTexto; }
-function rotarLienzo() { estado.orientacion = estado.orientacion === "vertical" ? "horizontal" : "vertical"; recalcularMarco(); }
-function alternarMonocromo() { estado.monocromo = !estado.monocromo; }
+function refrescarLienzo() {
+  gotas = [];
+  idsExistentes.clear();
+}
+
+function alternarFondo() {
+  estado.fondoA4 = estado.fondoA4 === "blanco" ? "negro" : "blanco";
+}
+
+function alternarTexto() {
+  estado.mostrarTexto = !estado.mostrarTexto;
+}
+
+function rotarLienzo() {
+  estado.orientacion = estado.orientacion === "vertical" ? "horizontal" : "vertical";
+  recalcularMarco();
+}
+
+function alternarMonocromo() {
+  estado.monocromo = !estado.monocromo;
+}
 
 // ==========================
 // AUXILIARES
 // ==========================
 function recalcularMarco() {
   let ratio = estado.orientacion === "vertical" ? 210 / 297 : 297 / 210;
-  if (canvas.width / canvas.height > ratio) {
-    marcoH = canvas.height - 40;
+  if (width / height > ratio) {
+    marcoH = height - 40;
     marcoW = marcoH * ratio;
   } else {
-    marcoW = canvas.width - 40;
+    marcoW = width - 40;
     marcoH = marcoW / ratio;
   }
-  marcoX = (canvas.width - marcoW) / 2;
-  marcoY = (canvas.height - marcoH) / 2;
+  marcoX = (width - marcoW) / 2;
+  marcoY = (height - marcoH) / 2;
 }
 
 function cargarDatos() {
@@ -190,7 +225,10 @@ class GotaPintura {
   mostrar() {
     if (this.creciendo) {
       this.radio += CRECIMIENTO;
-      if (this.radio >= this.radioFinal) { this.radio = this.radioFinal; this.creciendo = false; }
+      if (this.radio >= this.radioFinal) {
+        this.radio = this.radioFinal;
+        this.creciendo = false;
+      }
     }
 
     let x = this.x + noise(this.noiseX) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO / 2;
@@ -210,6 +248,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
