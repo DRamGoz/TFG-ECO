@@ -112,13 +112,11 @@ function draw() {
 // EXPORTAR A4 COMO IMAGEN
 // ==========================
 function exportarA4() {
-  // Resolución A4 300 DPI
   const dpi = 300;
   let anchoMM = 210;
   let altoMM = 297;
 
   if (estado.orientacion === "horizontal") {
-    // Invertimos dimensiones si es horizontal
     [anchoMM, altoMM] = [altoMM, anchoMM];
   }
 
@@ -145,12 +143,10 @@ function exportarA4() {
   pg.scale(scaleX, scaleY);
   pg.translate(-marcoX, -marcoY);
 
-  // Dibujar gotas
   gotas.forEach(g => dibujarGotaEnGraphics(pg, g));
 
   pg.pop();
 
-  // Texto
   if (estado.mostrarTexto && estado.modo === "editorial") {
     pg.textAlign(CENTER, TOP);
     pg.noStroke();
@@ -167,11 +163,9 @@ function exportarA4() {
   save(pg, "ECO_A4.png");
 }
 
-// Auxiliar para dibujar gotas en graphics offscreen
 function dibujarGotaEnGraphics(pg, g) {
   pg.noStroke();
   pg.fill(g.color);
-
   pg.beginShape();
   for (let i = 0; i < g.pasos; i++) {
     let ang = map(i, 0, g.pasos, 0, TWO_PI);
@@ -208,6 +202,25 @@ function rotarLienzo() {
 
 function alternarMonocromo() {
   estado.monocromo = !estado.monocromo;
+
+  const btn = document.querySelector("#botones-izquierda button:nth-child(6)");
+  if (!btn) return;
+
+  // Cambiar color del botón
+  btn.style.backgroundColor = estado.monocromo ? "#ff0000" : "#333";
+
+  // Crear o actualizar mensaje informativo
+  let info = document.getElementById("info-monocromo");
+  if (!info) {
+    info = document.createElement("div");
+    info.id = "info-monocromo";
+    info.style.fontSize = "12px";
+    info.style.color = "#fff";
+    info.style.marginTop = "4px";
+    btn.parentNode.insertBefore(info, btn.nextSibling);
+  }
+
+  info.innerText = estado.monocromo ? "Refrescar Lienzo para activar modo" : "";
 }
 
 // ==========================
@@ -295,6 +308,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
