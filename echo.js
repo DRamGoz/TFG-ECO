@@ -12,9 +12,9 @@ const CRECIMIENTO = 1.1;
 // Proporción A4
 const A4_RATIO = 210 / 297;
 
-// =========================
+// ==========================
 // ESTADO GLOBAL (UI AUTOR)
-// =========================
+// ==========================
 let titulo = "ECO — Generación de Arte Digital";
 let subtitulo = "Interacción de usuarios en tiempo real";
 
@@ -93,7 +93,7 @@ function draw() {
   }
 
   // CONTADOR
-  if (estado.mostrarTexto && estado.modo === "editorial") {
+  if (estado.mostrarTexto) {
     let contador = "Nº Interacción Usuarios: " + gotas.length;
     let franjaH = 26;
     let offsetY = 30;
@@ -111,64 +111,44 @@ function draw() {
 }
 
 // ==========================
-// EXPORTAR A4 (PNG / PDF)
+// EXPORTACIÓN A IMAGEN O PDF
 // ==========================
-function exportarA4() {
-  const opcion = prompt("Elige formato de exportación: PNG o PDF", "PNG");
-  if (!opcion) return;
+async function exportar(opcion = "png") {
+  // Captura del canvas
+  const canvasEl = document.querySelector("#defaultCanvas0");
 
-  const a4Canvas = createGraphics(marcoW, marcoH);
-  // Fondo
-  a4Canvas.noStroke();
-  a4Canvas.fill(estado.fondoA4 === "blanco" ? 255 : 0);
-  a4Canvas.rect(0, 0, marcoW, marcoH);
-
-  // Gotas
-  gotas.forEach(g => {
-    g.mostrarEnCanvas(a4Canvas);
-  });
-
-  // Título / Subtítulo / Franja
-  if (estado.mostrarTexto && estado.modo === "editorial") {
-    // Título
-    a4Canvas.textAlign(CENTER, TOP);
-    a4Canvas.textSize(24);
-    a4Canvas.fill(estado.fondoA4 === "blanco" ? 0 : 255);
-    a4Canvas.text(titulo, marcoW / 2, 20);
-
-    // Subtítulo
-    a4Canvas.textSize(16);
-    a4Canvas.fill(estado.fondoA4 === "blanco" ? 50 : 200);
-    a4Canvas.text(subtitulo, marcoW / 2, 60);
-
-    // Franja contador
-    let franjaH = 26;
-    let offsetY = 30;
-    let franjaY = marcoH - franjaH - offsetY;
-    a4Canvas.fill(estado.fondoA4 === "blanco" ? 0 : 255, 120);
-    a4Canvas.rect(0, franjaY, marcoW, franjaH);
-
-    a4Canvas.fill(estado.fondoA4 === "blanco" ? 255 : 0);
-    a4Canvas.textAlign(CENTER, CENTER);
-    a4Canvas.textSize(13);
-    a4Canvas.text("Nº Interacción Usuarios: " + gotas.length, marcoW / 2, franjaY + franjaH / 2);
+  if (opcion === "png") {
+    const link = document.createElement("a");
+    link.href = canvasEl.toDataURL("image/png");
+    link.download = "exportacion.png";
+    link.click();
   }
 
-  // Exportación
-  if (opcion.toUpperCase() === "PNG") {
-    const link = document.createElement("a");
-    link.download = "ECO_A4.png";
-    link.href = a4Canvas.elt.toDataURL("image/png");
-    link.click();
-  } else if (opcion.toUpperCase() === "PDF") {
+  if (opcion === "pdf") {
+    if (!window.jspdf) {
+      console.error("jsPDF no está cargado. Añade el script de jsPDF en el HTML.");
+      return;
+    }
+
+    const { jsPDF } = window.jspdf;
+
     const pdf = new jsPDF({
       orientation: estado.orientacion === "vertical" ? "portrait" : "landscape",
       unit: "mm",
       format: "a4"
     });
-    const imgData = a4Canvas.elt.toDataURL("image/png");
-    pdf.addImage(imgData, "PNG", 0, 0, 210, 297);
-    pdf.save("ECO_A4.pdf");
+
+    const imgData = canvasEl.toDataURL("image/png");
+    pdf.addImage(
+      imgData,
+      "PNG",
+      0,
+      0,
+      pdf.internal.pageSize.getWidth(),
+      pdf.internal.pageSize.getHeight()
+    );
+
+    pdf.save("exportacion.pdf");
   }
 }
 
@@ -202,7 +182,9 @@ function alternarMonocromo() {
 // AUXILIARES
 // ==========================
 function recalcularMarco() {
-  let ratio = estado.orientacion === "vertical" ? 210 / 297 : 297 / 210;
+  let ratio =
+    estado.orientacion === "vertical" ? 210 / 297 : 297 / 210;
+
   if (width / height > ratio) {
     marcoH = height - 40;
     marcoW = marcoH * ratio;
@@ -210,6 +192,7 @@ function recalcularMarco() {
     marcoW = width - 40;
     marcoH = marcoW / ratio;
   }
+
   marcoX = (width - marcoW) / 2;
   marcoY = (height - marcoH) / 2;
 }
@@ -279,37 +262,8 @@ class GotaPintura {
     this.noiseX += 0.005;
     this.noiseY += 0.005;
   }
-
-  mostrarEnCanvas(pg) {
-    if (this.creciendo) {
-      this.radio += CRECIMIENTO;
-      if (this.radio >= this.radioFinal) {
-        this.radio = this.radioFinal;
-        this.creciendo = false;
-      }
-    }
-
-    let x = this.x - marcoX; // relativo a A4
-    let y = this.y - marcoY;
-    let nx = noise(this.noiseX) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO / 2;
-    let ny = noise(this.noiseY) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO / 2;
-
-    pg.noStroke();
-    pg.fill(this.color);
-    pg.beginShape();
-    for (let i = 0; i < this.pasos; i++) {
-      let ang = map(i, 0, this.pasos, 0, TWO_PI);
-      let r =
-        this.radio *
-        map(noise(cos(ang) + this.offset, sin(ang) + this.offset), 0, 1, 0.7, 1.3);
-      pg.vertex(x + cos(ang) * r + nx, y + sin(ang) * r + ny);
-    }
-    pg.endShape(CLOSE);
-
-    this.noiseX += 0.005;
-    this.noiseY += 0.005;
-  }
 }
+
 
 
 
