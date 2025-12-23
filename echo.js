@@ -8,8 +8,12 @@ const RADIO_MAX = 120;
 const ALPHA_COLOR = 70;
 const RUEDO_MOVIMIENTO = 50;
 const CRECIMIENTO = 1.1;
+
 const A4_RATIO = 210 / 297;
 
+// ==========================
+// ESTADO GLOBAL
+// ==========================
 let titulo = "ECO — Generación de Arte Digital";
 let subtitulo = "Interacción de usuarios en tiempo real";
 
@@ -25,7 +29,6 @@ const API_URL = "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpn
 
 let gotas = [];
 let idsExistentes = new Set();
-
 let marcoX, marcoY, marcoW, marcoH;
 let canvas;
 
@@ -33,9 +36,8 @@ let canvas;
 // SETUP
 // ==========================
 function setup() {
-  canvas = createCanvas(windowWidth, windowHeight);
+  canvas = createCanvas(2100, 2970); // Canvas grande para alta resolución
   canvas.parent("a4-container");
-
   recalcularMarco();
 
   cargarDatos();
@@ -81,46 +83,44 @@ function draw() {
     fill(estado.fondoA4 === "blanco" ? 50 : 200);
     textSize(16);
     text(subtitulo, marcoX + marcoW / 2, marcoY + 60);
-  }
 
-  // CONTADOR
-  if (estado.mostrarTexto) {
+    // CONTADOR
     let contador = "Nº Interacción Usuarios: " + gotas.length;
-    let franjaH = 26;
-    let offsetY = 30;
-    let franjaY = marcoY + marcoH - franjaH - offsetY;
-
-    noStroke();
-    fill(estado.fondoA4 === "blanco" ? 0 : 255, 120);
-    rect(marcoX, franjaY, marcoW, franjaH);
-
-    fill(estado.fondoA4 === "blanco" ? 255 : 0);
-    textAlign(CENTER, CENTER);
     textSize(13);
-    text(contador, marcoX + marcoW / 2, franjaY + franjaH / 2);
+    textAlign(CENTER, CENTER);
+    fill(estado.fondoA4 === "blanco" ? 0 : 255);
+    text(contador, marcoX + marcoW / 2, marcoY + marcoH - 50);
   }
 }
 
 // ==========================
-// EXPORTAR A4
+// EXPORTACIÓN A4
 // ==========================
 function exportar(tipo) {
+  // tipo = 'png' o 'pdf'
   const canvasEl = document.querySelector("#a4-container canvas");
-  const imgData = canvasEl.toDataURL("image/png");
+  const dataURL = canvasEl.toDataURL("image/png");
 
   if (tipo === "png") {
-    saveCanvas(canvasEl, 'ECO_lienzo', 'png');
+    const link = document.createElement("a");
+    link.download = "ECO_A4.png";
+    link.href = dataURL;
+    link.click();
   } else if (tipo === "pdf") {
-    const pdf = new jsPDF({
-      orientation: estado.orientacion === 'vertical' ? 'portrait' : 'landscape',
-      unit: 'mm',
-      format: 'a4'
-    });
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
+    if (typeof jsPDF === "undefined") {
+      alert("jsPDF no está cargado. Incluye https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js");
+      return;
+    }
 
-    pdf.addImage(imgData, 'PNG', 0, 0, pageWidth, pageHeight);
-    pdf.save('ECO_lienzo.pdf');
+    const { jsPDF } = window.jspdf;
+    let pdf = new jsPDF({
+      orientation: estado.orientacion === "vertical" ? "portrait" : "landscape",
+      unit: "mm",
+      format: "a4"
+    });
+
+    pdf.addImage(dataURL, "PNG", 0, 0, 210, 297);
+    pdf.save("ECO_A4.pdf");
   }
 }
 
@@ -138,15 +138,15 @@ function alternarMonocromo() { estado.monocromo = !estado.monocromo; }
 // ==========================
 function recalcularMarco() {
   let ratio = estado.orientacion === "vertical" ? 210 / 297 : 297 / 210;
-  if (width / height > ratio) {
-    marcoH = height - 40;
+  if (canvas.width / canvas.height > ratio) {
+    marcoH = canvas.height - 40;
     marcoW = marcoH * ratio;
   } else {
-    marcoW = width - 40;
+    marcoW = canvas.width - 40;
     marcoH = marcoW / ratio;
   }
-  marcoX = (width - marcoW) / 2;
-  marcoY = (height - marcoH) / 2;
+  marcoX = (canvas.width - marcoW) / 2;
+  marcoY = (canvas.height - marcoH) / 2;
 }
 
 function cargarDatos() {
@@ -176,8 +176,12 @@ class GotaPintura {
     this.offset = random(1000);
     this.creciendo = true;
 
-    this.color = estado.monocromo ? color(random(80,200), random(80,200), random(80,200), ALPHA_COLOR) :
-                                      color(random(255), random(255), random(255), ALPHA_COLOR);
+    if (estado.monocromo) {
+      let g = random(80, 200);
+      this.color = color(g, g, g, ALPHA_COLOR);
+    } else {
+      this.color = color(random(255), random(255), random(255), ALPHA_COLOR);
+    }
 
     this.noiseX = random(1000);
     this.noiseY = random(1000);
@@ -186,19 +190,19 @@ class GotaPintura {
   mostrar() {
     if (this.creciendo) {
       this.radio += CRECIMIENTO;
-      if (this.radio >= this.radioFinal) this.creciendo = false;
+      if (this.radio >= this.radioFinal) { this.radio = this.radioFinal; this.creciendo = false; }
     }
 
-    let x = this.x + noise(this.noiseX) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO/2;
-    let y = this.y + noise(this.noiseY) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO/2;
+    let x = this.x + noise(this.noiseX) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO / 2;
+    let y = this.y + noise(this.noiseY) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO / 2;
 
     noStroke();
     fill(this.color);
     beginShape();
-    for (let i=0; i<this.pasos; i++) {
-      let ang = map(i,0,this.pasos,0,TWO_PI);
-      let r = this.radio * map(noise(cos(ang)+this.offset, sin(ang)+this.offset),0,1,0.7,1.3);
-      vertex(x + cos(ang)*r, y + sin(ang)*r);
+    for (let i = 0; i < this.pasos; i++) {
+      let ang = map(i, 0, this.pasos, 0, TWO_PI);
+      let r = this.radio * map(noise(cos(ang) + this.offset, sin(ang) + this.offset), 0, 1, 0.7, 1.3);
+      vertex(x + cos(ang) * r, y + sin(ang) * r);
     }
     endShape(CLOSE);
 
@@ -206,6 +210,8 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
+
 
 
 
