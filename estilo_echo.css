@@ -1,7 +1,7 @@
 html, body {
   margin: 0;
   padding: 0;
-  overflow: hidden; /* evita scroll en toda la página */
+  overflow: hidden;
 }
 
 /* CONTENEDORES DE BOTONES */
@@ -27,7 +27,6 @@ html, body {
   cursor: pointer;
   background-color: #333;
   color: #fff;
-  transition: background-color 0.3s;
 }
 
 #botones-izquierda button:hover,
@@ -42,21 +41,14 @@ html, body {
   height: 100%;
 }
 
-/* TÍTULO Y SUBTÍTULO */
-#a4-container #titulo,
-#a4-container #subtitulo {
-  position: absolute;
-  width: 100%;
-  text-align: center;
-  pointer-events: none; /* que no interfieran con el canvas */
-}
-
-/* IMPRESIÓN */
+/* =======================
+   IMPRESIÓN
+   ======================= */
 @media print {
 
   @page {
     size: A4;
-    margin: 0; /* CLAVE: elimina márgenes del navegador */
+    margin: 0;
   }
 
   html, body {
@@ -69,7 +61,8 @@ html, body {
     visibility: hidden;
   }
 
-  #a4-container, #a4-container * {
+  #a4-container, 
+  #a4-container * {
     visibility: visible;
   }
 
@@ -80,16 +73,8 @@ html, body {
     width: 210mm;
     height: 297mm;
   }
-
-  #a4-container img {
-    display: block; /* ELIMINA la franja blanca */
-    width: 100%;
-    height: auto;
-  }
 }
 
-  }
-}
 
 
 
