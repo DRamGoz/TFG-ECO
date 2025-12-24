@@ -32,8 +32,8 @@ canvas {
   font-size: 40px;
   text-shadow: 0 0 8px rgba(0,0,0,0.7);
   pointer-events: none;
-  line-height: 1.5;
-  margin-bottom: 25px; /* separa el texto del botón */
+  line-height: 1; /* ---------------interlineado-----------*/
+  margin-bottom: 40px; /* ---------------------separa el texto del botón -------------------------*/
   animation: fadePulse 2s ease-in-out infinite alternate;
 }
 
@@ -71,6 +71,7 @@ canvas {
   background-color: #00c2ff;
   box-shadow: 0 0 15px rgba(0, 200, 255, 0.8);
 }
+
 
 
 
