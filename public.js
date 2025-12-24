@@ -2,7 +2,7 @@ const API_URL = "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpn
 
 let stars = [];        // fondo de estrellas
 let userStar = null;   // estrella única del usuario
-const numStars = 100;  // cantidad de estrellas de fondo
+const numStars = 200;  // cantidad de estrellas de fondo
 
 function setup() {
   createCanvas(windowWidth, windowHeight).parent("app");
@@ -79,5 +79,6 @@ function enviarDato() {
     .then(console.log)
     .catch(console.error);
 }
+
 
 
