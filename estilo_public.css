@@ -17,18 +17,33 @@ canvas {
   display: block;
 }
 
-/* --- TEXTO MOTIVADOR --- */
+/* --- TEXTO MOTIVADOR CON EFECTO --- */
 #infoText {
   position: absolute;
-  top: 35%;
+  top: 30%;
   width: 100%;
   text-align: center;
   color: #fff;
-  font-size: 18px;
+  font-size: 20px;
   text-shadow: 0 0 8px rgba(0,0,0,0.7);
-  pointer-events: none; /* para que no interfiera con el botón */
-  line-height: 1.4;
+  pointer-events: none;
+  line-height: 1.5;
   padding: 0 20px;
+
+  /* efecto fade-in y leve pulso */
+  animation: fadePulse 2s ease-in-out infinite alternate;
+}
+
+/* Animación: leve pulso de opacidad y escala */
+@keyframes fadePulse {
+  0% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
 }
 
 /* --- BOTÓN ESTILO CIRCULAR --- */
@@ -63,4 +78,6 @@ canvas {
   background-color: #00c2ff;
   box-shadow: 0 0 15px rgba(0, 200, 255, 0.8);
 }
+
+
 
