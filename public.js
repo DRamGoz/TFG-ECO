@@ -30,10 +30,9 @@ function setup() {
       userStar = {
         x: random(width * 0.2, width * 0.8),
         y: random(height * 0.2, height * 0.8),
-        baseSize: random(6, 10),
-        size: 0,
+        size: random(6, 10),
         alpha: 0,
-        maxAlpha: 200
+        maxAlpha: 255
       };
 
       // mostrar texto junto a la estrella
@@ -60,16 +59,19 @@ function draw() {
     ellipse(s.x, s.y, s.size);
   }
 
-  // dibujar estrella del usuario
+  // dibujar halo pulsante de la estrella del usuario
   if (userStar) {
-    // fade-in
+    // fade-in de la estrella
     if (userStar.alpha < userStar.maxAlpha) userStar.alpha += 5;
 
-    // pulso (oscila tamaño)
-    let pulse = sin(frameCount * 0.01) * 1;
-    userStar.size = userStar.baseSize + pulse;
+    // pulso del halo
+    let haloPulse = sin(frameCount * 0.1) * 10; // oscila entre -10 y +10
 
-    // brillo azul
+    // halo difuso
+    fill(0, 200, 255, 50);
+    ellipse(userStar.x, userStar.y, (userStar.size + 20 + haloPulse) * 2);
+
+    // dibujar estrella estática con brillo oscilante
     fill(0, 200, 255, userStar.alpha);
     ellipse(userStar.x, userStar.y, userStar.size * 2);
   }
@@ -78,7 +80,7 @@ function draw() {
   if (showUserText && userStar) {
     fill(255, 255, 255, 220);
     textAlign(LEFT, CENTER);
-    textSize(10);
+    textSize(18);
     text("Gracias", userStar.x + 15, userStar.y);
 
     // desaparecer texto tras 2 segundos
