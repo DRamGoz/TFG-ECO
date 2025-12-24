@@ -78,9 +78,9 @@ function draw() {
 
   // dibujar texto junto a la estrella
   if (showUserText && userStar) {
-    fill(255, 255, 255, 220);
+    fill(255, 255, 255, 120);
     textAlign(LEFT, CENTER);
-    textSize(18);
+    textSize(10);
     text("Gracias", userStar.x + 15, userStar.y);
 
     // desaparecer texto tras 2 segundos
@@ -106,6 +106,7 @@ function enviarDato() {
     .then(console.log)
     .catch(console.error);
 }
+
 
 
 
