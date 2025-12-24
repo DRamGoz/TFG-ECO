@@ -2,7 +2,9 @@ const API_URL = "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpn
 
 let stars = [];        // fondo de estrellas
 let userStar = null;   // estrella única del usuario
-const numStars = 200;  // cantidad de estrellas de fondo
+let showUserText = false; // controlar el texto
+let textTimer = 0;     // temporizador del texto
+const numStars = 100;  // cantidad de estrellas de fondo
 
 function setup() {
   createCanvas(windowWidth, windowHeight).parent("app");
@@ -24,16 +26,21 @@ function setup() {
     if (!userStar) {
       enviarDato();
 
-      // generar estrella única de usuario
+      // generar estrella única del usuario
       userStar = {
-        x: random(width),
-        y: random(height),
-        size: random(6, 10),
+        x: random(width * 0.2, width * 0.8),
+        y: random(height * 0.2, height * 0.8),
+        baseSize: random(6, 10),
+        size: 0,
         alpha: 0,
         maxAlpha: 255
       };
 
-      // desaparecer botón y texto simultáneamente
+      // mostrar texto junto a la estrella
+      showUserText = true;
+      textTimer = millis();
+
+      // desaparecer botón y texto principal
       [btn, infoText].forEach(el => {
         el.style.transition = "opacity 1s ease";
         el.style.opacity = 0;
@@ -53,13 +60,31 @@ function draw() {
     ellipse(s.x, s.y, s.size);
   }
 
-  // dibujar estrella del usuario si existe
+  // dibujar estrella del usuario
   if (userStar) {
-    if (userStar.alpha < userStar.maxAlpha) {
-      userStar.alpha += 5; // fade-in
+    // fade-in
+    if (userStar.alpha < userStar.maxAlpha) userStar.alpha += 5;
+
+    // pulso (oscila tamaño)
+    let pulse = sin(frameCount * 0.1) * 3;
+    userStar.size = userStar.baseSize + pulse;
+
+    // brillo azul
+    fill(0, 200, 255, userStar.alpha);
+    ellipse(userStar.x, userStar.y, userStar.size * 2);
+  }
+
+  // dibujar texto junto a la estrella
+  if (showUserText && userStar) {
+    fill(255, 255, 255, 220);
+    textAlign(LEFT, CENTER);
+    textSize(18);
+    text("Aquí tu huella. Gracias", userStar.x + 15, userStar.y);
+
+    // desaparecer texto tras 2 segundos
+    if (millis() - textTimer > 2000) {
+      showUserText = false;
     }
-    fill(255, userStar.alpha);
-    ellipse(userStar.x, userStar.y, userStar.size);
   }
 }
 
@@ -79,6 +104,7 @@ function enviarDato() {
     .then(console.log)
     .catch(console.error);
 }
+
 
 
 
