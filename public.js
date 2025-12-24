@@ -4,7 +4,7 @@ let stars = [];        // fondo de estrellas
 let userStar = null;   // estrella única del usuario
 let showUserText = false; // controlar el texto
 let textTimer = 0;     // temporizador del texto
-const numStars = 100;  // cantidad de estrellas de fondo
+const numStars = 200;  // cantidad de estrellas de fondo
 
 function setup() {
   createCanvas(windowWidth, windowHeight).parent("app");
@@ -14,8 +14,8 @@ function setup() {
     stars.push({
       x: random(width),
       y: random(height),
-      size: random(1, 3),
-      alpha: random(50, 150)
+      size: random(1, 5),
+      alpha: random(50, 200)
     });
   }
 
@@ -106,6 +106,7 @@ function enviarDato() {
     .then(console.log)
     .catch(console.error);
 }
+
 
 
 
