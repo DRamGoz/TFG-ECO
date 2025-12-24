@@ -3,7 +3,7 @@ const API_URL = "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpn
 let btn;
 
 function setup() {
-  const canvas = createCanvas(400, 200);
+  const canvas = createCanvas(windowWidth, windowHeight);
   canvas.parent("app");
 
   btn = createButton("ENVIAR DATO");
@@ -13,9 +13,10 @@ function setup() {
 
 function draw() {
   background(0);
-  fill(255, 0, 0);
-  textAlign(CENTER, CENTER);
-  text("PUBLIC", width / 2, 40);
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
 }
 
 function enviarDato() {
@@ -30,3 +31,4 @@ function enviarDato() {
     .then(console.log)
     .catch(console.error);
 }
+
