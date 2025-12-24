@@ -17,8 +17,9 @@ function setup() {
     });
   }
 
-  // botón
   const btn = document.getElementById("sendBtn");
+  const infoText = document.getElementById("infoText");
+
   btn.addEventListener("click", () => {
     if (!userStar) {
       enviarDato();
@@ -28,14 +29,16 @@ function setup() {
         x: random(width),
         y: random(height),
         size: random(6, 10),
-        alpha: 0,       // empezamos invisible para animación
+        alpha: 0,
         maxAlpha: 255
       };
 
-      // ocultar/desaparecer el botón
-      btn.style.transition = "opacity 1s ease";
-      btn.style.opacity = 0;
-      setTimeout(() => btn.style.display = "none", 1000);
+      // desaparecer botón y texto simultáneamente
+      [btn, infoText].forEach(el => {
+        el.style.transition = "opacity 1s ease";
+        el.style.opacity = 0;
+        setTimeout(() => el.style.display = "none", 1000);
+      });
     }
   });
 }
@@ -53,7 +56,7 @@ function draw() {
   // dibujar estrella del usuario si existe
   if (userStar) {
     if (userStar.alpha < userStar.maxAlpha) {
-      userStar.alpha += 5; // animación fade-in
+      userStar.alpha += 5; // fade-in
     }
     fill(255, userStar.alpha);
     ellipse(userStar.x, userStar.y, userStar.size);
@@ -76,3 +79,5 @@ function enviarDato() {
     .then(console.log)
     .catch(console.error);
 }
+
+
