@@ -33,7 +33,7 @@ canvas {
   animation: fadePulse 2s ease-in-out infinite alternate;
 
   /* Posicionar sobre el botón usando bottom relativo al botón */
-  top: 40%;       /* coincide con la altura del botón */
+  top: 43%;       /* coincide con la altura del botón */
   left: 50%;      /* centrado horizontal respecto al contenedor */
   transform: translate(-50%, -180%); /* ajusta verticalmente sobre el botón */
 }
@@ -76,6 +76,7 @@ canvas {
   background-color: #00c2ff;
   box-shadow: 0 0 15px rgba(0, 200, 255, 0.8);
 }
+
 
 
 
