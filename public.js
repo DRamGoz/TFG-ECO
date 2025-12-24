@@ -33,7 +33,7 @@ function setup() {
         baseSize: random(6, 10),
         size: 0,
         alpha: 0,
-        maxAlpha: 255
+        maxAlpha: 200
       };
 
       // mostrar texto junto a la estrella
@@ -66,7 +66,7 @@ function draw() {
     if (userStar.alpha < userStar.maxAlpha) userStar.alpha += 5;
 
     // pulso (oscila tamaño)
-    let pulse = sin(frameCount * 0.1) * 1;
+    let pulse = sin(frameCount * 0.01) * 1;
     userStar.size = userStar.baseSize + pulse;
 
     // brillo azul
@@ -104,6 +104,7 @@ function enviarDato() {
     .then(console.log)
     .catch(console.error);
 }
+
 
 
 
