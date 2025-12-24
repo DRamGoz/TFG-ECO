@@ -1,18 +1,19 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpnsHnDcAIKQ-SWU8FoIpdu-PUwO0KsdIk3klratrjgCHfskg/exec";
 
-
 let btn;
 
 function setup() {
-  createCanvas(400, 200);
+  const canvas = createCanvas(400, 200);
+  canvas.parent("app");
+
   btn = createButton("ENVIAR DATO");
-  btn.position(width / 2 - 50, height / 2);
+  btn.parent("app");
   btn.mousePressed(enviarDato);
 }
 
 function draw() {
   background(0);
-  fill(255,0,0);
+  fill(255, 0, 0);
   textAlign(CENTER, CENTER);
   text("PUBLIC", width / 2, 40);
 }
@@ -25,8 +26,7 @@ function enviarDato() {
     method: "POST",
     body: data
   })
-  .then(r => r.text())
-  .then(console.log)
-  .catch(console.error);
+    .then(r => r.text())
+    .then(console.log)
+    .catch(console.error);
 }
-
