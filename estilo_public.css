@@ -23,7 +23,7 @@ canvas {
   top: 30%;
   width: 100%;
   text-align: center;
-  color: #fff;
+  color: #A9A9A9;
   font-size: 20px;
   text-shadow: 0 0 8px rgba(0,0,0,0.7);
   pointer-events: none;
@@ -37,7 +37,7 @@ canvas {
 /* Animación: leve pulso de opacidad y escala */
 @keyframes fadePulse {
   0% {
-    opacity: 0.85;
+    opacity: 0.60;
     transform: scale(1);
   }
   100% {
@@ -78,6 +78,7 @@ canvas {
   background-color: #00c2ff;
   box-shadow: 0 0 15px rgba(0, 200, 255, 0.8);
 }
+
 
 
 
