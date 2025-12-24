@@ -47,7 +47,7 @@ canvas {
 /* --- BOTÓN ESTILO CIRCULAR --- */
 #sendBtn {
   position: absolute;
-  top: 50%;
+  top: 60%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 240px;
@@ -76,6 +76,7 @@ canvas {
   background-color: #00c2ff;
   box-shadow: 0 0 15px rgba(0, 200, 255, 0.8);
 }
+
 
 
 
