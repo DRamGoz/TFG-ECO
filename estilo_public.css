@@ -17,33 +17,30 @@ canvas {
   display: block;
 }
 
-/* --- TEXTO MOTIVADOR CON EFECTO --- */
+/* --- TEXTO MOTIVADOR SOBRE EL BOTÓN --- */
 #infoText {
   position: absolute;
-  top: 30%;
-  width: 100%;
   text-align: center;
-  color: #A9A9A9;
+  color: #fff;
   font-size: 20px;
   text-shadow: 0 0 8px rgba(0,0,0,0.7);
   pointer-events: none;
   line-height: 1.5;
   padding: 0 20px;
 
-  /* efecto fade-in y leve pulso */
+  /* animación sutil de pulso/fade */
   animation: fadePulse 2s ease-in-out infinite alternate;
+
+  /* Posicionar sobre el botón usando bottom relativo al botón */
+  top: 50%;       /* coincide con la altura del botón */
+  left: 50%;      /* centrado horizontal respecto al contenedor */
+  transform: translate(-50%, -180%); /* ajusta verticalmente sobre el botón */
 }
 
-/* Animación: leve pulso de opacidad y escala */
+/* Animación pulso fade */
 @keyframes fadePulse {
-  0% {
-    opacity: 0.60;
-    transform: scale(1);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1.02);
-  }
+  0% { opacity: 0.85; transform: translate(-50%, -180%) scale(1); }
+  100% { opacity: 1; transform: translate(-50%, -180%) scale(1.02); }
 }
 
 /* --- BOTÓN ESTILO CIRCULAR --- */
@@ -78,6 +75,8 @@ canvas {
   background-color: #00c2ff;
   box-shadow: 0 0 15px rgba(0, 200, 255, 0.8);
 }
+
+
 
 
 
