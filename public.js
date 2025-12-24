@@ -72,7 +72,7 @@ function draw() {
     ellipse(userStar.x, userStar.y, (userStar.size + 20 + haloPulse) * 2);
 
     // dibujar estrella estática con brillo oscilante
-    fill(0, 200, 255, userStar.alpha);
+    fill(255, 10, 10, userStar.alpha);
     ellipse(userStar.x, userStar.y, userStar.size * 2);
   }
 
@@ -106,6 +106,7 @@ function enviarDato() {
     .then(console.log)
     .catch(console.error);
 }
+
 
 
 
