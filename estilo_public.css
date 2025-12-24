@@ -20,7 +20,7 @@ canvas {
 /* --- CONTENEDOR PARA BOTÓN Y TEXTO --- */
 #buttonContainer {
   position: absolute;
-  top: 60%; /* ajusta este valor para mover todo hacia arriba o abajo */
+  top: 50%; /* ajusta este valor para mover todo hacia arriba o abajo */
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
@@ -29,7 +29,7 @@ canvas {
 /* --- TEXTO MOTIVADOR SOBRE EL BOTÓN --- */
 #infoText {
   color: #fff;
-  font-size: 20px;
+  font-size: 40px;
   text-shadow: 0 0 8px rgba(0,0,0,0.7);
   pointer-events: none;
   line-height: 1.5;
@@ -45,8 +45,8 @@ canvas {
 
 /* --- BOTÓN ESTILO CIRCULAR --- */
 #sendBtn {
-  width: 120px;   /* ancho del botón */
-  height: 120px;  /* alto del botón */
+  width: 240px;   /* ancho del botón */
+  height: 240px;  /* alto del botón */
   border-radius: 50%;
   border: none;
   background-color: #0096ff;
@@ -71,6 +71,7 @@ canvas {
   background-color: #00c2ff;
   box-shadow: 0 0 15px rgba(0, 200, 255, 0.8);
 }
+
 
 
 
