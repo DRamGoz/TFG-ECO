@@ -72,7 +72,7 @@ function draw() {
     ellipse(userStar.x, userStar.y, (userStar.size + 20 + haloPulse) * 2);
 
     // dibujar estrella estática con brillo oscilante
-    fill(255, 10, 10, userStar.alpha);
+    fill(220, 10, 10, userStar.alpha);
     ellipse(userStar.x, userStar.y, userStar.size * 2);
   }
 
@@ -83,8 +83,8 @@ function draw() {
     textSize(10);
     text("Gracias", userStar.x + 15, userStar.y);
 
-    // desaparecer texto tras 2 segundos
-    if (millis() - textTimer > 3000) {
+    // desaparecer texto tras 5 segundos
+    if (millis() - textTimer > 5000) {
       showUserText = false;
     }
   }
@@ -106,6 +106,7 @@ function enviarDato() {
     .then(console.log)
     .catch(console.error);
 }
+
 
 
 
