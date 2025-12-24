@@ -51,7 +51,7 @@ function setup() {
 // DRAW
 // ==========================
 function draw() {
-  background(0, 40);
+  background(0);
 
   // Marco A4
   if (estado.fondoA4 === "blanco") {
@@ -299,6 +299,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
