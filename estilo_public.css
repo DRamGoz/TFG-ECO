@@ -16,12 +16,35 @@ canvas {
   display: block;
 }
 
-button {
+/* --- BOTÓN ESTILO CIRCULAR --- */
+#sendBtn {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  padding: 14px 28px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: none;
+  background-color: #0096ff;
+  color: white;
   font-size: 16px;
+  font-weight: bold;
   cursor: pointer;
+  box-shadow: 0 0 20px rgba(0, 150, 255, 0.5);
+  transition: all 0.2s ease;
+}
+
+/* Hover: halo difuso */
+#sendBtn:hover {
+  transform: translate(-50%, -50%) scale(1.05);
+  box-shadow: 0 0 40px rgba(0, 255, 150, 0.7);
+  background-color: #00ff96;
+}
+
+/* Presionado */
+#sendBtn:active {
+  transform: translate(-50%, -50%) scale(0.95);
+  background-color: #00c2ff;
+  box-shadow: 0 0 15px rgba(0, 200, 255, 0.8);
 }
