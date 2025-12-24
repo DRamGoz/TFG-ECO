@@ -66,7 +66,7 @@ function draw() {
     if (userStar.alpha < userStar.maxAlpha) userStar.alpha += 5;
 
     // pulso (oscila tamaño)
-    let pulse = sin(frameCount * 0.1) * 3;
+    let pulse = sin(frameCount * 0.1) * 1;
     userStar.size = userStar.baseSize + pulse;
 
     // brillo azul
@@ -78,8 +78,8 @@ function draw() {
   if (showUserText && userStar) {
     fill(255, 255, 255, 220);
     textAlign(LEFT, CENTER);
-    textSize(18);
-    text("Aquí tu huella. Gracias", userStar.x + 15, userStar.y);
+    textSize(10);
+    text("Gracias", userStar.x + 15, userStar.y);
 
     // desaparecer texto tras 2 segundos
     if (millis() - textTimer > 2000) {
@@ -104,6 +104,7 @@ function enviarDato() {
     .then(console.log)
     .catch(console.error);
 }
+
 
 
 
