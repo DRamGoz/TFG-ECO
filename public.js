@@ -65,10 +65,10 @@ function draw() {
     if (userStar.alpha < userStar.maxAlpha) userStar.alpha += 5;
 
     // pulso del halo
-    let haloPulse = sin(frameCount * 0.05) * 5; // oscila entre -10 y +10
+    let haloPulse = sin(frameCount * 0.03) * 5; // oscila entre -10 y +10
 
     // halo difuso
-    fill(0, 200, 255, 50);
+    fill(0, 200, 255, 20);
     ellipse(userStar.x, userStar.y, (userStar.size + 20 + haloPulse) * 2);
 
     // dibujar estrella estática con brillo oscilante
@@ -106,6 +106,7 @@ function enviarDato() {
     .then(console.log)
     .catch(console.error);
 }
+
 
 
 
