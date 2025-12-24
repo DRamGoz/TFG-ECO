@@ -30,8 +30,8 @@ function setup() {
       userStar = {
         x: random(width * 0.2, width * 0.8),
         y: random(height * 0.2, height * 0.8),
-        size: random(6, 10),
-        alpha: 0,
+        size: random(10, 20),
+        alpha: 50,
         maxAlpha: 255
       };
 
@@ -106,6 +106,7 @@ function enviarDato() {
     .then(console.log)
     .catch(console.error);
 }
+
 
 
 
