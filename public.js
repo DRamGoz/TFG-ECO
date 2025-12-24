@@ -65,7 +65,7 @@ function draw() {
     if (userStar.alpha < userStar.maxAlpha) userStar.alpha += 5;
 
     // pulso del halo
-    let haloPulse = sin(frameCount * 0.1) * 10; // oscila entre -10 y +10
+    let haloPulse = sin(frameCount * 0.05) * 5; // oscila entre -10 y +10
 
     // halo difuso
     fill(0, 200, 255, 50);
@@ -106,6 +106,7 @@ function enviarDato() {
     .then(console.log)
     .catch(console.error);
 }
+
 
 
 
