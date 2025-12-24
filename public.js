@@ -84,7 +84,7 @@ function draw() {
     text("Gracias", userStar.x + 15, userStar.y);
 
     // desaparecer texto tras 2 segundos
-    if (millis() - textTimer > 2000) {
+    if (millis() - textTimer > 3000) {
       showUserText = false;
     }
   }
@@ -106,6 +106,7 @@ function enviarDato() {
     .then(console.log)
     .catch(console.error);
 }
+
 
 
 
