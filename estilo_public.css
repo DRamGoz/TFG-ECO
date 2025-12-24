@@ -4,6 +4,7 @@ body {
   height: 100vh;
   background: #111;
   overflow: hidden;
+  font-family: Arial, sans-serif;
 }
 
 #app {
@@ -14,6 +15,20 @@ body {
 
 canvas {
   display: block;
+}
+
+/* --- TEXTO MOTIVADOR --- */
+#infoText {
+  position: absolute;
+  top: 35%;
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  font-size: 18px;
+  text-shadow: 0 0 8px rgba(0,0,0,0.7);
+  pointer-events: none; /* para que no interfiera con el botón */
+  line-height: 1.4;
+  padding: 0 20px;
 }
 
 /* --- BOTÓN ESTILO CIRCULAR --- */
@@ -48,3 +63,4 @@ canvas {
   background-color: #00c2ff;
   box-shadow: 0 0 15px rgba(0, 200, 255, 0.8);
 }
+
