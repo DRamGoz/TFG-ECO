@@ -1,7 +1,7 @@
 // ==========================
 // CONFIGURACIÓN
 // ==========================
-const NUM_VERTICES_MIN = 120;
+const NUM_VERTICES_MIN = 800;
 const NUM_VERTICES_MAX = 1000;
 const RADIO_MIN = 10;
 const RADIO_MAX = 120;
@@ -319,6 +319,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
