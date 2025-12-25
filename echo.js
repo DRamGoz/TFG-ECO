@@ -174,6 +174,46 @@ function dibujarGotaEnGraphics(pg, g) {
   }
   pg.endShape(CLOSE);
 }
+// ========================== 
+// BOTONES 
+// ========================== 
+
+function refrescarLienzo() { gotas = [];
+idsExistentes.clear();
+const btnMonocromo = document.querySelector("#botones-izquierda button:nth-child(6)");
+const btnRefrescar = document.querySelector("#botones-izquierda button:nth-child(2)");
+                            
+if (btnMonocromo) btnMonocromo.style.backgroundColor = estado.monocromo ? "#ff0000" : "#333";
+if (btnRefrescar) btnRefrescar.style.backgroundColor = "#333";
+                            
+const info = document.getElementById("info-monocromo");
+                            
+if (info) info.innerText = "";
+}
+function alternarFondo() { estado.fondoA4 = estado.fondoA4 === "blanco" ? "negro" : "blanco";
+} 
+function alternarTexto() { estado.mostrarTexto = !estado.mostrarTexto;
+} 
+function rotarLienzo() { estado.orientacion = estado.orientacion === "vertical" ? "horizontal" : "vertical";
+recalcularMarco();
+} 
+function alternarMonocromo() { estado.monocromo = !estado.monocromo;
+                              
+const btn = document.querySelector("#botones-izquierda button:nth-child(6)");
+const btnRefrescar = document.querySelector("#botones-izquierda button:nth-child(2)");
+                              
+if (!btn || !btnRefrescar) return;
+                              
+btn.style.backgroundColor = estado.monocromo ? "#ff0000" : "#333";
+let info = document.getElementById("info-monocromo");
+                              
+if (!info) { info = document.createElement("div"); info.id = "info-monocromo";
+info.style.fontSize = "12px"; info.style.color = "#A9A9A9";
+info.style.marginTop = "1px"; btn.parentNode.insertBefore(info, btn.nextSibling);
+} 
+info.innerText = estado.monocromo ? "Refrescar Lienzo para activar modo" : "";
+btnRefrescar.style.backgroundColor = estado.monocromo ? "#00aa00" : "#333";
+}
 
 // ==========================
 // AUXILIARES
@@ -279,6 +319,7 @@ window.exportarA4 = exportarA4;
 
   }
 }
+
 
 
 
