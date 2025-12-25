@@ -40,7 +40,7 @@ function setup() {
       textTimer = millis();
 
       // desaparecer botón y texto principal
-      [btn, infoText].forEach(el => {
+      [infoText].forEach(el => {
         el.style.transition = "opacity 1s ease";
         el.style.opacity = 0;
         setTimeout(() => el.style.display = "none", 1000);
@@ -106,6 +106,7 @@ function enviarDato() {
     .then(console.log)
     .catch(console.error);
 }
+
 
 
 
