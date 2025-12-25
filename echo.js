@@ -160,7 +160,7 @@ function dibujarGotaEnGraphics(pg, g) {
   pg.beginShape();
   for (let i = 0; i < g.pasos; i++) {
     let ang = map(i, 0, g.pasos, 0, TWO_PI);
-    let r = g.radio * map(noise(cos(ang) + g.offset, sin(ang) + g.offset), 0, 1, 0.7, 1.3);
+    let r = g.radio * map(noise(cos(ang) + g.offset, sin(ang) + g.offset), 0, 1, 0.3, 1.8);
     pg.vertex(g.x + cos(ang) * r, g.y + sin(ang) * r);
   }
   pg.endShape(CLOSE);
@@ -299,6 +299,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
