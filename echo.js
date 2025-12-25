@@ -1,13 +1,13 @@
 // ==========================
 // CONFIGURACIÓN
 // ==========================
-const NUM_VERTICES_MIN = 280;
-const NUM_VERTICES_MAX = 480;
-const RADIO_MIN = 20;
+const NUM_VERTICES_MIN = 20;
+const NUM_VERTICES_MAX = 200;
+const RADIO_MIN = 10;
 const RADIO_MAX = 120;
 const ALPHA_COLOR = 70;
 const RUEDO_MOVIMIENTO = 50;
-const CRECIMIENTO = 1.4;
+const CRECIMIENTO = 1.1;
 
 // Proporción A4
 const A4_RATIO = 210 / 297;
@@ -58,7 +58,7 @@ function draw() {
     fill(255, 255, 255, 220);
     stroke(0);
   } else {
-    fill(0);
+    fill(0, 0, 0);
     stroke(255);
   }
   strokeWeight(4);
@@ -74,7 +74,7 @@ function draw() {
   drawingContext.restore();
   pop();
 
-  // Texto editorial
+  // TÍTULO / SUBTÍTULO
   if (estado.mostrarTexto && estado.modo === "editorial") {
     textAlign(CENTER, TOP);
     noStroke();
@@ -86,10 +86,11 @@ function draw() {
     text(subtitulo, marcoX + marcoW / 2, marcoY + 60);
   }
 
-  // Contador
+  // CONTADOR
   let contador = "Nº Interacción Usuarios: " + gotas.length;
   let franjaH = 26;
-  let franjaY = marcoY + marcoH - franjaH - 30;
+  let offsetY = 30;
+  let franjaY = marcoY + marcoH - franjaH - offsetY;
   noStroke();
   fill(estado.fondoA4 === "blanco" ? 0 : 255, 120);
   rect(marcoX, franjaY, marcoW, franjaH);
@@ -100,31 +101,78 @@ function draw() {
 }
 
 // ==========================
-// EXPORTAR A4
+// EXPORTAR A4 COMO IMAGEN
 // ==========================
 function exportarA4() {
   const dpi = 300;
-  let wMM = estado.orientacion === "vertical" ? 210 : 297;
-  let hMM = estado.orientacion === "vertical" ? 297 : 210;
-  const pxMM = dpi / 25.4;
+  let anchoMM = 210;
+  let altoMM = 297;
 
-  let pg = createGraphics(wMM * pxMM, hMM * pxMM);
+  if (estado.orientacion === "horizontal") {
+    [anchoMM, altoMM] = [altoMM, anchoMM];
+  }
+
+  const pxPorMM = dpi / 25.4;
+  const w = Math.round(anchoMM * pxPorMM);
+  const h = Math.round(altoMM * pxPorMM);
+
+  let pg = createGraphics(w, h);
+
+  // Fondo
   pg.background(estado.fondoA4 === "blanco" ? 255 : 0);
+
+  // Marco
+  pg.noFill();
   pg.stroke(estado.fondoA4 === "blanco" ? 0 : 255);
   pg.strokeWeight(12);
-  pg.noFill();
-  pg.rect(0, 0, pg.width, pg.height);
+  pg.rect(0, 0, w, h);
 
-  let sx = pg.width / marcoW;
-  let sy = pg.height / marcoH;
+  // Escala y traducción
+  const scaleX = w / marcoW;
+  const scaleY = h / marcoH;
 
   pg.push();
-  pg.scale(sx, sy);
+  pg.scale(scaleX, scaleY);
   pg.translate(-marcoX, -marcoY);
-  gotas.forEach(g => g.dibujarEnGraphics(pg));
+  gotas.forEach(g => dibujarGotaEnGraphics(pg, g));
   pg.pop();
 
+  // Texto
+  if (estado.mostrarTexto && estado.modo === "editorial") {
+    pg.textAlign(CENTER, TOP);
+    pg.noStroke();
+    pg.fill(estado.fondoA4 === "blanco" ? 0 : 255);
+    pg.textSize(72);
+    pg.text(titulo, w / 2, 60);
+    pg.fill(estado.fondoA4 === "blanco" ? 60 : 200);
+    pg.textSize(42);
+    pg.text(subtitulo, w / 2, 140);
+  }
+
   saveCanvas(pg, "ECO_A4", "png");
+}
+
+// ==========================
+// DIBUJO GOTAS EN GRAPHICS
+// ==========================
+function dibujarGotaEnGraphics(pg, g) {
+  pg.noStroke();
+  pg.fill(g.color);
+  pg.beginShape();
+  for (let i = 0; i < g.pasos; i++) {
+    let ang = map(i, 0, g.pasos, 0, TWO_PI);
+    let r =
+      g.radio *
+      map(
+        noise(cos(ang) + g.offset, sin(ang) + g.offset),
+        0,
+        1,
+        0.7,
+        1.3
+      );
+    pg.vertex(g.x + cos(ang) * r, g.y + sin(ang) * r);
+  }
+  pg.endShape(CLOSE);
 }
 
 // ==========================
@@ -158,21 +206,17 @@ function cargarDatos() {
 }
 
 // ==========================
-// CLASE GOTA ORGÁNICA
+// CLASE GOTA
 // ==========================
 class GotaPintura {
   constructor() {
     this.x = random(marcoX + RADIO_MAX, marcoX + marcoW - RADIO_MAX);
     this.y = random(marcoY + RADIO_MAX, marcoY + marcoH - RADIO_MAX);
-
     this.radio = 0;
     this.radioFinal = random(RADIO_MIN, RADIO_MAX);
     this.pasos = int(random(NUM_VERTICES_MIN, NUM_VERTICES_MAX));
     this.offset = random(1000);
     this.creciendo = true;
-
-    this.puntos = [];
-    this.generada = false;
 
     if (estado.monocromo) {
       let g = random(80, 200);
@@ -185,67 +229,46 @@ class GotaPintura {
     this.noiseY = random(1000);
   }
 
-  generarForma() {
-    this.puntos = [];
-
-    for (let i = 0; i < this.pasos; i++) {
-      let a = map(i, 0, this.pasos, 0, TWO_PI);
-
-      let x = cos(a) * this.radioFinal;
-      let y = sin(a) * this.radioFinal;
-
-      let n = noise(i * 0.15 + this.offset);
-      let normalOffset = map(n, 0, 1, -65, 65);
-
-      x += cos(a) * normalOffset;
-      y += sin(a) * normalOffset;
-
-      let lateral = random(-25, 25);
-      x += -sin(a) * lateral;
-      y += cos(a) * lateral;
-
-      this.puntos.push(createVector(x, y));
-    }
-
-    this.generada = true;
-  }
-
   mostrar() {
-    if (!this.generada) {
+    if (this.creciendo) {
       this.radio += CRECIMIENTO;
       if (this.radio >= this.radioFinal) {
         this.radio = this.radioFinal;
-        this.generarForma();
+        this.creciendo = false;
       }
     }
 
-    let dx = noise(this.noiseX) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO / 2;
-    let dy = noise(this.noiseY) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO / 2;
+    let x =
+      this.x +
+      noise(this.noiseX) * RUEDO_MOVIMIENTO -
+      RUEDO_MOVIMIENTO / 2;
+    let y =
+      this.y +
+      noise(this.noiseY) * RUEDO_MOVIMIENTO -
+      RUEDO_MOVIMIENTO / 2;
 
     noStroke();
     fill(this.color);
     beginShape();
-    this.puntos.forEach(p => {
-      vertex(this.x + p.x + dx, this.y + p.y + dy);
-    });
+    for (let i = 0; i < this.pasos; i++) {
+      let ang = map(i, 0, this.pasos, 0, TWO_PI);
+      let r =
+        this.radio *
+        map(
+          noise(cos(ang) + this.offset, sin(ang) + this.offset),
+          0,
+          1,
+          0.7,
+          1.3
+        );
+      vertex(x + cos(ang) * r, y + sin(ang) * r);
+    }
     endShape(CLOSE);
 
     this.noiseX += 0.005;
     this.noiseY += 0.005;
   }
-
-  dibujarEnGraphics(pg) {
-    pg.noStroke();
-    pg.fill(this.color);
-    pg.beginShape();
-    this.puntos.forEach(p => {
-      pg.vertex(this.x + p.x, this.y + p.y);
-    });
-    pg.endShape(CLOSE);
-  }
 }
-
-
 
 
 
