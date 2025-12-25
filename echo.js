@@ -4,10 +4,10 @@
 const NUM_VERTICES_MIN = 180;
 const NUM_VERTICES_MAX = 500;
 const RADIO_MIN = 10;
-const RADIO_MAX = 120;
+const RADIO_MAX = 100;
 const ALPHA_COLOR = 70;
 const RUEDO_MOVIMIENTO = 50;
-const CRECIMIENTO = 1.1;
+const CRECIMIENTO = 1.0;
 
 // Proporción A4
 const A4_RATIO = 210 / 297;
@@ -161,7 +161,7 @@ function dibujarGotaEnGraphics(pg, g) {
   pg.beginShape();
   for (let i = 0; i < g.pasos; i++) {
     let ang = map(i, 0, g.pasos, 0, TWO_PI);
-    let r = g.radio *map(noise(cos(ang)*-20 + g.offset, sin(ang)*10 + g.offset),0,1,-0.5,5.7);
+    let r = g.radio *map(noise(cos(ang)*-20 + g.offset, sin(ang)*10 + g.offset),0,1,1.3,5.7);
     pg.vertex(g.x + cos(ang) * r, g.y + sin(ang) * r);
   }
   pg.endShape(CLOSE);
@@ -290,6 +290,7 @@ class GotaPintura {
 
   }
 }
+
 
 
 
