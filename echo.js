@@ -267,8 +267,19 @@ class GotaPintura {
 
     this.noiseX += 0.005;
     this.noiseY += 0.005;
+    // ==========================
+// EXPONER FUNCIONES AL HTML
+// ==========================
+window.refrescarLienzo = refrescarLienzo;
+window.alternarFondo = alternarFondo;
+window.alternarTexto = alternarTexto;
+window.rotarLienzo = rotarLienzo;
+window.alternarMonocromo = alternarMonocromo;
+window.exportarA4 = exportarA4;
+
   }
 }
+
 
 
 
