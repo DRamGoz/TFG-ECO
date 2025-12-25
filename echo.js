@@ -1,13 +1,13 @@
 // ==========================
 // CONFIGURACIÓN
 // ==========================
-const NUM_VERTICES_MIN = 20;
-const NUM_VERTICES_MAX = 200;
-const RADIO_MIN = 10;
+const NUM_VERTICES_MIN = 280;
+const NUM_VERTICES_MAX = 480;
+const RADIO_MIN = 20;
 const RADIO_MAX = 120;
 const ALPHA_COLOR = 70;
 const RUEDO_MOVIMIENTO = 50;
-const CRECIMIENTO = 1.1;
+const CRECIMIENTO = 1.4;
 
 // Proporción A4
 const A4_RATIO = 210 / 297;
@@ -58,7 +58,7 @@ function draw() {
     fill(255, 255, 255, 220);
     stroke(0);
   } else {
-    fill(0, 0, 0);
+    fill(0);
     stroke(255);
   }
   strokeWeight(4);
@@ -74,7 +74,7 @@ function draw() {
   drawingContext.restore();
   pop();
 
-  // TÍTULO / SUBTÍTULO
+  // Texto editorial
   if (estado.mostrarTexto && estado.modo === "editorial") {
     textAlign(CENTER, TOP);
     noStroke();
@@ -86,11 +86,10 @@ function draw() {
     text(subtitulo, marcoX + marcoW / 2, marcoY + 60);
   }
 
-  // CONTADOR
+  // Contador
   let contador = "Nº Interacción Usuarios: " + gotas.length;
   let franjaH = 26;
-  let offsetY = 30;
-  let franjaY = marcoY + marcoH - franjaH - offsetY;
+  let franjaY = marcoY + marcoH - franjaH - 30;
   noStroke();
   fill(estado.fondoA4 === "blanco" ? 0 : 255, 120);
   rect(marcoX, franjaY, marcoW, franjaH);
@@ -101,123 +100,31 @@ function draw() {
 }
 
 // ==========================
-// EXPORTAR A4 COMO IMAGEN (ARREGLADO)
+// EXPORTAR A4
 // ==========================
 function exportarA4() {
   const dpi = 300;
-  let anchoMM = 210;
-  let altoMM = 297;
+  let wMM = estado.orientacion === "vertical" ? 210 : 297;
+  let hMM = estado.orientacion === "vertical" ? 297 : 210;
+  const pxMM = dpi / 25.4;
 
-  if (estado.orientacion === "horizontal") {
-    [anchoMM, altoMM] = [altoMM, anchoMM];
-  }
-
-  const pxPorMM = dpi / 25.4;
-  const w = Math.round(anchoMM * pxPorMM);
-  const h = Math.round(altoMM * pxPorMM);
-
-  let pg = createGraphics(w, h);
-
-  // Fondo
+  let pg = createGraphics(wMM * pxMM, hMM * pxMM);
   pg.background(estado.fondoA4 === "blanco" ? 255 : 0);
-
-  // Marco
-  pg.noFill();
   pg.stroke(estado.fondoA4 === "blanco" ? 0 : 255);
   pg.strokeWeight(12);
-  pg.rect(0, 0, w, h);
+  pg.noFill();
+  pg.rect(0, 0, pg.width, pg.height);
 
-  // Escala y traducción
-  const scaleX = w / marcoW;
-  const scaleY = h / marcoH;
+  let sx = pg.width / marcoW;
+  let sy = pg.height / marcoH;
 
   pg.push();
-  pg.scale(scaleX, scaleY);
+  pg.scale(sx, sy);
   pg.translate(-marcoX, -marcoY);
-  gotas.forEach(g => dibujarGotaEnGraphics(pg, g));
+  gotas.forEach(g => g.dibujarEnGraphics(pg));
   pg.pop();
 
-  // Texto
-  if (estado.mostrarTexto && estado.modo === "editorial") {
-    pg.textAlign(CENTER, TOP);
-    pg.noStroke();
-    pg.fill(estado.fondoA4 === "blanco" ? 0 : 255);
-    pg.textSize(72);
-    pg.text(titulo, w / 2, 60);
-    pg.fill(estado.fondoA4 === "blanco" ? 60 : 200);
-    pg.textSize(42);
-    pg.text(subtitulo, w / 2, 140);
-  }
-
-  // ✅ GUARDADO CORRECTO
   saveCanvas(pg, "ECO_A4", "png");
-}
-
-// Dibujo gotas en graphics
-function dibujarGotaEnGraphics(pg, g) {
-  pg.noStroke();
-  pg.fill(g.color);
-  
-  beginShape();
-for (let i = 0; i < g.pasos; i++) {
-  let ang = map(i, 0, g.pasos, 0, TWO_PI);
-  let r = g.radio*map(noise(cos(ang) + g.offset, sin(ang) + g.offset), 0, 1, 0.7, 1.3);
-  pg.vertex(g.x + cos(ang)* r, g.y + sin(ang)* r);
-}
-pg.endShape(CLOSE);
-}
-
-// ==========================
-// BOTONES
-// ==========================
-function refrescarLienzo() {
-  gotas = [];
-  idsExistentes.clear();
-
-  const btnMonocromo = document.querySelector("#botones-izquierda button:nth-child(6)");
-  const btnRefrescar = document.querySelector("#botones-izquierda button:nth-child(2)");
-  if (btnMonocromo) btnMonocromo.style.backgroundColor = estado.monocromo ? "#ff0000" : "#333";
-  if (btnRefrescar) btnRefrescar.style.backgroundColor = "#333";
-
-  const info = document.getElementById("info-monocromo");
-  if (info) info.innerText = "";
-}
-
-function alternarFondo() {
-  estado.fondoA4 = estado.fondoA4 === "blanco" ? "negro" : "blanco";
-}
-
-function alternarTexto() {
-  estado.mostrarTexto = !estado.mostrarTexto;
-}
-
-function rotarLienzo() {
-  estado.orientacion =
-    estado.orientacion === "vertical" ? "horizontal" : "vertical";
-  recalcularMarco();
-}
-
-function alternarMonocromo() {
-  estado.monocromo = !estado.monocromo;
-
-  const btn = document.querySelector("#botones-izquierda button:nth-child(6)");
-  const btnRefrescar = document.querySelector("#botones-izquierda button:nth-child(2)");
-  if (!btn || !btnRefrescar) return;
-
-  btn.style.backgroundColor = estado.monocromo ? "#ff0000" : "#333";
-
-  let info = document.getElementById("info-monocromo");
-  if (!info) {
-    info = document.createElement("div");
-    info.id = "info-monocromo";
-    info.style.fontSize = "12px";
-    info.style.color = "#A9A9A9";
-    info.style.marginTop = "1px";
-    btn.parentNode.insertBefore(info, btn.nextSibling);
-  }
-  info.innerText = estado.monocromo ? "Refrescar Lienzo para activar modo" : "";
-
-  btnRefrescar.style.backgroundColor = estado.monocromo ? "#00aa00" : "#333";
 }
 
 // ==========================
@@ -251,17 +158,21 @@ function cargarDatos() {
 }
 
 // ==========================
-// CLASE GOTA
+// CLASE GOTA ORGÁNICA
 // ==========================
 class GotaPintura {
   constructor() {
     this.x = random(marcoX + RADIO_MAX, marcoX + marcoW - RADIO_MAX);
     this.y = random(marcoY + RADIO_MAX, marcoY + marcoH - RADIO_MAX);
+
     this.radio = 0;
     this.radioFinal = random(RADIO_MIN, RADIO_MAX);
     this.pasos = int(random(NUM_VERTICES_MIN, NUM_VERTICES_MAX));
     this.offset = random(1000);
     this.creciendo = true;
+
+    this.puntos = [];
+    this.generada = false;
 
     if (estado.monocromo) {
       let g = random(80, 200);
@@ -273,35 +184,67 @@ class GotaPintura {
     this.noiseX = random(1000);
     this.noiseY = random(1000);
   }
-  
-mostrar() {
-    if (this.creciendo) {
+
+  generarForma() {
+    this.puntos = [];
+
+    for (let i = 0; i < this.pasos; i++) {
+      let a = map(i, 0, this.pasos, 0, TWO_PI);
+
+      let x = cos(a) * this.radioFinal;
+      let y = sin(a) * this.radioFinal;
+
+      let n = noise(i * 0.15 + this.offset);
+      let normalOffset = map(n, 0, 1, -65, 65);
+
+      x += cos(a) * normalOffset;
+      y += sin(a) * normalOffset;
+
+      let lateral = random(-25, 25);
+      x += -sin(a) * lateral;
+      y += cos(a) * lateral;
+
+      this.puntos.push(createVector(x, y));
+    }
+
+    this.generada = true;
+  }
+
+  mostrar() {
+    if (!this.generada) {
       this.radio += CRECIMIENTO;
       if (this.radio >= this.radioFinal) {
         this.radio = this.radioFinal;
-        this.creciendo = false;
+        this.generarForma();
       }
     }
 
-    let x = this.x + noise(this.noiseX) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO / 2;
-    let y = this.y + noise(this.noiseY) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO / 2;
+    let dx = noise(this.noiseX) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO / 2;
+    let dy = noise(this.noiseY) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO / 2;
 
     noStroke();
     fill(this.color);
-  
     beginShape();
-    for (let i = 0; i < this.pasos; i++) {
-      let ang = map(i, 0, this.pasos, 0, TWO_PI);
-      let r = this.radio * map(noise(cos(ang) + this.offset, sin(ang) + this.offset), 0, 1, 0.7, 1.3);
-      vertex(x + cos(ang) * r, y + sin(ang) * r);
-    }
+    this.puntos.forEach(p => {
+      vertex(this.x + p.x + dx, this.y + p.y + dy);
+    });
     endShape(CLOSE);
 
     this.noiseX += 0.005;
     this.noiseY += 0.005;
-  
+  }
+
+  dibujarEnGraphics(pg) {
+    pg.noStroke();
+    pg.fill(this.color);
+    pg.beginShape();
+    this.puntos.forEach(p => {
+      pg.vertex(this.x + p.x, this.y + p.y);
+    });
+    pg.endShape(CLOSE);
   }
 }
+
 
 
 
