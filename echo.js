@@ -158,19 +158,31 @@ function dibujarGotaEnGraphics(pg, g) {
   pg.noStroke();
   pg.fill(g.color);
   beginShape();
+
 for (let i = 0; i < this.pasos; i++) {
   let ang = map(i, 0, this.pasos, 0, TWO_PI);
 
+  // Ruido suave (forma base)
   let n = noise(
-    cos(ang) * 7.0 + this.offset,
-    sin(ang) * 7.0 + this.offset
+    cos(ang) * 2.5 + this.offset,
+    sin(ang) * 2.5 + this.offset
   );
 
-  let r = this.radio * map(n, 0, 1, 0.8, 1.15);
+  let rBase = this.radio * map(n, 0, 1, 0.95, 1.05);
 
-  vertex(x + cos(ang) * r, y + sin(ang) * r);
+  // 🔥 RUIDO DURO (esto es lo que faltaba)
+  let jitter = random(-this.radio * 0.15, this.radio * 0.15);
+
+  let rFinal = rBase + jitter;
+
+  let px = x + cos(ang) * rFinal;
+  let py = y + sin(ang) * rFinal;
+
+  vertex(px, py);
 }
+
 endShape(CLOSE);
+
 
 }
 
@@ -307,6 +319,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
