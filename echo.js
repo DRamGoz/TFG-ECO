@@ -274,41 +274,7 @@ function cargarDatos() {
 // ==========================
 class GotaPintura {
   constructor() {
-    this.puntos = [];
-this.generada = false;
-    generarForma() {
-  this.puntos = [];
-
-  let pasos = this.pasos;
-  let radioBase = this.radioFinal;
-
-  for (let i = 0; i < pasos; i++) {
-    let a = map(i, 0, pasos, 0, TWO_PI);
-
-    // círculo base
-    let x = cos(a) * radioBase;
-    let y = sin(a) * radioBase;
-
-    // ruido normal (hacia dentro / fuera)
-    let n = noise(i * 0.15 + this.offset);
-    let normalOffset = map(n, 0, 1, -45, 45);
-
-    x += cos(a) * normalOffset;
-    y += sin(a) * normalOffset;
-
-    // desplazamiento lateral (CLAVE)
-    let lateral = random(-18, 18);
-    x += -sin(a) * lateral;
-    y +=  cos(a) * lateral;
-
-    this.puntos.push(createVector(x, y));
-  }
-
-  this.generada = true;
-}
-
-
-  /*  this.x = random(marcoX + RADIO_MAX, marcoX + marcoW - RADIO_MAX);
+    this.x = random(marcoX + RADIO_MAX, marcoX + marcoW - RADIO_MAX);
     this.y = random(marcoY + RADIO_MAX, marcoY + marcoH - RADIO_MAX);
     this.radio = 0;
     this.radioFinal = random(RADIO_MIN, RADIO_MAX);
@@ -324,37 +290,9 @@ this.generada = false;
     }
 
     this.noiseX = random(1000);
-    this.noiseY = random(1000);*/
+    this.noiseY = random(1000);
   }
 mostrar() {
-
-  // crecimiento inicial
-  if (!this.generada) {
-    this.radio += CRECIMIENTO;
-    if (this.radio >= this.radioFinal) {
-      this.radio = this.radioFinal;
-      this.generarForma(); // 🔥 aquí se fija la forma
-    }
-  }
-
-  let dx = noise(this.noiseX) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO / 2;
-  let dy = noise(this.noiseY) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO / 2;
-
-  noStroke();
-  fill(this.color);
-  beginShape();
-
-  for (let p of this.puntos) {
-    vertex(this.x + p.x + dx, this.y + p.y + dy);
-  }
-
-  endShape(CLOSE);
-
-  this.noiseX += 0.005;
-  this.noiseY += 0.005;
-}
-
- /* mostrar() {
     if (this.creciendo) {
       this.radio += CRECIMIENTO;
       if (this.radio >= this.radioFinal) {
@@ -381,7 +319,6 @@ mostrar() {
   
   }
 }
-
 
 
 
