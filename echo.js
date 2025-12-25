@@ -157,13 +157,21 @@ function exportarA4() {
 function dibujarGotaEnGraphics(pg, g) {
   pg.noStroke();
   pg.fill(g.color);
-  pg.beginShape();
-  for (let i = 0; i < g.pasos; i++) {
-    let ang = map(i, 0, g.pasos, 0, TWO_PI);
-    let r = g.radio * map(noise(cos(ang)*4 + this.offset, sin(ang)*4 + this.offset), 0, 1, 0.3, 1.8);
-    pg.vertex(g.x + cos(ang) * r, g.y + sin(ang) * r);
-  }
-  pg.endShape(CLOSE);
+  beginShape();
+for (let i = 0; i < this.pasos; i++) {
+  let ang = map(i, 0, this.pasos, 0, TWO_PI);
+
+  let n = noise(
+    cos(ang) * 7.0 + this.offset,
+    sin(ang) * 7.0 + this.offset
+  );
+
+  let r = this.radio * map(n, 0, 1, 0.8, 1.15);
+
+  vertex(x + cos(ang) * r, y + sin(ang) * r);
+}
+endShape(CLOSE);
+
 }
 
 // ==========================
@@ -299,6 +307,7 @@ class GotaPintura {
     this.noiseY += 0.005;
   }
 }
+
 
 
 
