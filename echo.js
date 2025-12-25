@@ -161,15 +161,7 @@ function dibujarGotaEnGraphics(pg, g) {
   pg.beginShape();
   for (let i = 0; i < g.pasos; i++) {
     let ang = map(i, 0, g.pasos, 0, TWO_PI);
-    let r =
-      g.radio *
-      map(
-        noise(cos(ang) + g.offset, sin(ang) + g.offset),
-        0,
-        1,
-        0.7,
-        1.3
-      );
+    let r = g.radio *map(noise(cos(ang)*3 + g.offset, sin(ang)*3 + g.offset),0,1,0.4,1.7);
     pg.vertex(g.x + cos(ang) * r, g.y + sin(ang) * r);
   }
   pg.endShape(CLOSE);
@@ -278,28 +270,16 @@ class GotaPintura {
       }
     }
 
-    let x =
-      this.x +
-      noise(this.noiseX) * RUEDO_MOVIMIENTO -
-      RUEDO_MOVIMIENTO / 2;
-    let y =
-      this.y +
-      noise(this.noiseY) * RUEDO_MOVIMIENTO -
-      RUEDO_MOVIMIENTO / 2;
+    let x = this.x +
+    noise(this.noiseX) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO / 2;
+    let y = this.y + noise(this.noiseY) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO / 2;
 
     noStroke();
     fill(this.color);
     beginShape();
     for (let i = 0; i < this.pasos; i++) {
       let ang = map(i, 0, this.pasos, 0, TWO_PI);
-      let r =
-        this.radio *
-        map(
-          noise(cos(ang) + this.offset, sin(ang) + this.offset),
-          0,
-          1,
-          0.7,
-          1.3
+      let r = this.radio *map(noise(cos(ang) + this.offset, sin(ang) + this.offset),0,1,0.7,1.8
         );
       vertex(x + cos(ang) * r, y + sin(ang) * r);
     }
@@ -307,18 +287,10 @@ class GotaPintura {
 
     this.noiseX += 0.005;
     this.noiseY += 0.005;
-    // ==========================
-// EXPONER FUNCIONES AL HTML
-// ==========================
-window.refrescarLienzo = refrescarLienzo;
-window.alternarFondo = alternarFondo;
-window.alternarTexto = alternarTexto;
-window.rotarLienzo = rotarLienzo;
-window.alternarMonocromo = alternarMonocromo;
-window.exportarA4 = exportarA4;
 
   }
 }
+
 
 
 
