@@ -146,7 +146,7 @@ function exportarA4() {
     pg.text(subtitulo, w / 2, 140);
   }
 
-  saveCanvas(pg, "ECO_A4", "png");
+  saveCanvas(pg, g, "ECO_A4", "png");
 }
 
 // Dibujo gotas en graphics
@@ -226,8 +226,6 @@ function alternarMonocromo() {
 function activarModo1() {
   estado.modo = "modo1";
   refrescarLienzo();
-  alternarTexto();
-    exportarA4();
 }
 
 // ==========================
@@ -383,6 +381,7 @@ class GotaPinturaModo1 {
 }
 
   
+
 
 
 
