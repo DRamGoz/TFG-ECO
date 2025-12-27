@@ -209,6 +209,7 @@ function alternarMonocromo() {
 function activarModo1() {
   estado.modo = "modo1";
   refrescarLienzo();
+  alternarTexto();
 }
 
 // ==========================
@@ -305,7 +306,7 @@ class GotaPinturaModo1 {
     this.y = random(marcoY + RADIO_MAX, marcoY + marcoH - RADIO_MAX);
 
     this.radio = 5;
-    this.radioFinal = random(40, 90);
+    this.radioFinal = random(40, 120);
     this.velocidad = 0.08;
 
     this.ruidoOffset = random(1000);
@@ -352,7 +353,7 @@ class GotaPinturaModo1 {
       }
 
       this.calcularForma();
-      this.ruidoOffset += 0.01;
+      this.ruidoOffset += 0.03;
     }
 
     noStroke();
@@ -364,6 +365,7 @@ class GotaPinturaModo1 {
 }
 
   
+
 
 
 
