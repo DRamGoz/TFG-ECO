@@ -1,25 +1,24 @@
 // ==========================
 // CONFIGURACIÓN
 // ==========================
-const NUM_VERTICES_MIN = 180;
-const NUM_VERTICES_MAX = 500;
+const NUM_VERTICES_MIN = 20;
+const NUM_VERTICES_MAX = 200;
 const RADIO_MIN = 10;
-const RADIO_MAX = 100;
+const RADIO_MAX = 120;
 const ALPHA_COLOR = 70;
 const RUEDO_MOVIMIENTO = 50;
-const CRECIMIENTO = 1.0;
+const CRECIMIENTO = 1.1;
 
-// Proporción A4
 const A4_RATIO = 210 / 297;
 
-// =========================
+// ==========================
 // ESTADO GLOBAL
-// =========================
+// ==========================
 let titulo = "ECO — Generación de Arte Digital";
 let subtitulo = "Interacción de usuarios en tiempo real";
 
 window.estado = {
-  modo: "editorial",
+  modo: "editorial", // "editorial" | "modo1"
   fondoA4: "blanco",
   mostrarTexto: true,
   monocromo: false,
@@ -58,7 +57,7 @@ function draw() {
     fill(255, 255, 255, 220);
     stroke(0);
   } else {
-    fill(0, 0, 0);
+    fill(0);
     stroke(255);
   }
   strokeWeight(4);
@@ -74,7 +73,7 @@ function draw() {
   drawingContext.restore();
   pop();
 
-  // TÍTULO / SUBTÍTULO
+  // Texto editorial
   if (estado.mostrarTexto && estado.modo === "editorial") {
     textAlign(CENTER, TOP);
     noStroke();
@@ -86,11 +85,10 @@ function draw() {
     text(subtitulo, marcoX + marcoW / 2, marcoY + 60);
   }
 
-  // CONTADOR
+  // Contador
   let contador = "Nº Interacción Usuarios: " + gotas.length;
   let franjaH = 26;
-  let offsetY = 30;
-  let franjaY = marcoY + marcoH - franjaH - offsetY;
+  let franjaY = marcoY + marcoH - franjaH - 30;
   noStroke();
   fill(estado.fondoA4 === "blanco" ? 0 : 255, 120);
   rect(marcoX, franjaY, marcoW, franjaH);
@@ -101,110 +99,64 @@ function draw() {
 }
 
 // ==========================
-// EXPORTAR A4 COMO IMAGEN
+// BOTONES IZQUIERDA (YA EXISTENTES)
 // ==========================
-function exportarA4() {
-  const dpi = 300;
-  let anchoMM = 210;
-  let altoMM = 297;
+function refrescarLienzo() {
+  gotas = [];
+  idsExistentes.clear();
 
-  if (estado.orientacion === "horizontal") {
-    [anchoMM, altoMM] = [altoMM, anchoMM];
+  const btnMonocromo = document.querySelector("#botones-izquierda button:nth-child(6)");
+  const btnRefrescar = document.querySelector("#botones-izquierda button:nth-child(2)");
+
+  if (btnMonocromo) btnMonocromo.style.backgroundColor = estado.monocromo ? "#ff0000" : "#333";
+  if (btnRefrescar) btnRefrescar.style.backgroundColor = "#333";
+
+  const info = document.getElementById("info-monocromo");
+  if (info) info.innerText = "";
+}
+
+function alternarFondo() {
+  estado.fondoA4 = estado.fondoA4 === "blanco" ? "negro" : "blanco";
+}
+
+function alternarTexto() {
+  estado.mostrarTexto = !estado.mostrarTexto;
+}
+
+function rotarLienzo() {
+  estado.orientacion = estado.orientacion === "vertical" ? "horizontal" : "vertical";
+  recalcularMarco();
+}
+
+function alternarMonocromo() {
+  estado.monocromo = !estado.monocromo;
+
+  const btn = document.querySelector("#botones-izquierda button:nth-child(6)");
+  const btnRefrescar = document.querySelector("#botones-izquierda button:nth-child(2)");
+  if (!btn || !btnRefrescar) return;
+
+  btn.style.backgroundColor = estado.monocromo ? "#ff0000" : "#333";
+
+  let info = document.getElementById("info-monocromo");
+  if (!info) {
+    info = document.createElement("div");
+    info.id = "info-monocromo";
+    info.style.fontSize = "12px";
+    info.style.color = "#A9A9A9";
+    info.style.marginTop = "1px";
+    btn.parentNode.insertBefore(info, btn.nextSibling);
   }
+  info.innerText = estado.monocromo ? "Refrescar Lienzo para activar modo" : "";
 
-  const pxPorMM = dpi / 25.4;
-  const w = Math.round(anchoMM * pxPorMM);
-  const h = Math.round(altoMM * pxPorMM);
-
-  let pg = createGraphics(w, h);
-
-  // Fondo
-  pg.background(estado.fondoA4 === "blanco" ? 255 : 0);
-
-  // Marco
-  pg.noFill();
-  pg.stroke(estado.fondoA4 === "blanco" ? 0 : 255);
-  pg.strokeWeight(12);
-  pg.rect(0, 0, w, h);
-
-  // Escala y traducción
-  const scaleX = w / marcoW;
-  const scaleY = h / marcoH;
-
-  pg.push();
-  pg.scale(scaleX, scaleY);
-  pg.translate(-marcoX, -marcoY);
-  gotas.forEach(g => dibujarGotaEnGraphics(pg, g));
-  pg.pop();
-
-  // Texto
-  if (estado.mostrarTexto && estado.modo === "editorial") {
-    pg.textAlign(CENTER, TOP);
-    pg.noStroke();
-    pg.fill(estado.fondoA4 === "blanco" ? 0 : 255);
-    pg.textSize(72);
-    pg.text(titulo, w / 2, 60);
-    pg.fill(estado.fondoA4 === "blanco" ? 60 : 200);
-    pg.textSize(42);
-    pg.text(subtitulo, w / 2, 140);
-  }
-
-  saveCanvas(pg, "ECO_A4", "png");
+  btnRefrescar.style.backgroundColor = estado.monocromo ? "#00aa00" : "#333";
 }
 
 // ==========================
-// DIBUJO GOTAS EN GRAPHICS
-// ==============================================================================================
-function dibujarGotaEnGraphics(pg, g) {
-  pg.noStroke();
-  pg.fill(g.color);
-  pg.beginShape();
-  for (let i = 0; i < g.pasos; i++) {
-    let ang = map(i, 0, g.pasos, 0, TWO_PI);
-    let r = g.radio *map(noise(cos(ang)*-20 + g.offset, sin(ang)*10 + g.offset),0,1,1.3,5.7);
-    pg.vertex(g.x + cos(ang) * r-180, g.y + sin(ang) * r-90);
-  }
-  pg.endShape(CLOSE);
-}
-// ========================== 
-// BOTONES 
-// ========================== 
-
-function refrescarLienzo() { gotas = [];
-idsExistentes.clear();
-const btnMonocromo = document.querySelector("#botones-izquierda button:nth-child(6)");
-const btnRefrescar = document.querySelector("#botones-izquierda button:nth-child(2)");
-                            
-if (btnMonocromo) btnMonocromo.style.backgroundColor = estado.monocromo ? "#ff0000" : "#333";
-if (btnRefrescar) btnRefrescar.style.backgroundColor = "#333";
-                            
-const info = document.getElementById("info-monocromo");
-                            
-if (info) info.innerText = "";
-}
-function alternarFondo() { estado.fondoA4 = estado.fondoA4 === "blanco" ? "negro" : "blanco";
-} 
-function alternarTexto() { estado.mostrarTexto = !estado.mostrarTexto;
-} 
-function rotarLienzo() { estado.orientacion = estado.orientacion === "vertical" ? "horizontal" : "vertical";
-recalcularMarco();
-} 
-function alternarMonocromo() { estado.monocromo = !estado.monocromo;
-                              
-const btn = document.querySelector("#botones-izquierda button:nth-child(6)");
-const btnRefrescar = document.querySelector("#botones-izquierda button:nth-child(2)");
-                              
-if (!btn || !btnRefrescar) return;
-                              
-btn.style.backgroundColor = estado.monocromo ? "#ff0000" : "#333";
-let info = document.getElementById("info-monocromo");
-                              
-if (!info) { info = document.createElement("div"); info.id = "info-monocromo";
-info.style.fontSize = "12px"; info.style.color = "#A9A9A9";
-info.style.marginTop = "1px"; btn.parentNode.insertBefore(info, btn.nextSibling);
-} 
-info.innerText = estado.monocromo ? "Refrescar Lienzo para activar modo" : "";
-btnRefrescar.style.backgroundColor = estado.monocromo ? "#00aa00" : "#333";
+// BOTÓN DERECHO — MODO 1
+// ==========================
+function activarModo1() {
+  estado.modo = "modo1";
+  refrescarLienzo();
 }
 
 // ==========================
@@ -229,7 +181,11 @@ function cargarDatos() {
     .then(datos => {
       datos.forEach(d => {
         if (!idsExistentes.has(d.timestamp)) {
-          gotas.push(new GotaPintura());
+          if (estado.modo === "modo1") {
+            gotas.push(new GotaPinturaModo1());
+          } else {
+            gotas.push(new GotaPintura());
+          }
           idsExistentes.add(d.timestamp);
         }
       });
@@ -238,7 +194,7 @@ function cargarDatos() {
 }
 
 // ==========================
-// CLASE GOTA
+// CLASE GOTA EDITORIAL (ORIGINAL)
 // ==========================
 class GotaPintura {
   constructor() {
@@ -270,8 +226,7 @@ class GotaPintura {
       }
     }
 
-    let x = this.x +
-    noise(this.noiseX) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO / 2;
+    let x = this.x + noise(this.noiseX) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO / 2;
     let y = this.y + noise(this.noiseY) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO / 2;
 
     noStroke();
@@ -279,27 +234,74 @@ class GotaPintura {
     beginShape();
     for (let i = 0; i < this.pasos; i++) {
       let ang = map(i, 0, this.pasos, 0, TWO_PI);
-      let r = this.radio *map(noise(cos(ang) + this.offset, sin(ang) + this.offset),0,1,0.7,1.8
-        );
+      let r = this.radio * map(noise(cos(ang) + this.offset, sin(ang) + this.offset), 0, 1, 0.7, 1.3);
       vertex(x + cos(ang) * r, y + sin(ang) * r);
     }
     endShape(CLOSE);
 
     this.noiseX += 0.005;
     this.noiseY += 0.005;
-
   }
 }
 
+// ==========================
+// CLASE GOTA — MODO 1 (SALVAJE)
+// ==========================
+class GotaPinturaModo1 {
+  constructor() {
+    this.x = random(marcoX + RADIO_MAX, marcoX + marcoW - RADIO_MAX);
+    this.y = random(marcoY + RADIO_MAX, marcoY + marcoH - RADIO_MAX);
 
+    this.radio = 5;
+    this.radioFinal = random(40, 90);
+    this.velocidad = 0.25;
 
+    this.ruidoOffset = random(1000);
+    this.finalizada = false;
 
+    this.pasos = 120;
 
+    if (estado.monocromo) {
+      let g = random(80, 200);
+      this.color = color(g, g, g, ALPHA_COLOR);
+    } else {
+      this.color = color(random(255), random(255), random(255), ALPHA_COLOR);
+    }
+  }
 
+  mostrar() {
+    if (!this.finalizada) {
+      this.radio += this.velocidad;
+      if (this.radio >= this.radioFinal) {
+        this.radio = this.radioFinal;
+        this.finalizada = true;
+      }
+    }
 
+    noStroke();
+    fill(this.color);
+    beginShape();
+    for (let i = 0; i <= this.pasos; i++) {
+      let ang = map(i, 0, this.pasos, 0, TWO_PI);
 
+      let nx = cos(ang) + 1.5;
+      let ny = sin(ang) + 1.5;
 
+      let deformacion =
+        noise(nx * 100.8, ny * 200.8, this.ruidoOffset) *
+        random(0.6, 1.4);
 
+      let r = this.radio * map(deformacion, 0, 1, 0.6, 1.6);
+
+      vertex(this.x + cos(ang) * r, this.y + sin(ang) * r);
+    }
+    endShape(CLOSE);
+
+    if (!this.finalizada) {
+      this.ruidoOffset += 0.01;
+    }
+  }
+}
 
 
 
