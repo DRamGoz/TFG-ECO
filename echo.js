@@ -134,7 +134,7 @@ function exportarA4() {
   gotas.forEach(g => dibujarGotaEnGraphics(pg, g));
   pg.pop();
 
-  // Texto editorial (solo si procede)
+  // Texto 
   if (estado.mostrarTexto && estado.modo === "editorial") {
     pg.textAlign(CENTER, TOP);
     pg.noStroke();
@@ -147,6 +147,23 @@ function exportarA4() {
   }
 
   saveCanvas(pg, "ECO_A4", "png");
+}
+
+// Dibujo gotas en graphics
+
+function dibujarGotaEnGraphics(pg, g) {
+  pg.noStroke();
+  pg.fill(g.color);
+  pg.beginShape();
+  for (let i = 0; i < g.pasos; i++) {
+    let ang = map(i, 0, g.pasos, 0, TWO_PI);
+    let r = g.radio * map(
+      noise(cos(ang) + g.offset, sin(ang) + g.offset),
+      0, 1, 0.7, 1.3
+    );
+    pg.vertex(g.x + cos(ang) * r, g.y + sin(ang) * r);
+  }
+  pg.endShape(CLOSE);
 }
 
 
@@ -392,7 +409,6 @@ function exportarA4() {
     pg.text(subtitulo, w / 2, 140);
   }
 
-  saveCanvas(pg, "ECO_A4", "png");
 }
 
   mostrar() {
@@ -417,6 +433,7 @@ function exportarA4() {
 }
 
   
+
 
 
 
