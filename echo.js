@@ -8,7 +8,7 @@ const RADIO_MAX = 120;
 const ALPHA_COLOR = 70;
 const RUEDO_MOVIMIENTO = 50;
 const CRECIMIENTO = 1.1;
-
+// TAMAÑO A4
 const A4_RATIO = 210 / 297;
 
 // ==========================
@@ -52,7 +52,8 @@ function setup() {
 function draw() {
   background(0);
 
-  // Marco A4
+  // MARCO A4
+  
   if (estado.fondoA4 === "blanco") {
     fill(255, 255, 255, 220);
     stroke(0);
@@ -63,7 +64,8 @@ function draw() {
   strokeWeight(4);
   rect(marcoX, marcoY, marcoW, marcoH);
 
-  // Clipping gotas
+  // CLIPPING GOTAS
+  
   push();
   drawingContext.save();
   drawingContext.beginPath();
@@ -73,7 +75,8 @@ function draw() {
   drawingContext.restore();
   pop();
 
-  // Texto editorial
+  // TÍTULO / SUBTÍTULO
+  
   if (estado.mostrarTexto && estado.modo === "editorial") {
     textAlign(CENTER, TOP);
     noStroke();
@@ -85,7 +88,8 @@ function draw() {
     text(subtitulo, marcoX + marcoW / 2, marcoY + 60);
   }
 
-  // Contador
+  // CONTADOR
+  
   let contador = "Nº Interacción Usuarios: " + gotas.length;
   let franjaH = 26;
   let franjaY = marcoY + marcoH - franjaH - 30;
@@ -97,6 +101,25 @@ function draw() {
   textSize(13);
   text(contador, marcoX + marcoW / 2, franjaY + franjaH / 2);
 }
+
+// ==========================
+// EXPORTAR A4 COMO IMAGEN (ARREGLADO)
+// ========================== 
+
+function exportarA4() {
+const dpi = 300;
+let anchoMM = 210;
+let altoMM = 297;
+
+if (estado.orientacion === "horizontal")
+{ [anchoMM, altoMM] = [altoMM, anchoMM];
+}
+
+const pxPorMM = dpi / 25.4;
+const w = Math.round(anchoMM * pxPorMM);
+const h = Math.round(altoMM * pxPorMM);
+let pg = createGraphics(w, h);
+
 
 // ==========================
 // BOTONES IZQUIERDA (YA EXISTENTES)
@@ -193,6 +216,11 @@ function cargarDatos() {
     .catch(() => {});
 }
 
+  // ✅ GUARDADO CORRECTO
+
+saveCanvas(pg, "ECO_A4", "png");
+ }
+
 // ==========================
 // CLASE GOTA EDITORIAL (ORIGINAL)
 // ==========================
@@ -254,7 +282,7 @@ class GotaPinturaModo1 {
 
     this.radio = 5;
     this.radioFinal = random(40, 90);
-    this.velocidad = 0.25;
+    this.velocidad = 0.1;
 
     this.ruidoOffset = random(1000);
     this.finalizada = false;
@@ -302,6 +330,7 @@ class GotaPinturaModo1 {
     }
   }
 }
+
 
 
 
