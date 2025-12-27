@@ -102,24 +102,6 @@ function draw() {
   text(contador, marcoX + marcoW / 2, franjaY + franjaH / 2);
 }
 
-// ==========================
-// EXPORTAR A4 COMO IMAGEN (ARREGLADO)
-// ========================== 
-
-function exportarA4() {
-const dpi = 300;
-let anchoMM = 210;
-let altoMM = 297;
-
-if (estado.orientacion === "horizontal")
-{ [anchoMM, altoMM] = [altoMM, anchoMM];
-}
-
-const pxPorMM = dpi / 25.4;
-const w = Math.round(anchoMM * pxPorMM);
-const h = Math.round(altoMM * pxPorMM);
-let pg = createGraphics(w, h);
-
 
 // ==========================
 // BOTONES IZQUIERDA (YA EXISTENTES)
@@ -182,6 +164,23 @@ function activarModo1() {
   refrescarLienzo();
 }
 
+// ==========================
+// EXPORTAR A4 COMO IMAGEN (ARREGLADO)
+// ========================== 
+
+function exportarA4() {
+const dpi = 300;
+let anchoMM = 210;
+let altoMM = 297;
+
+if (estado.orientacion === "horizontal")
+{ [anchoMM, altoMM] = [altoMM, anchoMM];
+}
+
+const pxPorMM = dpi / 25.4;
+const w = Math.round(anchoMM * pxPorMM);
+const h = Math.round(altoMM * pxPorMM);
+let pg = createGraphics(w, h);
 // ==========================
 // AUXILIARES
 // ==========================
@@ -330,6 +329,7 @@ class GotaPinturaModo1 {
     }
   }
 }
+
 
 
 
