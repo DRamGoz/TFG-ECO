@@ -164,19 +164,6 @@ function activarModo1() {
   refrescarLienzo();
 }
 
-// ==========================
-// EXPORTAR A4 COMO IMAGEN (ARREGLADO)
-// ========================== 
-
-function exportarA4() {
-const dpi = 300;
-let anchoMM = 210;
-let altoMM = 297;
-
-if (estado.orientacion === "horizontal")
-{ [anchoMM, altoMM] = [altoMM, anchoMM];
-}
-
 const pxPorMM = dpi / 25.4;
 const w = Math.round(anchoMM * pxPorMM);
 const h = Math.round(altoMM * pxPorMM);
@@ -215,10 +202,6 @@ function cargarDatos() {
     .catch(() => {});
 }
 
-  // ✅ GUARDADO CORRECTO
-
-saveCanvas(pg, "ECO_A4", "png");
- }
 
 // ==========================
 // CLASE GOTA EDITORIAL (ORIGINAL)
@@ -327,8 +310,25 @@ class GotaPinturaModo1 {
     if (!this.finalizada) {
       this.ruidoOffset += 0.01;
     }
+    // ==========================
+// EXPORTAR A4 COMO IMAGEN (ARREGLADO)
+// ========================== 
+
+function exportarA4() {
+const dpi = 300;
+let anchoMM = 210;
+let altoMM = 297;
+
+if (estado.orientacion === "horizontal")
+{ [anchoMM, altoMM] = [altoMM, anchoMM];
+}
+  // ✅ GUARDADO CORRECTO
+
+saveCanvas(pg, "ECO_A4", "png");
+
   }
 }
+
 
 
 
