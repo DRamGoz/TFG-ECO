@@ -146,7 +146,7 @@ function exportarA4() {
     pg.text(subtitulo, w / 2, 140);
   }
 
-  saveCanvas(pg, g, "ECO_A4", "png");
+  saveCanvas(pg, "ECO_A4", "png");
 }
 
 // Dibujo gotas en graphics
@@ -190,6 +190,7 @@ function alternarFondo() {
 
 function alternarTexto() {
   estado.mostrarTexto = !estado.mostrarTexto;
+  
 }
 
 function rotarLienzo() {
@@ -377,10 +378,12 @@ class GotaPinturaModo1 {
     beginShape();
     this.vertices.forEach(v => vertex(v.x, v.y));
     endShape(CLOSE);
+    exportarA4();
   }
 }
 
   
+
 
 
 
