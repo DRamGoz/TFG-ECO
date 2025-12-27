@@ -378,11 +378,12 @@ class GotaPinturaModo1 {
     beginShape();
     this.vertices.forEach(v => vertex(v.x, v.y));
     endShape(CLOSE);
-    exportarA4();
+    
   }
 }
 
   
+
 
 
 
