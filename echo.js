@@ -210,6 +210,7 @@ function activarModo1() {
   estado.modo = "modo1";
   refrescarLienzo();
   alternarTexto();
+    exportarA4();
 }
 
 // ==========================
@@ -342,6 +343,57 @@ class GotaPinturaModo1 {
       });
     }
   }
+// ==========================
+// EXPORTAR A4 COMO IMAGEN (ARREGLADO)
+// ==========================
+function exportarA4() {
+  const dpi = 300;
+  let anchoMM = 210;
+  let altoMM = 297;
+
+  if (estado.orientacion === "horizontal") {
+    [anchoMM, altoMM] = [altoMM, anchoMM];
+  }
+
+  const pxPorMM = dpi / 25.4;
+  const w = Math.round(anchoMM * pxPorMM);
+  const h = Math.round(altoMM * pxPorMM);
+
+  let pg = createGraphics(w, h);
+
+  // Fondo
+  pg.background(estado.fondoA4 === "blanco" ? 255 : 0);
+
+  // Marco
+  pg.noFill();
+  pg.stroke(estado.fondoA4 === "blanco" ? 0 : 255);
+  pg.strokeWeight(12);
+  pg.rect(0, 0, w, h);
+
+  // Escalado del contenido
+  const scaleX = w / marcoW;
+  const scaleY = h / marcoH;
+
+  pg.push();
+  pg.scale(scaleX, scaleY);
+  pg.translate(-marcoX, -marcoY);
+  gotas.forEach(g => dibujarGotaEnGraphics(pg, g));
+  pg.pop();
+
+  // Texto editorial (solo si procede)
+  if (estado.mostrarTexto && estado.modo === "editorial") {
+    pg.textAlign(CENTER, TOP);
+    pg.noStroke();
+    pg.fill(estado.fondoA4 === "blanco" ? 0 : 255);
+    pg.textSize(72);
+    pg.text(titulo, w / 2, 60);
+    pg.fill(estado.fondoA4 === "blanco" ? 60 : 200);
+    pg.textSize(42);
+    pg.text(subtitulo, w / 2, 140);
+  }
+
+  saveCanvas(pg, "ECO_A4", "png");
+}
 
   mostrar() {
     if (!this.finalizada) {
@@ -365,6 +417,7 @@ class GotaPinturaModo1 {
 }
 
   
+
 
 
 
