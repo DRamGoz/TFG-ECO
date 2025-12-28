@@ -39,7 +39,7 @@ let canvas;
 // ==========================
 function preload() {
   // Cambia esta URL por la imagen que quieras usar de fondo
-  imgFondo = loadImage("https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/1024px-Placeholder_view_vector.svg.png");
+  imgFondo = loadImage("https://www.pngegg.com/es/png-ddjex");
 }
 
 // ==========================
@@ -331,6 +331,7 @@ class GotaPinturaModo1 {
     endShape(CLOSE);
   }
 }
+
 
 
 
