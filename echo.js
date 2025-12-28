@@ -154,7 +154,11 @@ function exportarA4() {
   // 🔥 CLAVE
   exportando = true;
 }
-
+ if (exportando && bufferExport) {
+  image(bufferExport, 0, 0, width, height);
+  saveCanvas("ECO_A4", "png");
+  exportando = false;
+}
 /*function exportarA4() {
   const dpi = 300;
   let anchoMM = 210;
@@ -422,13 +426,9 @@ class GotaPinturaModo1 {
     this.vertices.forEach(v => vertex(v.x, v.y));
     endShape(CLOSE);
 
-    if (exportando && bufferExport) {
-  image(bufferExport, 0, 0, width, height);
-  saveCanvas("ECO_A4", "png");
-  exportando = false;
+    }
 }
-  }
-}
+
 
 
 
