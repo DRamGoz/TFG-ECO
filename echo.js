@@ -53,7 +53,7 @@ function setup() {
 function draw() {
 	 imageMode(CENTER);
 	image(img,windowWidth,windowHeight);
-  background(0);
+  //background(0);
 
   
   
@@ -327,6 +327,7 @@ class GotaPinturaModo1 {
     endShape(CLOSE);
   }
 }
+
 
 
 
