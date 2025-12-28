@@ -321,8 +321,6 @@ class GotaPinturaModo1 {
       this.ruidoOffset += 0.025;
     }
 
-	  let x = this.x + noise(this.noiseX) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO / 2;
-    let y = this.y + noise(this.noiseY) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO / 2;
     noStroke();
     fill(this.color);
     beginShape();
@@ -330,6 +328,7 @@ class GotaPinturaModo1 {
     endShape(CLOSE);
   }
 }
+
 
 
 
