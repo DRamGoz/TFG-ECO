@@ -134,9 +134,8 @@ function exportarA4() {
 
   pg.pop();
 
-  if (estado.mostrarTexto && estado.modo === "editorial";
-   (estado.mostrarTexto && estado.modo === "modo1") {
-) {
+  if (estado.mostrarTexto && estado.modo === "editorial","modo1")
+ {
     pg.textAlign(CENTER, TOP);
     pg.noStroke();
     pg.fill(estado.fondoA4 === "blanco" ? 0 : 255);
@@ -361,6 +360,7 @@ class GotaPinturaModo1 {
     endShape(CLOSE);
   }
 }
+
 
 
 
