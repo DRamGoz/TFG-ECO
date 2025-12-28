@@ -7,7 +7,7 @@ const RADIO_MIN = 10;
 const RADIO_MAX = 120;
 const ALPHA_COLOR = 70;
 const RUEDO_MOVIMIENTO = 50;
-const CRECIMIENTO = 1.1;
+const CRECIMIENTO = 0.8;
 
 const A4_RATIO = 210 / 297;
 
@@ -302,7 +302,7 @@ class GotaPinturaModo1 {
 
     this.radio = 5;
     this.radioFinal = random(40, 120);
-    this.velocidad = 0.08;
+    this.velocidad = 0.8;
 
     this.ruidoOffset = random(1000);
     this.finalizada = false;
@@ -359,6 +359,7 @@ class GotaPinturaModo1 {
     endShape(CLOSE);
   }
 }
+
 
 
 
