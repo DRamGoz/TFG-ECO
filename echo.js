@@ -16,7 +16,9 @@ const A4_RATIO = 210 / 297;
 // ==========================
 let titulo = "ECO — Generación de Arte Digital";
 let subtitulo = "Interacción de usuarios en tiempo real";
-
+function preload(){
+	img = loadImage("https://www.pngegg.com/es/png-ddjex");
+}
 window.estado = {
   modo: "modo1",            // "modo1" | "modo2"
   fondoA4: "blanco",
@@ -50,6 +52,10 @@ function setup() {
 // ==========================
 function draw() {
   background(0);
+
+  imageMode(CENTER);
+	image(img,windowWidth,windowHeight);
+  
   // Marco A4
   strokeWeight(4);
   if (estado.fondoA4 === "blanco") {
@@ -320,6 +326,7 @@ class GotaPinturaModo1 {
     endShape(CLOSE);
   }
 }
+
 
 
 
