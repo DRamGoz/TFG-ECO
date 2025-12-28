@@ -33,10 +33,7 @@ let idsExistentes = new Set();
 
 let marcoX, marcoY, marcoW, marcoH;
 let canvas;
-// Load the image and create a p5.Image object.
-function preload() {
-  img = loadImage('fondomadera.jpg');
-}
+
 // ==========================
 // SETUP
 // ==========================
@@ -47,8 +44,7 @@ function setup() {
   cargarDatos();
   setInterval(cargarDatos, 2000);
 }
-// Draw the image.
-  image(img, 0, 0);
+
 // ==========================
 // DRAW
 // ==========================
@@ -324,6 +320,7 @@ class GotaPinturaModo1 {
     endShape(CLOSE);
   }
 }
+
 
 
 
