@@ -179,14 +179,14 @@ function dibujarGotaEnGraphics(pg, g) {
   pg.endShape(CLOSE);
 }
 
-/*function dibujarGotaModo1EnPG(pg, g) {
+function dibujarGotaModo1EnPG(pg, g) {
   if (!g.vertices || g.vertices.length === 0) return;
   pg.noStroke();
   pg.fill(g.color);
   pg.beginShape();
   g.vertices.forEach(v => pg.vertex(v.x, v.y));
   pg.endShape(CLOSE);
-}*/
+}
 
 // ==========================
 // BOTONES
@@ -397,6 +397,7 @@ class GotaPinturaModo1 {
 
     }
 }
+
 
 
 
