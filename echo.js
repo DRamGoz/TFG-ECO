@@ -16,7 +16,7 @@ const A4_RATIO = 210 / 297;
 // ==========================
 let titulo = "ECO — Generación de Arte Digital";
 let subtitulo = "Interacción de usuarios en tiempo real";
-let imgFondo; // Imagen de fondo
+
 window.estado = {
   modo: "modo1",            // "modo1" | "modo2"
   fondoA4: "blanco",
@@ -33,11 +33,7 @@ let idsExistentes = new Set();
 
 let marcoX, marcoY, marcoW, marcoH;
 let canvas;
-// ==========================
-// PRELOAD
-// ==========================
-function preload() {
-  imgFondo = loadImage("https://www.pngegg.com/es/png-ddjex"); // Cambia por tu URL
+
 }
 // ==========================
 // SETUP
@@ -329,6 +325,7 @@ class GotaPinturaModo1 {
     endShape(CLOSE);
   }
 }
+
 
 
 
