@@ -1,21 +1,6 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>ECHO — Arte Digital Interactivo</title>
-
-  <link rel="stylesheet" href="estilo_echo.css">
-
-  <!-- p5 -->
-  <script src="https://cdn.jsdelivr.net/npm/p5@1.11.7/lib/p5.js"></script>
-  <script src="echo.js" defer></script>
-</head>
 <body>
 
-  <div id="app">
-
-    <!-- CONTENEDOR DEL CANVAS -->
-    <div id="a4-container"></div>
+  <div id="layout">
 
     <!-- BOTONES IZQUIERDA -->
     <div id="botones-izquierda">
@@ -24,8 +9,10 @@
       <button onclick="alternarFondo()">Fondo A4</button>
       <button onclick="alternarTexto()">Mostrar/Ocultar Texto</button>
       <button onclick="rotarLienzo()">Rotar Lienzo</button>
-      <!-- <button onclick="alternarMonocromo()">Colores Monocromáticos</button> -->
     </div>
+
+    <!-- CONTENEDOR A4 -->
+    <div id="a4-container"></div>
 
     <!-- BOTONES DERECHA -->
     <div id="botones-derecha">
@@ -40,13 +27,6 @@
   </div>
 
 </body>
-</html>
-
-
-
-
-
-
 
 
 
