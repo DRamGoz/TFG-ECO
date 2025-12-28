@@ -75,7 +75,7 @@ function draw() {
   pop();
 
   // TÍTULO / SUBTÍTULO
-  if (estado.mostrarTexto) {
+  if (estado.mostrarTexto && estado.modo === "editorial") {
     textAlign(CENTER, TOP);
     noStroke();
     fill(estado.fondoA4 === "blanco" ? 0 : 255);
@@ -143,7 +143,9 @@ pg.translate(-marcoX, -marcoY);
 
   pg.pop();
 
-  if (estado.mostrarTexto && estado.modo === "editorial","modo1")
+  // TEXTO
+  
+  if (estado.mostrarTexto && estado.modo === "editorial")
  {
     pg.textAlign(CENTER, TOP);
     pg.noStroke();
@@ -371,6 +373,7 @@ class GotaPinturaModo1 {
 
     }
 }
+
 
 
 
