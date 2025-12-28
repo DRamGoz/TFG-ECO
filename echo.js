@@ -106,7 +106,7 @@ function exportarA4() {
   let anchoMM = 210;
   let altoMM = 297;
 
-  if (estado.orientacion === "horizontal") {
+  if (estado.mostrarTexto) {
     [anchoMM, altoMM] = [altoMM, anchoMM];
   }
 
@@ -359,6 +359,7 @@ class GotaPinturaModo1 {
     endShape(CLOSE);
   }
 }
+
 
 
 
