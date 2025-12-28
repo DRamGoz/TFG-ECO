@@ -39,7 +39,7 @@ let canvas;
 // ==========================
 function preload() {
   // Cambia esta URL por la imagen que quieras usar de fondo
-  imgFondo = loadImage("https://www.istockphoto.com/es/search/2/image?mediatype=&phrase=mesas&utm_source=pixabay&utm_medium=affiliate&utm_campaign=sponsored_image&utm_content=srp_topbanner_viewmore&utm_term=mesas");
+  imgFondo = loadImage("fondomadera.jpg");
 }
 
 // ==========================
@@ -331,6 +331,7 @@ class GotaPinturaModo1 {
     endShape(CLOSE);
   }
 }
+
 
 
 
