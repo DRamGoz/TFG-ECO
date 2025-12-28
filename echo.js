@@ -20,7 +20,7 @@ let subtitulo = "Interacción de usuarios en tiempo real";
 
 window.estado = {
   modo1: "modo1",
-  modo2: "editorial",// "editorial" | "modo1"
+  modo2: "modo2",// "editorial" | "modo1"
   fondoA4: "blanco",
   mostrarTexto: true,
   monocromo: false,
@@ -76,7 +76,7 @@ function draw() {
   pop();
 
   // TÍTULO / SUBTÍTULO
-  if (estado.mostrarTexto && estado.modo1 === "modo1" && estado.modo2 === "editorial") {
+  if (estado.mostrarTexto && estado.modo1 === "modo1" && estado.modo2 === "modo2") {
     textAlign(CENTER, TOP);
     noStroke();
     fill(estado.fondoA4 === "blanco" ? 0 : 255);
@@ -138,7 +138,7 @@ pg.translate(-marcoX, -marcoY);
     if (g instanceof GotaPinturaModo1) {
       dibujarGotaModo1EnPG(pg, g);
     } else {
-      dibujarGotaEditorialEnPG(pg, g);
+      dibujarGotaModo2EnPG(pg, g);
     }
   });
 
@@ -146,7 +146,7 @@ pg.translate(-marcoX, -marcoY);
 
   // TEXTO
   
-  if (estado.mostrarTexto && estado.modo1 === "modo1" && estado.modo2 === "editorial")
+  if (estado.mostrarTexto && estado.modo1 === "modo1" && estado.modo2 === "modo2")
  {
     pg.textAlign(CENTER, TOP);
     pg.noStroke();
@@ -165,7 +165,7 @@ pg.translate(-marcoX, -marcoY);
 // ==========================
 // DIBUJO EXPORTACIÓN
 // ==========================
-function dibujarGotaEditorialEnPG(pg, g) {
+function dibujarGotaModo2EnPG(pg, g) {
   pg.noStroke();
   pg.fill(g.color);
   pg.beginShape();
@@ -243,8 +243,8 @@ function activarModo1() {
   refrescarLienzo();
 }
 
-function activarEditorial() {
-  estado.modo2 = "editorial";
+function activarModo2() {
+  estado.modo2 = "modo2";
   refrescarLienzo();
 }
 
@@ -270,7 +270,7 @@ function cargarDatos() {
     .then(datos => {
       datos.forEach(d => {
         if (!idsExistentes.has(d.timestamp)) {
-          if (estado.modo1 === "modo1" && estado.modo2 === "editorial") {
+          if (estado.modo1 === "modo1" && estado.modo2 === "modo2") {
             gotas.push(new GotaPinturaModo1());
           } else {
             gotas.push(new GotaPintura());
@@ -398,6 +398,7 @@ class GotaPinturaModo1 {
 
     }
 }
+
 
 
 
