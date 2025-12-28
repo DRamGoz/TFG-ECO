@@ -20,7 +20,7 @@ let subtitulo = "Interacción de usuarios en tiempo real";
 
 window.estado = {
   modo1: "modo1",
-  modo2: "modo2",// "editorial" | "modo1"
+  modo2: "modo2",
   fondoA4: "blanco",
   mostrarTexto: true,
   monocromo: false,
@@ -116,10 +116,10 @@ function exportarA4() {
   const pxPorMM = dpi / 25.4;
   const w = Math.round(anchoMM * pxPorMM);
   const h = Math.round(altoMM * pxPorMM);
-
   let pg = createGraphics(w, h);
+  
+// FONDO
   pg.background(estado.fondoA4 === "blanco" ? 255 : 0);
-
  const scaleFactor = min(
   w / marcoW,
   h / marcoH
@@ -133,7 +133,7 @@ pg.translate(
 pg.scale(scaleFactor);
 pg.translate(-marcoX, -marcoY);
 
-
+///////////////////////////////////////////////////////////////////////////////////////////
   gotas.forEach(g => {
     if (g instanceof GotaPinturaModo1) {
       dibujarGotaModo1EnPG(pg, g);
@@ -146,8 +146,7 @@ pg.translate(-marcoX, -marcoY);
 
   // TEXTO
   
-  if (estado.mostrarTexto && estado.modo1 === "modo1" && estado.modo2 === "modo2")
- {
+  if (estado.mostrarTexto && estado.modo1 === "modo1" && estado.modo2 === "modo2"){
     pg.textAlign(CENTER, TOP);
     pg.noStroke();
     pg.fill(estado.fondoA4 === "blanco" ? 0 : 255);
@@ -165,7 +164,7 @@ pg.translate(-marcoX, -marcoY);
 // ==========================
 // DIBUJO EXPORTACIÓN
 // ==========================
-function dibujarGotaModo2EnPG(pg, g) {
+function dibujarGotaEnGraphics(pg, g) {
   pg.noStroke();
   pg.fill(g.color);
   pg.beginShape();
@@ -180,14 +179,14 @@ function dibujarGotaModo2EnPG(pg, g) {
   pg.endShape(CLOSE);
 }
 
-function dibujarGotaModo1EnPG(pg, g) {
+/*function dibujarGotaModo1EnPG(pg, g) {
   if (!g.vertices || g.vertices.length === 0) return;
   pg.noStroke();
   pg.fill(g.color);
   pg.beginShape();
   g.vertices.forEach(v => pg.vertex(v.x, v.y));
   pg.endShape(CLOSE);
-}
+}*/
 
 // ==========================
 // BOTONES
@@ -273,7 +272,7 @@ function cargarDatos() {
           if (estado.modo1 === "modo1" && estado.modo2 === "modo2") {
             gotas.push(new GotaPinturaModo1());
           } else {
-            gotas.push(new GotaPintura());
+            gotas.push(new GotaPinturaModo2());
           }
           idsExistentes.add(d.timestamp);
         }
@@ -283,9 +282,9 @@ function cargarDatos() {
 }
 
 // ==========================
-// CLASE GOTA EDITORIAL
+// CLASE GOTA EDITORIAL modo2
 // ==========================
-class GotaPintura {
+class GotaPinturaModo2 {
   constructor() {
     this.x = random(marcoX + RADIO_MAX, marcoX + marcoW - RADIO_MAX);
     this.y = random(marcoY + RADIO_MAX, marcoY + marcoH - RADIO_MAX);
@@ -398,6 +397,7 @@ class GotaPinturaModo1 {
 
     }
 }
+
 
 
 
