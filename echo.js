@@ -318,7 +318,7 @@ class GotaPinturaModo1 {
     this.y = random(marcoY + RADIO_MAX, marcoY + marcoH - RADIO_MAX);
 
     this.radio = 5;
-    this.radioFinal = random(40, 90);
+    this.radioFinal = random(40, 120);
     this.velocidad = 0.08;
 
     this.ruidoOffset = random(1000);
@@ -378,6 +378,7 @@ class GotaPinturaModo1 {
   
 
   
+
 
 
 
