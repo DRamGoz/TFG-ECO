@@ -300,6 +300,10 @@ class GotaPinturaModo1 {
     this.finalizada = false;
     this.pasos = 120;
     this.vertices = [];
+    this.noiseX = random(1000);
+this.noiseY = random(1000);
+this.movimiento = 12; // intensidad del desplazamiento
+
     this.color = color(random(255), random(255), random(255), ALPHA_COLOR);
   }
 
@@ -324,13 +328,21 @@ class GotaPinturaModo1 {
       this.ruidoOffset += 0.025;
     }
 
-    noStroke();
-    fill(this.color);
-    beginShape();
-    this.vertices.forEach(v => vertex(v.x, v.y));
-    endShape(CLOSE);
+    let dx = noise(this.noiseX) * this.movimiento - this.movimiento / 2;
+let dy = noise(this.noiseY) * this.movimiento - this.movimiento / 2;
+
+noStroke();
+fill(this.color);
+beginShape();
+this.vertices.forEach(v => vertex(v.x + dx, v.y + dy));
+endShape(CLOSE);
+
+this.noiseX += 0.004;
+this.noiseY += 0.004;
+
   }
 }
+
 
 
 
