@@ -219,6 +219,22 @@ function rotarLienzo() {
 
 function alternarMonocromo() {
   estado.monocromo = !estado.monocromo;
+  const btn = document.querySelector("#botones-izquierda button:nth-child(6)");
+const btnRefrescar = document.querySelector("#botones-izquierda button:nth-child(2)");
+
+if (!btn || !btnRefrescar) return;
+
+btn.style.backgroundColor = estado.monocromo ? "#ff0000" : "#333";
+let info = document.getElementById("info-monocromo");
+
+if (!info) { info = document.createElement("div");
+info.id = "info-monocromo";
+
+info.style.fontSize = "12px"; info.style.color = "#A9A9A9"; info.style.marginTop = "1px"; btn.parentNode.insertBefore(info, btn.nextSibling);
+} 
+info.innerText = estado.monocromo ? "Refrescar Lienzo para activar modo" : "";
+btnRefrescar.style.backgroundColor = estado.monocromo ? "#00aa00" : "#333";
+
 }
 
 function activarModo1() {
@@ -381,6 +397,7 @@ class GotaPinturaModo1 {
 
     }
 }
+
 
 
 
