@@ -1,68 +1,94 @@
+/* RESET BÁSICO */
 html, body {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  height: 100%;
+  background: #111;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-/* ===== LAYOUT PRINCIPAL ===== */
-#layout {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 20px; /* distancia botones ↔ marco */
-}
-
-/* ===== A4 ===== */
+/* CONTENEDOR DEL CANVAS */
 #a4-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
+  position: fixed;
+  inset: 0;
+  pointer-events: none; /* p5 manda */
 }
 
-/* ===== BOTONES ===== */
+/* ===============================
+   BOTONES (BASE)
+   =============================== */
+
 #botones-izquierda,
 #botones-derecha {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  z-index: 10;
+  gap: 8px;
+  z-index: 20;
+  pointer-events: auto;
 }
 
-#botones-izquierda {
-  align-items: flex-end;
-}
+/* IZQUIERDA / DERECHA */
+#botones-izquierda { left: 0; }
+#botones-derecha { right: 0; }
 
-#botones-derecha {
-  align-items: flex-start;
-}
-
+/* BOTONES */
 #botones-izquierda button,
 #botones-derecha button {
-  padding: 8px 12px;
-  font-size: 14px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  background-color: #333;
+  background: #222;
   color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s ease, transform 0.15s ease;
 }
 
 #botones-izquierda button:hover,
 #botones-derecha button:hover {
-  background-color: #555;
+  background: #444;
+  transform: translateX(2px);
 }
 
-/* ===== IMPRESIÓN ===== */
+/* ===============================
+   AJUSTE FINO SEGÚN ORIENTACIÓN
+   (se activa desde JS)
+   =============================== */
+
+/* A4 VERTICAL → botones pegados */
+body.a4-vertical #botones-izquierda {
+  left: calc(50% - 210px);
+}
+
+body.a4-vertical #botones-derecha {
+  right: calc(50% - 210px);
+}
+
+/* A4 HORIZONTAL → botones más fuera */
+body.a4-horizontal #botones-izquierda {
+  left: 40px;
+}
+
+body.a4-horizontal #botones-derecha {
+  right: 40px;
+}
+
+/* ===============================
+   IMPRESIÓN
+   =============================== */
 @media print {
 
   @page {
     size: A4;
     margin: 0;
+  }
+
+  body {
+    background: white;
   }
 
   body * {
@@ -76,13 +102,9 @@ html, body {
 
   #a4-container {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 210mm;
-    height: 297mm;
+    inset: 0;
   }
 }
-
 
 
 
