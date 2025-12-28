@@ -1,32 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>ECHO — Arte Digital Interactivo</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="estilo_echo.css">
+
+  <!-- p5.js -->
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.11.7/lib/p5.js"></script>
+
+  <!-- Sketch -->
+  <script src="echo.js" defer></script>
+</head>
+
 <body>
 
-  <div id="layout">
+  <!-- CONTENEDOR DEL CANVAS / A4 -->
+  <div id="a4-container"></div>
 
-    <!-- BOTONES IZQUIERDA -->
-    <div id="botones-izquierda">
-      <button onclick="exportarA4()">Exportar A4</button>
-      <button onclick="refrescarLienzo()">Refrescar Lienzo</button>
-      <button onclick="alternarFondo()">Fondo A4</button>
-      <button onclick="alternarTexto()">Mostrar/Ocultar Texto</button>
-      <button onclick="rotarLienzo()">Rotar Lienzo</button>
-    </div>
+  <!-- BOTONES IZQUIERDA -->
+  <div id="botones-izquierda">
+    <button onclick="exportarA4()">Exportar A4</button>
+    <button onclick="refrescarLienzo()">Refrescar lienzo</button>
+    <button onclick="alternarFondo()">Fondo A4</button>
+    <button onclick="alternarTexto()">Título / Subtítulo</button>
+    <button onclick="rotarLienzo()">Rotar A4</button>
+  </div>
 
-    <!-- CONTENEDOR A4 -->
-    <div id="a4-container"></div>
-
-    <!-- BOTONES DERECHA -->
-    <div id="botones-derecha">
-      <button onclick="activarModo1()">MODO 1 ACRÍLICO</button>
-      <button onclick="activarModo2()">MODO 2 ACUARELA</button>
-      <button disabled>Botón 9</button>
-      <button disabled>Botón 10</button>
-      <button disabled>Botón 11</button>
-      <button disabled>Botón 12</button>
-    </div>
-
+  <!-- BOTONES DERECHA -->
+  <div id="botones-derecha">
+    <button onclick="activarModo1()">MODO 1 · Acrílico</button>
+    <button onclick="activarModo2()">MODO 2 · Acuarela</button>
   </div>
 
 </body>
+</html>
 
 
 
