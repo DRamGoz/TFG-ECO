@@ -1,84 +1,4 @@
-/*html, body {
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-}
-
-/* CONTENEDORES DE BOTONES */
-/*#botones-izquierda, #botones-derecha {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  z-index: 10;
-}
-
-#botones-izquierda { left: 100px; }
-#botones-derecha { right: 100px; }
-
-#botones-izquierda button,
-#botones-derecha button {
-  padding: 8px 12px;
-  font-size: 14px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  background-color: #333;
-  color: #fff;
-}
-
-#botones-izquierda button:hover,
-#botones-derecha button:hover {
-  background-color: #555;
-}
-
-/* CONTENEDOR A4 */
-/*#a4-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-/* =======================
-   IMPRESIÓN
-   ======================= */
-/*@media print {
-
-  @page {
-    size: A4;
-    margin: 0;
-  }
-
-  html, body {
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-  }
-
-  body * {
-    visibility: hidden;
-  }
-
-  #a4-container, 
-  #a4-container * {
-    visibility: visible;
-  }
-
-  #a4-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 210mm;
-    height: 297mm;
-  }
-}
-
-*/
-
-/* RESET */
-* {
+ {
   box-sizing: border-box;
 }
 
@@ -126,7 +46,7 @@ button {
 button:hover {
   background: #333;
 }
-button:push {
+button:active {
   background: #ff0000;
 }
 button:disabled {
@@ -164,6 +84,7 @@ button:disabled {
     right: 12px;
   }
 }
+
 
 
 
