@@ -144,11 +144,11 @@ button:disabled {
 /* HORIZONTAL → BOTONES MÁS PEGADOS AL MARCO */
 @media (orientation: landscape) {
   #botones-izquierda {
-    left: 6px;
+    left: 200px;
   }
 
   #botones-derecha {
-    right: 6px;
+    right:200px;
   }
 }
 
@@ -162,6 +162,7 @@ button:disabled {
     right: 12px;
   }
 }
+
 
 
 
