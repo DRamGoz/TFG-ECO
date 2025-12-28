@@ -138,6 +138,7 @@ pg.translate(-marcoX, -marcoY);
     if (g instanceof GotaPinturaModo1) {
       dibujarGotaModo1EnPG(pg, g);
     } else {
+      if (g instanceof GotaPinturaModo2) {
       dibujarGotaModo2EnPG(pg, g);
     }
   });
@@ -397,6 +398,7 @@ class GotaPinturaModo1 {
 
     }
 }
+
 
 
 
