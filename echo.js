@@ -135,7 +135,7 @@ pg.translate(-marcoX, -marcoY);
 
 ///////////////////////////////////////////////////////////////////////////////////////////
   gotas.forEach(g => {
-    if (g instanceof GotaPinturaModo2) {
+    if (g instanceof GotaPinturaModo) {
       dibujarGotaModo1EnPG(pg, g);
     } else {
       dibujarGotaModo2EnPG(pg, g);
@@ -397,6 +397,7 @@ class GotaPinturaModo1 {
 
     }
 }
+
 
 
 
