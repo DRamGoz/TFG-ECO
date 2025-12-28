@@ -375,13 +375,10 @@ class GotaPinturaModo1 {
     endShape(CLOSE);
   }
 }
-    if (!this.finalizada) {
-      this.ruidoOffset += 0.01;
-    }
-  }
-}
+  
 
   
+
 
 
 
