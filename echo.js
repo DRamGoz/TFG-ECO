@@ -19,7 +19,7 @@ let titulo = "ECO — Generación de Arte Digital";
 let subtitulo = "Interacción de usuarios en tiempo real";
 
 window.estado = {
-  modo1: ("modo1","modo2"),
+  modo: ("modo1","modo2"),
   //modo2: "modo2",
   fondoA4: "blanco",
   mostrarTexto: true,
@@ -76,7 +76,7 @@ function draw() {
   pop();
 
   // TÍTULO / SUBTÍTULO
-  if (estado.mostrarTexto && estado.modo1 === "modo1" && estado.modo2 === "modo2") {
+  if (estado.mostrarTexto && estado.modo === "modo1","modo2") {
     textAlign(CENTER, TOP);
     noStroke();
     fill(estado.fondoA4 === "blanco" ? 0 : 255);
@@ -146,7 +146,7 @@ pg.translate(-marcoX, -marcoY);
 
   // TEXTO
   
-  if (estado.mostrarTexto && estado.modo1 === "modo1" && estado.modo2 === "modo2"){
+  if (estado.mostrarTexto && estado.modo === "modo1","modo2"){
     pg.textAlign(CENTER, TOP);
     pg.noStroke();
     pg.fill(estado.fondoA4 === "blanco" ? 0 : 255);
@@ -238,12 +238,12 @@ btnRefrescar.style.backgroundColor = estado.monocromo ? "#00aa00" : "#333";
 }
 
 function activarModo1() {
-  estado.modo1 = "modo1";
+  estado.modo = "modo1";
   refrescarLienzo();
 }
 
 function activarModo2() {
-  estado.modo2 = "modo2";
+  estado.modo = "modo2";
   refrescarLienzo();
 }
 
@@ -269,7 +269,7 @@ function cargarDatos() {
     .then(datos => {
       datos.forEach(d => {
         if (!idsExistentes.has(d.timestamp)) {
-          if (estado.modo1 === "modo1" && estado.modo2 === "modo2") {
+          if (estado.modo === "modo1","modo2") {
             gotas.push(new GotaPinturaModo1());
           } else {
             gotas.push(new GotaPinturaModo2());
@@ -397,6 +397,7 @@ class GotaPinturaModo1 {
 
     }
 }
+
 
 
 
