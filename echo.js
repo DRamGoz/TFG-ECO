@@ -38,7 +38,8 @@ let canvas;
 // PRELOAD
 // ==========================
 function preload() {
-  imgFondo = loadImage("https://www.pngegg.com/es/png-ddjex"); // Cambia por tu URL
+  // Cambia esta URL por la imagen que quieras usar de fondo
+  imgFondo = loadImage("https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/1024px-Placeholder_view_vector.svg.png");
 }
 
 // ==========================
@@ -59,26 +60,28 @@ function draw() {
   // --------------------------
   // FONDO DEL CANVAS
   // --------------------------
-  if (estado.fondoA4 === "imagen" && imgFondo) {
-    background(255); // Limpia el canvas
+  if (imgFondo) {
     imageMode(CORNER);
-    image(imgFondo, 0, 0, width, height); // Dibuja la imagen detrás de todo
-  } else if (estado.fondoA4 === "blanco") {
-    background(255);
+    image(imgFondo, 0, 0, width, height); // solo el fondo
   } else {
-    background(0);
+    background(estado.fondoA4 === "blanco" ? 255 : 0);
   }
 
   // --------------------------
-  // Marco A4 (sin fill transparente para que se vea fondo)
+  // Marco A4
   // --------------------------
   strokeWeight(4);
-  stroke(0);          // Borde negro por defecto
-  fill(estado.fondoA4 === "imagen" ? color(255, 0) : (estado.fondoA4 === "blanco" ? 255 : 0)); 
+  if (estado.fondoA4 === "blanco") {
+    fill(255, 220);
+    stroke(0);
+  } else {
+    fill(0);
+    stroke(255);
+  }
   rect(marcoX, marcoY, marcoW, marcoH);
 
   // --------------------------
-  // Clipping de gotas dentro del marco
+  // Clipping de gotas
   // --------------------------
   push();
   drawingContext.save();
@@ -95,10 +98,10 @@ function draw() {
   if (estado.mostrarTexto) {
     textAlign(CENTER, TOP);
     noStroke();
-    fill(0);
+    fill(estado.fondoA4 === "blanco" ? 0 : 255);
     textSize(24);
     text(titulo, marcoX + marcoW / 2, marcoY + 20);
-    fill(50);
+    fill(estado.fondoA4 === "blanco" ? 50 : 200);
     textSize(16);
     text(subtitulo, marcoX + marcoW / 2, marcoY + 60);
   }
@@ -109,33 +112,225 @@ function draw() {
   let franjaH = 26;
   let franjaY = marcoY + marcoH - franjaH - 30;
   noStroke();
-  fill(0, 120);
+  fill(estado.fondoA4 === "blanco" ? 0 : 255, 120);
   rect(marcoX, franjaY, marcoW, franjaH);
-  fill(255);
+  fill(estado.fondoA4 === "blanco" ? 255 : 0);
   textAlign(CENTER, CENTER);
   textSize(13);
   text("Nº Interacción Usuarios: " + gotas.length,
        marcoX + marcoW / 2, franjaY + franjaH / 2);
 }
 
+// ==========================
+// EXPORTAR A4
+// ==========================
+function exportarA4() {
+  const dpi = 300;
+  let wMM = 210, hMM = 297;
 
+  if (estado.orientacion === "horizontal") [wMM, hMM] = [hMM, wMM];
 
+  const pxMM = dpi / 25.4;
+  const w = Math.round(wMM * pxMM);
+  const h = Math.round(hMM * pxMM);
 
+  let pg = createGraphics(w, h);
 
+  // Fondo exportación
+  if (estado.fondoA4 === "blanco") pg.background(255);
+  else if (estado.fondoA4 === "negro") pg.background(0);
+  else if (estado.fondoA4 === "imagen" && imgFondo) pg.image(imgFondo, 0, 0, w, h);
 
+  const scaleFactor = min(w / marcoW, h / marcoH);
+  pg.push();
+  pg.translate((w - marcoW * scaleFactor) / 2, (h - marcoH * scaleFactor) / 2);
+  pg.scale(scaleFactor);
+  pg.translate(-marcoX, -marcoY);
 
+  gotas.forEach(g => {
+    if (g instanceof GotaPinturaModo1) dibujarGotaModo1(pg, g);
+    if (g instanceof GotaPinturaModo2) dibujarGotaModo2(pg, g);
+  });
+  pg.pop();
 
+  // Texto exportado
+  if (estado.mostrarTexto) {
+    pg.textAlign(CENTER, TOP);
+    pg.noStroke();
+    pg.fill(estado.fondoA4 === "blanco" ? 0 : 255);
+    pg.textSize(72);
+    pg.text(titulo, w / 2, 60);
+    pg.fill(estado.fondoA4 === "blanco" ? 60 : 200);
+    pg.textSize(42);
+    pg.text(subtitulo, w / 2, 140);
+  }
 
+  saveCanvas(pg, "ECO_A4", "png");
+}
 
+// ==========================
+// DIBUJO DE GOTAS
+// ==========================
+function dibujarGotaModo1(pg, g) {
+  if (!g.vertices.length) return;
+  pg.noStroke();
+  pg.fill(g.color);
+  pg.beginShape();
+  g.vertices.forEach(v => pg.vertex(v.x, v.y));
+  pg.endShape(CLOSE);
+}
 
+function dibujarGotaModo2(pg, g) {
+  pg.noStroke();
+  pg.fill(g.color);
+  pg.beginShape();
+  for (let i = 0; i < g.pasos; i++) {
+    let ang = map(i, 0, g.pasos, 0, TWO_PI);
+    let r = g.radio * map(
+      noise(cos(ang) + g.offset, sin(ang) + g.offset),
+      0, 1, 0.7, 1.3
+    );
+    pg.vertex(g.x + cos(ang) * r, g.y + sin(ang) * r);
+  }
+  pg.endShape(CLOSE);
+}
 
+// ==========================
+// BOTONES / ESTADO
+// ==========================
+function activarModo1() { estado.modo = "modo1"; refrescarLienzo(); }
+function activarModo2() { estado.modo = "modo2"; refrescarLienzo(); }
+function refrescarLienzo() { gotas = []; idsExistentes.clear(); }
 
+function alternarFondo() {
+  if (estado.fondoA4 === "blanco") estado.fondoA4 = "negro";
+  else if (estado.fondoA4 === "negro") estado.fondoA4 = "imagen";
+  else estado.fondoA4 = "blanco";
+}
 
+function alternarTexto() { estado.mostrarTexto = !estado.mostrarTexto; }
 
+function rotarLienzo() {
+  estado.orientacion = estado.orientacion === "vertical" ? "horizontal" : "vertical";
+  recalcularMarco();
+}
 
+// ==========================
+// AUXILIARES
+// ==========================
+function recalcularMarco() {
+  let ratio = estado.orientacion === "vertical" ? 210 / 297 : 297 / 210;
+  if (width / height > ratio) {
+    marcoH = height - 40;
+    marcoW = marcoH * ratio;
+  } else {
+    marcoW = width - 40;
+    marcoH = marcoW / ratio;
+  }
+  marcoX = (width - marcoW) / 2;
+  marcoY = (height - marcoH) / 2;
+}
 
+function cargarDatos() {
+  fetch(API_URL)
+    .then(r => r.json())
+    .then(datos => {
+      datos.forEach(d => {
+        if (!idsExistentes.has(d.timestamp)) {
+          if (estado.modo === "modo1") gotas.push(new GotaPinturaModo1());
+          if (estado.modo === "modo2") gotas.push(new GotaPinturaModo2());
+          idsExistentes.add(d.timestamp);
+        }
+      });
+    })
+    .catch(() => {});
+}
 
+// ==========================
+// CLASES DE GOTAS
+// ==========================
+class GotaPinturaModo2 {
+  constructor() {
+    this.x = random(marcoX + RADIO_MAX, marcoX + marcoW - RADIO_MAX);
+    this.y = random(marcoY + RADIO_MAX, marcoY + marcoH - RADIO_MAX);
+    this.radio = 0;
+    this.radioFinal = random(RADIO_MIN, RADIO_MAX);
+    this.pasos = int(random(NUM_VERTICES_MIN, NUM_VERTICES_MAX));
+    this.offset = random(1000);
+    this.creciendo = true;
+    this.color = color(random(255), random(255), random(255), ALPHA_COLOR);
+    this.noiseX = random(1000);
+    this.noiseY = random(1000);
+  }
 
+  mostrar() {
+    if (this.creciendo) {
+      this.radio += CRECIMIENTO;
+      if (this.radio >= this.radioFinal) {
+        this.radio = this.radioFinal;
+        this.creciendo = false;
+      }
+    }
+    let x = this.x + noise(this.noiseX) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO / 2;
+    let y = this.y + noise(this.noiseY) * RUEDO_MOVIMIENTO - RUEDO_MOVIMIENTO / 2;
+
+    noStroke();
+    fill(this.color);
+    beginShape();
+    for (let i = 0; i < this.pasos; i++) {
+      let ang = map(i, 0, this.pasos, 0, TWO_PI);
+      let r = this.radio * map(noise(cos(ang) + this.offset, sin(ang) + this.offset), 0, 1, 0.7, 1.3);
+      vertex(x + cos(ang) * r, y + sin(ang) * r);
+    }
+    endShape(CLOSE);
+
+    this.noiseX += 0.005;
+    this.noiseY += 0.005;
+  }
+}
+
+class GotaPinturaModo1 {
+  constructor() {
+    this.x = random(marcoX + RADIO_MAX, marcoX + marcoW - RADIO_MAX);
+    this.y = random(marcoY + RADIO_MAX, marcoY + marcoH - RADIO_MAX);
+    this.radio = 5;
+    this.radioFinal = random(40, 120);
+    this.velocidad = 0.8;
+    this.ruidoOffset = random(1000);
+    this.finalizada = false;
+    this.pasos = 120;
+    this.vertices = [];
+    this.color = color(random(255), random(255), random(255), ALPHA_COLOR);
+  }
+
+  calcularForma() {
+    this.vertices = [];
+    for (let i = 0; i <= this.pasos; i++) {
+      let ang = map(i, 0, this.pasos, 0, TWO_PI);
+      let deformacion = noise(cos(ang) * 120, sin(ang) * 240, this.ruidoOffset);
+      let r = this.radio * map(deformacion, 0, 1, 0.4, 2.0);
+      this.vertices.push({ x: this.x + cos(ang) * r, y: this.y + sin(ang) * r });
+    }
+  }
+
+  mostrar() {
+    if (!this.finalizada) {
+      this.radio += this.velocidad;
+      if (this.radio >= this.radioFinal) {
+        this.radio = this.radioFinal;
+        this.finalizada = true;
+      }
+      this.calcularForma();
+      this.ruidoOffset += 0.025;
+    }
+
+    noStroke();
+    fill(this.color);
+    beginShape();
+    this.vertices.forEach(v => vertex(v.x, v.y));
+    endShape(CLOSE);
+  }
+}
 
 
 
