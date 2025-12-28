@@ -157,7 +157,7 @@ function exportarA4() {
  if (exportando && bufferExport) {
   image(bufferExport, 0, 0, width, height);
   saveCanvas("ECO_A4", "png");
-  exportando = false;
+  
 }
 /*function exportarA4() {
   const dpi = 300;
