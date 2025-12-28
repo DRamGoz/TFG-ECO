@@ -197,9 +197,10 @@ function rotarLienzo() {
   estado.orientacion =
     estado.orientacion === "vertical" ? "horizontal" : "vertical";
   recalcularMarco();
-}
-const btn = document.querySelector("#botones-izquierda button:nth-child(5)");
+  const btn = document.querySelector("#botones-izquierda button:nth-child(5)");
 btn.style.backgroundColor = estado.rotarLienzo ? "#ff2200";
+}
+
 // ==========================
 // AUXILIARES
 // ==========================
@@ -322,6 +323,7 @@ class GotaPinturaModo1 {
     endShape(CLOSE);
   }
 }
+
 
 
 
