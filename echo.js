@@ -19,7 +19,7 @@ let titulo = "ECO — Generación de Arte Digital";
 let subtitulo = "Interacción de usuarios en tiempo real";
 
 window.estado = {
-  modo: "editorial", // "editorial" | "modo1"
+  modo: "editorial", "modo1" // "editorial" | "modo1"
   fondoA4: "blanco",
   mostrarTexto: true,
   monocromo: false,
@@ -75,7 +75,7 @@ function draw() {
   pop();
 
   // TÍTULO / SUBTÍTULO
-  if (estado.mostrarTexto && estado.modo === "editorial") {
+  if (estado.mostrarTexto && estado.modo === "editorial","modo1") {
     textAlign(CENTER, TOP);
     noStroke();
     fill(estado.fondoA4 === "blanco" ? 0 : 255);
@@ -397,6 +397,7 @@ class GotaPinturaModo1 {
 
     }
 }
+
 
 
 
