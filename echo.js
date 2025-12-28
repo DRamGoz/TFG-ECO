@@ -194,6 +194,14 @@ function dibujarGotaModo1EnPG(pg, g) {
 function refrescarLienzo() {
   gotas = [];
   idsExistentes.clear();
+  const btnMonocromo = document.querySelector("#botones-izquierda button:nth-child(6)");
+const btnRefrescar = document.querySelector("#botones-izquierda button:nth-child(2)");
+
+if (btnMonocromo) btnMonocromo.style.backgroundColor = estado.monocromo ? "#ff0000" : "#333";
+if (btnRefrescar) btnRefrescar.style.backgroundColor = "#333";
+
+const info = document.getElementById("info-monocromo");
+if (info) info.innerText = "";
 }
 
 function alternarFondo() {
@@ -373,6 +381,7 @@ class GotaPinturaModo1 {
 
     }
 }
+
 
 
 
