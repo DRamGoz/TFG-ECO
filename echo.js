@@ -14,8 +14,6 @@ const A4_RATIO = 210 / 297;
 // ==========================
 // ESTADO GLOBAL
 // ==========================
-let exportando = false;
-let bufferExport = null;
 
 let titulo = "ECO — Generación de Arte Digital";
 let subtitulo = "Interacción de usuarios en tiempo real";
@@ -110,60 +108,6 @@ function exportarA4() {
   let anchoMM = 210;
   let altoMM = 297;
 
-  if (estado.orientacion === "horizontal") {
-    [anchoMM, altoMM] = [altoMM, anchoMM];
-  }
-
-  const pxPorMM = dpi / 25.4;
-  const w = Math.round(anchoMM * pxPorMM);
-  const h = Math.round(altoMM * pxPorMM);
-
-  bufferExport = createGraphics(w, h);
-
-  // Fondo
-  bufferExport.background(estado.fondoA4 === "blanco" ? 255 : 0);
-
-  // Marco
-  bufferExport.noFill();
-  bufferExport.stroke(estado.fondoA4 === "blanco" ? 0 : 255);
-  bufferExport.strokeWeight(12);
-  bufferExport.rect(0, 0, w, h);
-
-  // Escala correcta
-  const scaleX = w / marcoW;
-  const scaleY = h / marcoH;
-
-  bufferExport.push();
-  bufferExport.scale(scaleX, scaleY);
-  bufferExport.translate(-marcoX, -marcoY);
-  gotas.forEach(g => dibujarGotaEnGraphics(bufferExport, g));
-  bufferExport.pop();
-
-  // TEXTO → SIEMPRE si está activo
-  if (estado.mostrarTexto) {
-    bufferExport.textAlign(CENTER, TOP);
-    bufferExport.noStroke();
-    bufferExport.fill(estado.fondoA4 === "blanco" ? 0 : 255);
-    bufferExport.textSize(72);
-    bufferExport.text(titulo, w / 2, 60);
-    bufferExport.fill(estado.fondoA4 === "blanco" ? 60 : 200);
-    bufferExport.textSize(42);
-    bufferExport.text(subtitulo, w / 2, 140);
-  }
-
-  // 🔥 CLAVE
-  exportando = true;
-}
- if (exportando && bufferExport) {
-  image(bufferExport, 0, 0, width, height);
-  saveCanvas("ECO_A4.png");
-  
-}
-/*function exportarA4() {
-  const dpi = 300;
-  let anchoMM = 210;
-  let altoMM = 297;
-
  if (estado.mostrarTexto && estado.modo === "editorial","modo1")
  {
     [anchoMM, altoMM] = [altoMM, anchoMM];
@@ -214,7 +158,7 @@ pg.translate(-marcoX, -marcoY);
 
   saveCanvas("ECO_A4", "png");
 
-}*/
+}
 
 // ==========================
 // DIBUJO EXPORTACIÓN
@@ -428,6 +372,7 @@ class GotaPinturaModo1 {
 
     }
 }
+
 
 
 
