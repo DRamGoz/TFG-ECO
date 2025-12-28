@@ -12,31 +12,36 @@
 </head>
 <body>
 
-  <!-- CONTENEDOR A4 (solo para impresión) -->
-  <div id="a4-container"></div>
+  <div id="app">
 
-  <!-- BOTONES IZQUIERDA -->
-  <div id="botones-izquierda">
-   <button onclick="exportarA4()">Exportar A4</button>
-    <button onclick="refrescarLienzo()">Refrescar Lienzo</button>
-    <button onclick="alternarFondo()">Fondo A4</button>
-    <button onclick="alternarTexto()">Mostrar/Ocultar Texto</button>
-    <button onclick="rotarLienzo()">Rotar Lienzo</button>
-   <!--<button onclick="alternarMonocromo()">Colores Monocromáticos</button>--!>
-  </div>
+    <!-- CONTENEDOR DEL CANVAS -->
+    <div id="a4-container"></div>
 
-  <!-- BOTONES DERECHA (RESERVADOS) -->
-  <div id="botones-derecha">
-   <button onclick="activarModo1()">MODO 1 ACRILICO</button>
-    <button onclick="activarModo2()">MODO 2 ACUARELA</button>
-    <button disabled>Botón 9</button>
-    <button disabled>Botón 10</button>
-    <button disabled>Botón 11</button>
-    <button disabled>Botón 12</button>
+    <!-- BOTONES IZQUIERDA -->
+    <div id="botones-izquierda">
+      <button onclick="exportarA4()">Exportar A4</button>
+      <button onclick="refrescarLienzo()">Refrescar Lienzo</button>
+      <button onclick="alternarFondo()">Fondo A4</button>
+      <button onclick="alternarTexto()">Mostrar/Ocultar Texto</button>
+      <button onclick="rotarLienzo()">Rotar Lienzo</button>
+      <!-- <button onclick="alternarMonocromo()">Colores Monocromáticos</button> -->
+    </div>
+
+    <!-- BOTONES DERECHA -->
+    <div id="botones-derecha">
+      <button onclick="activarModo1()">MODO 1 ACRÍLICO</button>
+      <button onclick="activarModo2()">MODO 2 ACUARELA</button>
+      <button disabled>Botón 9</button>
+      <button disabled>Botón 10</button>
+      <button disabled>Botón 11</button>
+      <button disabled>Botón 12</button>
+    </div>
+
   </div>
 
 </body>
 </html>
+
 
 
 
