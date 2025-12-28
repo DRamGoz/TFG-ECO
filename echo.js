@@ -34,7 +34,7 @@ let idsExistentes = new Set();
 let marcoX, marcoY, marcoW, marcoH;
 let canvas;
 
-}
+
 // ==========================
 // SETUP
 // ==========================
@@ -325,6 +325,7 @@ class GotaPinturaModo1 {
     endShape(CLOSE);
   }
 }
+
 
 
 
