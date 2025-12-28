@@ -319,12 +319,13 @@ class GotaPinturaModo1 {
 
     this.radio = 5;
     this.radioFinal = random(40, 90);
-    this.velocidad = 0.25;
+    this.velocidad = 0.08;
 
     this.ruidoOffset = random(1000);
     this.finalizada = false;
 
     this.pasos = 120;
+    this.vertices = [];
 
     if (estado.monocromo) {
       let g = random(80, 200);
@@ -334,18 +335,8 @@ class GotaPinturaModo1 {
     }
   }
 
-  mostrar() {
-    if (!this.finalizada) {
-      this.radio += this.velocidad;
-      if (this.radio >= this.radioFinal) {
-        this.radio = this.radioFinal;
-        this.finalizada = true;
-      }
-    }
-
-    noStroke();
-    fill(this.color);
-    beginShape();
+  calcularForma() {
+    this.vertices = [];
     for (let i = 0; i <= this.pasos; i++) {
       let ang = map(i, 0, this.pasos, 0, TWO_PI);
 
@@ -353,15 +344,37 @@ class GotaPinturaModo1 {
       let ny = sin(ang) + 1.5;
 
       let deformacion =
-        noise(nx * 100.8, ny * 200.8, this.ruidoOffset) *
-        random(0.6, 1.4);
+        noise(nx * 100.8, ny * 200.8, this.ruidoOffset);
 
       let r = this.radio * map(deformacion, 0, 1, 0.6, 1.6);
 
-      vertex(this.x + cos(ang) * r, this.y + sin(ang) * r);
+      this.vertices.push({
+        x: this.x + cos(ang) * r,
+        y: this.y + sin(ang) * r
+      });
     }
-    endShape(CLOSE);
+  }
 
+  mostrar() {
+    if (!this.finalizada) {
+      this.radio += this.velocidad;
+
+      if (this.radio >= this.radioFinal) {
+        this.radio = this.radioFinal;
+        this.finalizada = true;
+      }
+
+      this.calcularForma();
+      this.ruidoOffset += 0.01;
+    }
+
+    noStroke();
+    fill(this.color);
+    beginShape();
+    this.vertices.forEach(v => vertex(v.x, v.y));
+    endShape(CLOSE);
+  }
+}
     if (!this.finalizada) {
       this.ruidoOffset += 0.01;
     }
@@ -369,6 +382,7 @@ class GotaPinturaModo1 {
 }
 
   
+
 
 
 
