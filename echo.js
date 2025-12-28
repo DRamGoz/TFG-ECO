@@ -72,7 +72,7 @@ function draw() {
   // --------------------------
   strokeWeight(4);
   if (estado.fondoA4 === "blanco") {
-    fill(255, 220);
+    fill(255, 255);
     stroke(0);
   } else {
     fill(0);
@@ -331,6 +331,7 @@ class GotaPinturaModo1 {
     endShape(CLOSE);
   }
 }
+
 
 
 
