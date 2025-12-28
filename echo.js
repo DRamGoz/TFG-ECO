@@ -223,6 +223,10 @@ function activarModo1() {
   estado.modo = "modo1";
   refrescarLienzo();
 }
+function activarEditorial() {
+  estado.modo = "editorial";
+  refrescarLienzo();
+}
 
 // ==========================
 // AUXILIARES
@@ -378,6 +382,7 @@ class GotaPinturaModo1 {
   
 
   
+
 
 
 
