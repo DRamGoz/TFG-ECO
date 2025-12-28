@@ -50,7 +50,8 @@ button:active {
   background: #ff0000;
 }
 button:disabled {
-  background: #ff0000;
+   opacity: 0.35;
+  cursor: default;
 }
 
 /* POSICIÓN POR DEFECTO (VERTICAL) */
@@ -83,6 +84,7 @@ button:disabled {
     right: 12px;
   }
 }
+
 
 
 
