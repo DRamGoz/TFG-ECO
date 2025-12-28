@@ -108,10 +108,9 @@ function exportarA4() {
   let anchoMM = 210;
   let altoMM = 297;
 
- if (estado.mostrarTexto && estado.modo === "editorial","modo1")
- {
-    [anchoMM, altoMM] = [altoMM, anchoMM];
-  }
+ if (estado.orientacion === "horizontal")
+{ [anchoMM, altoMM] = [altoMM, anchoMM];
+}
 
   const pxPorMM = dpi / 25.4;
   const w = Math.round(anchoMM * pxPorMM);
@@ -156,7 +155,7 @@ pg.translate(-marcoX, -marcoY);
     pg.text(subtitulo, w / 2, 140);
   }
 
-  saveCanvas(scaleFactor, "ECO_A4", "png");
+  saveCanvas(pg, "ECO_A4", "png");
 
 }
 
@@ -372,6 +371,7 @@ class GotaPinturaModo1 {
 
     }
 }
+
 
 
 
