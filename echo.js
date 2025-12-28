@@ -316,17 +316,30 @@ class GotaPinturaModo1 {
   }
 
   calcularForma() {
-    this.vertices = [];
-    for (let i = 0; i <= this.pasos; i++) {
-      let ang = map(i, 0, this.pasos, 0, TWO_PI);
-      let deform = noise(cos(ang) + 1.5, sin(ang) + 1.5, this.ruidoOffset);
-      let r = this.radio * map(deform, 0, 1, 0.6, 1.6);
-      this.vertices.push({
-        x: this.x + cos(ang) * r,
-        y: this.y + sin(ang) * r
-      });
-    }
+  this.vertices = [];
+  for (let i = 0; i <= this.pasos; i++) {
+    let ang = map(i, 0, this.pasos, 0, TWO_PI);
+
+    let nx = cos(ang) + 1.5;
+    let ny = sin(ang) + 1.5;
+
+    // 🔥 ruido de ALTA FRECUENCIA (salvaje)
+    let deformacion = noise(
+      nx * 120.8,
+      ny * 240.8,
+      this.ruidoOffset
+    );
+
+    // 🔥 rango MUY agresivo
+    let r = this.radio * map(deformacion, 0, 1, 0.4, 2.0);
+
+    this.vertices.push({
+      x: this.x + cos(ang) * r,
+      y: this.y + sin(ang) * r
+    });
   }
+}
+
 
   mostrar() {
     if (!this.finalizada) {
@@ -336,7 +349,7 @@ class GotaPinturaModo1 {
         this.finalizada = true;
       }
       this.calcularForma();
-      this.ruidoOffset += 0.01;
+      this.ruidoOffset += 0.025;
     }
 
     noStroke();
@@ -346,6 +359,7 @@ class GotaPinturaModo1 {
     endShape(CLOSE);
   }
 }
+
 
 
 
