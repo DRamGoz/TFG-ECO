@@ -118,8 +118,10 @@ function exportarA4() {
   let pg = createGraphics(w, h);
   pg.background(estado.fondoA4 === "blanco" ? 255 : 0);
 
-  const scaleX = w / marcoW;
-  const scaleY = h / marcoH;
+  const scaleFactor = min(
+  w / marcoW,
+  h / marcoH
+);
 
   pg.push();
   pg.scale(scaleX, scaleY);
@@ -361,6 +363,7 @@ class GotaPinturaModo1 {
     endShape(CLOSE);
   }
 }
+
 
 
 
