@@ -1,89 +1,89 @@
- {
-  box-sizing: border-box;
-}
-
-body {
+html, body {
   margin: 0;
-  background: #111;
-  font-family: system-ui, sans-serif;
+  padding: 0;
   overflow: hidden;
+  height: 100%;
 }
 
-/* CONTENEDOR GENERAL */
-#app {
+/* ===== LAYOUT PRINCIPAL ===== */
+#layout {
   position: relative;
   width: 100vw;
   height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px; /* distancia botones ↔ marco */
 }
 
-/* CONTENEDOR DEL CANVAS */
+/* ===== A4 ===== */
 #a4-container {
-  position: absolute;
-  inset: 0;
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
-/* BOTONES (COMÚN) */
+/* ===== BOTONES ===== */
 #botones-izquierda,
 #botones-derecha {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   z-index: 10;
 }
 
-button {
-  background: #222;
-  color: #ddd;
-  border: 1px solid #444;
-  padding: 8px 12px;
-  font-size: 12px;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #333;
-}
-button:active {
-  background: #ff0000;
-}
-button:disabled {
-   opacity: 0.35;
-  cursor: default;
-}
-
-/* POSICIÓN POR DEFECTO (VERTICAL) */
 #botones-izquierda {
-  left: 12px;
+  align-items: flex-end;
 }
 
 #botones-derecha {
-  right: 12px;
+  align-items: flex-start;
 }
 
-/* HORIZONTAL → BOTONES MÁS PEGADOS AL MARCO */
-@media (orientation: landscape) {
-  #botones-izquierda {
-    left: 200px;
+#botones-izquierda button,
+#botones-derecha button {
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background-color: #333;
+  color: #fff;
+}
+
+#botones-izquierda button:hover,
+#botones-derecha button:hover {
+  background-color: #555;
+}
+
+/* ===== IMPRESIÓN ===== */
+@media print {
+
+  @page {
+    size: A4;
+    margin: 0;
   }
 
-  #botones-derecha {
-    right:200px;
+  body * {
+    visibility: hidden;
+  }
+
+  #a4-container,
+  #a4-container * {
+    visibility: visible;
+  }
+
+  #a4-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 210mm;
+    height: 297mm;
   }
 }
 
-/* VERTICAL → UN POCO MÁS SEPARADOS */
-@media (orientation: portrait) {
-  #botones-izquierda {
-    left: 12px;
-  }
 
-  #botones-derecha {
-    right: 12px;
-  }
-}
 
 
 
