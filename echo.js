@@ -319,7 +319,9 @@ class GotaPinturaModo1 {
     this.vertices = [];
     for (let i = 0; i <= this.pasos; i++) {
       let ang = map(i, 0, this.pasos, 0, TWO_PI);
-      let deform = noise(cos(ang) + 1.5, sin(ang) + 1.5, this.ruidoOffset);
+      let nx = cos(ang) + 1.5;
+      let ny = sin(ang) + 1.5;
+      let deformacion = noise(nx * 100.8, ny * 200.8, this.ruidoOffset);
       let r = this.radio * map(deform, 0, 1, 0.6, 1.6);
       this.vertices.push({
         x: this.x + cos(ang) * r,
@@ -346,6 +348,7 @@ class GotaPinturaModo1 {
     endShape(CLOSE);
   }
 }
+
 
 
 
