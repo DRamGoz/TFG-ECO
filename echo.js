@@ -51,10 +51,11 @@ function setup() {
 // DRAW
 // ==========================
 function draw() {
+	 imageMode(CENTER);
+	image(img,windowWidth,windowHeight);
   background(0);
 
-  imageMode(CENTER);
-	image(img,windowWidth,windowHeight);
+  
   
   // Marco A4
   strokeWeight(4);
@@ -326,6 +327,7 @@ class GotaPinturaModo1 {
     endShape(CLOSE);
   }
 }
+
 
 
 
