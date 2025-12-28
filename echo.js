@@ -19,7 +19,7 @@ let titulo = "ECO — Generación de Arte Digital";
 let subtitulo = "Interacción de usuarios en tiempo real";
 
 window.estado = {
-  modo: ("modo1","modo2"),
+  modo: ("modo1" && "modo2"),
   //modo2: "modo2",
   fondoA4: "blanco",
   mostrarTexto: true,
@@ -397,6 +397,7 @@ class GotaPinturaModo1 {
 
     }
 }
+
 
 
 
