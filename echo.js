@@ -156,7 +156,7 @@ function exportarA4() {
 }
  if (exportando && bufferExport) {
   image(bufferExport, 0, 0, width, height);
-  saveCanvas("ECO_A4", "png");
+  saveCanvas("ECO_A4.png");
   
 }
 /*function exportarA4() {
@@ -428,6 +428,7 @@ class GotaPinturaModo1 {
 
     }
 }
+
 
 
 
