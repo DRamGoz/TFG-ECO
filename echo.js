@@ -145,7 +145,7 @@ pg.translate(-marcoX, -marcoY);
 
   // TEXTO
   
-  if (estado.mostrarTexto && estado.modo === "editorial")
+  if (estado.mostrarTexto && estado.modo === "editorial","modo1")
  {
     pg.textAlign(CENTER, TOP);
     pg.noStroke();
@@ -397,6 +397,7 @@ class GotaPinturaModo1 {
 
     }
 }
+
 
 
 
