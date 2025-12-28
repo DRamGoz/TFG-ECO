@@ -156,7 +156,7 @@ pg.translate(-marcoX, -marcoY);
     pg.text(subtitulo, w / 2, 140);
   }
 
-  saveCanvas("ECO_A4", "png");
+  saveCanvas("ECO_A4", "png",canvas);
 
 }
 
@@ -372,6 +372,7 @@ class GotaPinturaModo1 {
 
     }
 }
+
 
 
 
