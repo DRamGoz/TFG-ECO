@@ -74,7 +74,7 @@ function draw() {
   pop();
 
   // TÍTULO / SUBTÍTULO
-  if (estado.mostrarTexto) {
+  if (estado.mostrarTexto && estado.modo === "editorial") {
     textAlign(CENTER, TOP);
     noStroke();
     fill(estado.fondoA4 === "blanco" ? 0 : 255);
@@ -106,7 +106,7 @@ function exportarA4() {
   let anchoMM = 210;
   let altoMM = 297;
 
-  if (estado.mostrarTexto && estado.modo === "editorial") {
+  if (estado.mostrarTexto) {
     [anchoMM, altoMM] = [altoMM, anchoMM];
   }
 
@@ -359,6 +359,7 @@ class GotaPinturaModo1 {
     endShape(CLOSE);
   }
 }
+
 
 
 
