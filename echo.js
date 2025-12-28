@@ -302,7 +302,7 @@ class GotaPinturaModo1 {
     this.vertices = [];
     this.noiseX = random(1000);
 this.noiseY = random(1000);
-this.movimiento = 12; // intensidad del desplazamiento
+this.movimiento = 20; // intensidad del desplazamiento
 
     this.color = color(random(255), random(255), random(255), ALPHA_COLOR);
   }
@@ -342,6 +342,7 @@ this.noiseY += 0.004;
 
   }
 }
+
 
 
 
