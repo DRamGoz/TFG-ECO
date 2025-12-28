@@ -8,7 +8,6 @@ const RADIO_MAX = 120;
 const ALPHA_COLOR = 70;
 const RUEDO_MOVIMIENTO = 50;
 const CRECIMIENTO = 0.8;
-
 const A4_RATIO = 210 / 297;
 
 // ==========================
@@ -17,9 +16,11 @@ const A4_RATIO = 210 / 297;
 let titulo = "ECO — Generación de Arte Digital";
 let subtitulo = "Interacción de usuarios en tiempo real";
 
+let imgFondo; // Imagen de fondo del canvas
+
 window.estado = {
   modo: "modo1",            // "modo1" | "modo2"
-  fondoA4: "blanco",
+  fondoA4: "blanco",        // "blanco" | "negro" | "imagen"
   mostrarTexto: true,
   monocromo: false,
   orientacion: "vertical"
@@ -30,10 +31,15 @@ const API_URL =
 
 let gotas = [];
 let idsExistentes = new Set();
-
 let marcoX, marcoY, marcoW, marcoH;
 let canvas;
 
+// ==========================
+// PRELOAD
+// ==========================
+function preload() {
+  imgFondo = loadImage("https://www.pngegg.com/es/png-ddjex"); // Cambia por tu URL
+}
 
 // ==========================
 // SETUP
@@ -50,22 +56,32 @@ function setup() {
 // DRAW
 // ==========================
 function draw() {
-  background(0);
+  // --------------------------
+  // FONDO DEL CANVAS
+  // --------------------------
+  if (estado.fondoA4 === "imagen" && imgFondo) {
+    imageMode(CORNER);
+    image(imgFondo, 0, 0, width, height);
+  } else {
+    background(estado.fondoA4 === "blanco" ? 255 : 0);
+  }
 
-  
-  
+  // --------------------------
   // Marco A4
+  // --------------------------
   strokeWeight(4);
   if (estado.fondoA4 === "blanco") {
     fill(255, 220);
     stroke(0);
   } else {
-    fill(0);
+    fill(0, 180);
     stroke(255);
   }
   rect(marcoX, marcoY, marcoW, marcoH);
 
-  // Clipping
+  // --------------------------
+  // Clipping de gotas dentro del marco
+  // --------------------------
   push();
   drawingContext.save();
   drawingContext.beginPath();
@@ -75,7 +91,9 @@ function draw() {
   drawingContext.restore();
   pop();
 
-  // Texto (independiente del modo)
+  // --------------------------
+  // Texto dentro del marco
+  // --------------------------
   if (estado.mostrarTexto) {
     textAlign(CENTER, TOP);
     noStroke();
@@ -87,7 +105,9 @@ function draw() {
     text(subtitulo, marcoX + marcoW / 2, marcoY + 60);
   }
 
-  // Contador
+  // --------------------------
+  // Contador en el marco
+  // --------------------------
   let franjaH = 26;
   let franjaY = marcoY + marcoH - franjaH - 30;
   noStroke();
@@ -101,30 +121,28 @@ function draw() {
 }
 
 // ==========================
-// EXPORTAR A4 (ROBUSTO)
+// EXPORTAR A4
 // ==========================
 function exportarA4() {
   const dpi = 300;
   let wMM = 210, hMM = 297;
 
-  if (estado.orientacion === "horizontal") {
-    [wMM, hMM] = [hMM, wMM];
-  }
+  if (estado.orientacion === "horizontal") [wMM, hMM] = [hMM, wMM];
 
   const pxMM = dpi / 25.4;
   const w = Math.round(wMM * pxMM);
   const h = Math.round(hMM * pxMM);
 
   let pg = createGraphics(w, h);
-  pg.background(estado.fondoA4 === "blanco" ? 255 : 0);
+
+  // Fondo exportación
+  if (estado.fondoA4 === "blanco") pg.background(255);
+  else if (estado.fondoA4 === "negro") pg.background(0);
+  else if (estado.fondoA4 === "imagen" && imgFondo) pg.image(imgFondo, 0, 0, w, h);
 
   const scaleFactor = min(w / marcoW, h / marcoH);
-
   pg.push();
-  pg.translate(
-    (w - marcoW * scaleFactor) / 2,
-    (h - marcoH * scaleFactor) / 2
-  );
+  pg.translate((w - marcoW * scaleFactor) / 2, (h - marcoH * scaleFactor) / 2);
   pg.scale(scaleFactor);
   pg.translate(-marcoX, -marcoY);
 
@@ -132,10 +150,9 @@ function exportarA4() {
     if (g instanceof GotaPinturaModo1) dibujarGotaModo1(pg, g);
     if (g instanceof GotaPinturaModo2) dibujarGotaModo2(pg, g);
   });
-
   pg.pop();
 
-  // Texto exportado (SIEMPRE)
+  // Texto exportado
   if (estado.mostrarTexto) {
     pg.textAlign(CENTER, TOP);
     pg.noStroke();
@@ -151,7 +168,7 @@ function exportarA4() {
 }
 
 // ==========================
-// DIBUJO EXPORTACIÓN
+// DIBUJO DE GOTAS
 // ==========================
 function dibujarGotaModo1(pg, g) {
   if (!g.vertices.length) return;
@@ -178,27 +195,22 @@ function dibujarGotaModo2(pg, g) {
 }
 
 // ==========================
-// BOTONES
+// BOTONES / ESTADO
 // ==========================
 function activarModo1() { estado.modo = "modo1"; refrescarLienzo(); }
 function activarModo2() { estado.modo = "modo2"; refrescarLienzo(); }
-
-function refrescarLienzo() {
-  gotas = [];
-  idsExistentes.clear();
-}
+function refrescarLienzo() { gotas = []; idsExistentes.clear(); }
 
 function alternarFondo() {
-  estado.fondoA4 = estado.fondoA4 === "blanco" ? "negro" : "blanco";
+  if (estado.fondoA4 === "blanco") estado.fondoA4 = "negro";
+  else if (estado.fondoA4 === "negro") estado.fondoA4 = "imagen";
+  else estado.fondoA4 = "blanco";
 }
 
-function alternarTexto() {
-  estado.mostrarTexto = !estado.mostrarTexto;
-}
+function alternarTexto() { estado.mostrarTexto = !estado.mostrarTexto; }
 
 function rotarLienzo() {
-  estado.orientacion =
-    estado.orientacion === "vertical" ? "horizontal" : "vertical";
+  estado.orientacion = estado.orientacion === "vertical" ? "horizontal" : "vertical";
   recalcularMarco();
 }
 
@@ -234,7 +246,7 @@ function cargarDatos() {
 }
 
 // ==========================
-// CLASES
+// CLASES DE GOTAS
 // ==========================
 class GotaPinturaModo2 {
   constructor() {
@@ -294,16 +306,9 @@ class GotaPinturaModo1 {
     this.vertices = [];
     for (let i = 0; i <= this.pasos; i++) {
       let ang = map(i, 0, this.pasos, 0, TWO_PI);
-      let deformacion = noise(
-        cos(ang) * 120,
-        sin(ang) * 240,
-        this.ruidoOffset
-      );
+      let deformacion = noise(cos(ang) * 120, sin(ang) * 240, this.ruidoOffset);
       let r = this.radio * map(deformacion, 0, 1, 0.4, 2.0);
-      this.vertices.push({
-        x: this.x + cos(ang) * r,
-        y: this.y + sin(ang) * r
-      });
+      this.vertices.push({ x: this.x + cos(ang) * r, y: this.y + sin(ang) * r });
     }
   }
 
@@ -325,6 +330,7 @@ class GotaPinturaModo1 {
     endShape(CLOSE);
   }
 }
+
 
 
 
