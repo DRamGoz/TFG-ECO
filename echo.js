@@ -76,7 +76,7 @@ function draw() {
   pop();
 
   // TÍTULO / SUBTÍTULO
-  if (estado.mostrarTexto && estado.modo === "modo1","modo2") {
+  if (estado.mostrarTexto && estado.modo === ("modo1" && "modo2")) {
     textAlign(CENTER, TOP);
     noStroke();
     fill(estado.fondoA4 === "blanco" ? 0 : 255);
@@ -146,7 +146,7 @@ pg.translate(-marcoX, -marcoY);
 
   // TEXTO
   
-  if (estado.mostrarTexto && estado.modo === "modo1","modo2"){
+  if (estado.mostrarTexto && estado.modo === ("modo1" && "modo2")) {
     pg.textAlign(CENTER, TOP);
     pg.noStroke();
     pg.fill(estado.fondoA4 === "blanco" ? 0 : 255);
@@ -397,6 +397,7 @@ class GotaPinturaModo1 {
 
     }
 }
+
 
 
 
