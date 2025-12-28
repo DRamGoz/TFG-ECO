@@ -118,14 +118,19 @@ function exportarA4() {
   let pg = createGraphics(w, h);
   pg.background(estado.fondoA4 === "blanco" ? 255 : 0);
 
-  const scaleFactor = min(
+ const scaleFactor = min(
   w / marcoW,
   h / marcoH
 );
 
-  pg.push();
-  pg.scale(scaleX, scaleY);
-  pg.translate(-marcoX, -marcoY);
+pg.push();
+pg.translate(
+  (w - marcoW * scaleFactor) / 2,
+  (h - marcoH * scaleFactor) / 2
+);
+pg.scale(scaleFactor);
+pg.translate(-marcoX, -marcoY);
+
 
   gotas.forEach(g => {
     if (g instanceof GotaPinturaModo1) {
@@ -363,6 +368,7 @@ class GotaPinturaModo1 {
     endShape(CLOSE);
   }
 }
+
 
 
 
