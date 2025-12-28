@@ -47,14 +47,13 @@ function setup() {
   cargarDatos();
   setInterval(cargarDatos, 2000);
 }
-
+// Draw the image.
+  image(img, 0, 0);
 // ==========================
 // DRAW
 // ==========================
 function draw() {
   background(0);
-// Draw the image.
-  image(img, 0, 0);
   // Marco A4
   strokeWeight(4);
   if (estado.fondoA4 === "blanco") {
@@ -325,6 +324,7 @@ class GotaPinturaModo1 {
     endShape(CLOSE);
   }
 }
+
 
 
 
