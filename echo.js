@@ -53,7 +53,8 @@ function setup() {
 // ==========================
 function draw() {
   background(0);
-
+// Draw the image.
+  image(img, 0, 0);
   // Marco A4
   strokeWeight(4);
   if (estado.fondoA4 === "blanco") {
@@ -324,6 +325,7 @@ class GotaPinturaModo1 {
     endShape(CLOSE);
   }
 }
+
 
 
 
