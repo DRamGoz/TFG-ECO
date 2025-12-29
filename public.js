@@ -2,14 +2,13 @@ const API_URL = "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpn
 
 const btn = document.getElementById("sendBtn");
 
-btn.addEventListener("click", () => {
-  // enviar coordenadas x e y actuales del mouse al hacer click
-  enviarDato("click", mouseX, mouseY);
-});
+btn.addEventListener("click", (event) => {
+  // event.clientX y event.clientY dan la posición del click en la ventana
+  const x = event.clientX;
+  const y = event.clientY;
 
-function enviarDato(valor, x = "", y = "") {
   const data = new URLSearchParams();
-  data.append("valor", valor);
+  data.append("valor", "click");
   data.append("x", x);
   data.append("y", y);
 
@@ -17,10 +16,10 @@ function enviarDato(valor, x = "", y = "") {
     method: "POST",
     body: data
   })
-    .then(r => r.text())
-    .then(console.log)
-    .catch(console.error);
-}
+  .then(r => r.text())
+  .then(console.log)
+  .catch(console.error);
+});
 
 
 
