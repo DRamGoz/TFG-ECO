@@ -1,7 +1,7 @@
 // ==========================
 // CONFIGURACIÓN GLOBAL
 // ==========================
-const API_URL = "https://script.google.com/macros/s/TU_URL_AQUI/exec"; // Tu URL del Apps Script
+const API_URL = "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpnsHnDcAIKQ-SWU8FoIpdu-PUwO0KsdIk3klratrjgCHfskg/exec"; // Tu URL del Apps Script
 
 let stars = [];              // fondo de estrellas
 let userStar = null;         // estrella única del usuario
@@ -166,5 +166,6 @@ function enviarDato() {
     .then(console.log)
     .catch(console.error);
 }
+
 
 
