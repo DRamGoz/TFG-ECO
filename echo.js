@@ -342,9 +342,10 @@ this.noiseY += 0.004;
   }
 }
 
-funtion windowResized(){
+function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
