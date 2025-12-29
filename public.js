@@ -12,14 +12,25 @@ btn.addEventListener("click", (event) => {
   data.append("x", 123);
   data.append("y", 456);
 
+ function enviarDato(valor, x = 0, y = 0) {
+  const data = new URLSearchParams();
+  data.append("valor", valor);
+  data.append("x", x);
+  data.append("y", y);
+
   fetch(API_URL, {
     method: "POST",
-    body: data
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: data.toString() // clave: convertir a string
   })
   .then(r => r.text())
   .then(console.log)
   .catch(console.error);
-});
+}
+
+
 
 
 
