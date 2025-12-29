@@ -9,8 +9,8 @@ btn.addEventListener("click", (event) => {
 
   const data = new URLSearchParams();
   data.append("valor", "click");
-  data.append("x", x);
-  data.append("y", y);
+  data.append("x", 123);
+  data.append("y", 456);
 
   fetch(API_URL, {
     method: "POST",
@@ -20,6 +20,7 @@ btn.addEventListener("click", (event) => {
   .then(console.log)
   .catch(console.error);
 });
+
 
 
 
