@@ -1,21 +1,23 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpnsHnDcAIKQ-SWU8FoIpdu-PUwO0KsdIk3klratrjgCHfskg/exec"; // sustituye con tu URL actual
 
 
+const API_URL = "TU_URL_DEL_DEPLOYMENT";
 
-// Registro continuo de la posición del mouse
+let lastSent = 0;
+const throttleTime = 200; // ms
+
 document.addEventListener("mousemove", (event) => {
-  const x = event.clientX;
-  const y = event.clientY;
-
-  // Enviar a la hoja solo si quieres limitar la frecuencia
-  enviarMouse(x, y);
+  const now = Date.now();
+  if (now - lastSent > throttleTime) {
+    lastSent = now;
+    enviarMouse(event.clientX, event.clientY);
+  }
 });
 
-// Función de envío de mouse
 function enviarMouse(x, y) {
   const data = new URLSearchParams();
-  data.append("x", x);
-  data.append("y", y);
+  data.append("x", "move");
+  data.append("y", "move");
 
   fetch(API_URL, {
     method: "POST",
@@ -26,22 +28,6 @@ function enviarMouse(x, y) {
   .then(console.log)
   .catch(console.error);
 }
-
-// Botón para enviar "valor" al hacer click (timestamp + valor)
-const btn = document.getElementById("sendBtn");
-btn.addEventListener("click", () => {
-  const data = new URLSearchParams();
-  data.append("valor", "click");
-
-  fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: data.toString()
-  })
-  .then(r => r.text())
-  .then(console.log)
-  .catch(console.error);
-});
 
 
 
