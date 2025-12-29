@@ -3,7 +3,7 @@ const API_URL = "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpn
 const btn = document.getElementById("sendBtn");
 
 btn.addEventListener("click", (event) => {
-  // event.clientX y event.clientY dan la posición del click en la ventana
+  // Captura las coordenadas del click
   const x = event.clientX;
   const y = event.clientY;
 
@@ -20,6 +20,7 @@ btn.addEventListener("click", (event) => {
   .then(console.log)
   .catch(console.error);
 });
+
 
 
 
