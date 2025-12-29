@@ -1,4 +1,4 @@
-const API_URL = "TU_URL_DEL_DEPLOYMENT"; // reemplaza con tu URL actual
+const API_URL = "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpnsHnDcAIKQ-SWU8FoIpdu-PUwO0KsdIk3klratrjgCHfskg/exec"; // reemplaza con tu URL actual
 
 let rastroActivo = false; // activa la captura del mouse tras click
 
@@ -54,6 +54,7 @@ function enviarDato(valor, x = "", y = "") {
     .then(console.log)
     .catch(console.error);
 }
+
 
 
 
