@@ -90,9 +90,6 @@ function draw() {
   }
 }
 
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
-}
 
 function enviarDato() {
   const data = new URLSearchParams();
@@ -114,3 +111,4 @@ data.append("y", mouseY);
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
+
