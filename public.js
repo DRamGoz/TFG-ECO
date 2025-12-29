@@ -108,6 +108,12 @@ data.append("y", mouseY);
     .then(console.log)
     .catch(console.error);
 }
+// ==========================
+// RESIZE VENTANA
+// ==========================
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
 
 
 
