@@ -114,21 +114,3 @@ data.append("y", mouseY);
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
