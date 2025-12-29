@@ -343,8 +343,8 @@ this.noiseY += 0.004;
     funtion WindowResized()
     {resizeCanvas(windowWidth,windowHeight);
     }
-  }
 }
+
 
 
 
