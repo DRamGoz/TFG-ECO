@@ -89,11 +89,10 @@ function draw() {
   drawingContext.rect(marcoX, marcoY, marcoW, marcoH);
   drawingContext.clip();
   gotas.forEach(g => g.mostrar());
+  gotasSolidas.forEach(g => g.mostrar());
   drawingContext.restore();
   pop();
   
-// dibujar gotas sólidas (rastro de mouse)
-gotasSolidas.forEach(g => g.mostrar());
 
   // --------------------------
   // Texto dentro del marco
@@ -255,9 +254,21 @@ if (!idsExistentes.has(idUnico)) {
 
   // MOVE → gotas sólidas pequeñas
   if (d.valor === "move" && d.x && d.y) {
-    gotasSolidas.push(
-      new GotaSolida(Number(d.x), Number(d.y))
-    );
+   const xMap = map(
+  Number(d.x),
+  0, window.innerWidth,
+  marcoX, marcoX + marcoW
+);
+
+const yMap = map(
+  Number(d.y),
+  0, window.innerHeight,
+  marcoY, marcoY + marcoH
+);
+
+gotasSolidas.push(new GotaSolida(xMap, yMap));
+ 
+    
   }
 
   idsExistentes.add(idUnico);
@@ -381,6 +392,7 @@ class GotaSolida {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
