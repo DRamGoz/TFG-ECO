@@ -350,19 +350,27 @@ this.noiseY += 0.004;
   }
 }
 
-// --- NUEVO: Gota Sólida ---
+// --- Gota Sólida Mejorada ---
 class GotaSolida {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.radio = random(2, 4);            // tamaño aleatorio
-    this.color = color(random(100, 255), random(100, 255), random(100, 255), random(150, 255)); // color y transparencia
+    this.radio = random(2, 5); // tamaño pequeño y variable
+    // color brillante y semi-transparente, con contraste
+    this.color = color(
+      random(150, 255), 
+      random(150, 255), 
+      random(150, 255), 
+      200
+    );
+    // movimiento muy leve para no deformar la forma
     this.noiseX = random(1000);
     this.noiseY = random(1000);
-    this.movimiento = random(5, 15);      // intensidad de movimiento leve
+    this.movimiento = random(1, 3); // leve desplazamiento
   }
 
   mostrar() {
+    // desplazamiento muy sutil para simular “vida” sin deformar la forma
     let dx = noise(this.noiseX) * this.movimiento - this.movimiento / 2;
     let dy = noise(this.noiseY) * this.movimiento - this.movimiento / 2;
 
@@ -370,14 +378,17 @@ class GotaSolida {
     fill(this.color);
     ellipse(this.x + dx, this.y + dy, this.radio * 2);
 
-    this.noiseX += 0.01;
-    this.noiseY += 0.01;
+    // actualizar ruido
+    this.noiseX += 0.005;
+    this.noiseY += 0.005;
   }
 }
+
 
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
