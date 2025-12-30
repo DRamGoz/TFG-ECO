@@ -239,8 +239,12 @@ function cargarDatos() {
     .then(r => r.json())
     .then(datos => {
       datos.forEach(d => {
-        const idUnico = d.timestamp + "_" + d.valor;
-
+        //////////////////////////////////
+     const idUnico =
+  d.valor === "move"
+    ? d.timestamp + "_" + d.x + "_" + d.y
+    : d.timestamp + "_click";
+        
 if (!idsExistentes.has(idUnico)) {
 
   // CLICK → gotas grandes (modo 1 / modo 2)
@@ -377,6 +381,7 @@ class GotaSolida {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
