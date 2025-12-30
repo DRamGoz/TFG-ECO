@@ -15,7 +15,7 @@ const A4_RATIO = 210 / 297;
 // ==========================
 let titulo = "ECO — Generación de Arte Digital";
 let subtitulo = "Interacción de usuarios en tiempo real";
-
+let gotasSolidas = [];
 let imgFondo; // Imagen de fondo del canvas
 
 window.estado = {
@@ -345,3 +345,4 @@ this.noiseY += 0.004;
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
