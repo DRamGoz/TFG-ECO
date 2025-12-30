@@ -91,6 +91,9 @@ function draw() {
   gotas.forEach(g => g.mostrar());
   drawingContext.restore();
   pop();
+  
+// dibujar gotas sólidas (rastro de mouse)
+gotasSolidas.forEach(g => g.mostrar());
 
   // --------------------------
   // Texto dentro del marco
@@ -239,6 +242,11 @@ function cargarDatos() {
         if (!idsExistentes.has(d.timestamp)) {
           if (estado.modo === "modo1") gotas.push(new GotaPinturaModo1());
           if (estado.modo === "modo2") gotas.push(new GotaPinturaModo2());
+          
+          // NUEVO: si valor es "move" creamos una gota sólida en las coordenadas x, y
+    if (d.valor === "move" && d.x && d.y) {
+      gotasSolidas.push(new GotaSolida(Number(d.x), Number(d.y)));
+    }
           idsExistentes.add(d.timestamp);
         }
       });
@@ -342,7 +350,34 @@ this.noiseY += 0.004;
   }
 }
 
+// --- NUEVO: Gota Sólida ---
+class GotaSolida {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.radio = random(3, 8);            // tamaño aleatorio
+    this.color = color(random(100, 255), random(100, 255), random(100, 255), random(150, 255)); // color y transparencia
+    this.noiseX = random(1000);
+    this.noiseY = random(1000);
+    this.movimiento = random(5, 15);      // intensidad de movimiento leve
+  }
+
+  mostrar() {
+    let dx = noise(this.noiseX) * this.movimiento - this.movimiento / 2;
+    let dy = noise(this.noiseY) * this.movimiento - this.movimiento / 2;
+
+    noStroke();
+    fill(this.color);
+    ellipse(this.x + dx, this.y + dy, this.radio * 2);
+
+    this.noiseX += 0.01;
+    this.noiseY += 0.01;
+  }
+}
+
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
+
 
