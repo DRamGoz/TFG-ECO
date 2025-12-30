@@ -105,12 +105,44 @@ data.append("y", mouseY);
     .then(console.log)
     .catch(console.error);
 }
+
+///////////////////////////////////////////////////////////////////////////////////////
+let lastSent = 0;       // tiempo del último envío
+const throttle = 500;   // tiempo mínimo entre envíos (ms)
+
+window.addEventListener("mousemove", (e) => {
+    const now = Date.now();
+
+    // Limitar frecuencia de envío
+    if (now - lastSent < throttle) return;
+    lastSent = now;
+
+    const x = e.clientX;
+    const y = e.clientY;
+
+    console.log(`Mouse move: X=${x}, Y=${y}`);
+
+    // Enviar datos al Apps Script
+    const data = new URLSearchParams();
+    data.append("valor", "move");
+    data.append("x", x);
+    data.append("y", y);
+
+    fetch(API_URL, {
+        method: "POST",
+        body: data
+    })
+    .then(r => r.text())
+    .then(res => console.log("Enviado:", res))
+    .catch(err => console.error("Error enviando:", err));
+});
 // ==========================
 // RESIZE VENTANA
 // ==========================
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
+
 
 
 
