@@ -238,46 +238,28 @@ function cargarDatos() {
     .then(r => r.json())
     .then(datos => {
       datos.forEach(d => {
-        //////////////////////////////////
-     const idUnico =
-  d.valor === "move"
-    ? d.timestamp + "_" + d.x + "_" + d.y
-    : d.timestamp + "_click";
-        
-if (!idsExistentes.has(idUnico)) {
+        if (!idsExistentes.has(d.timestamp)) {
 
-  // CLICK → gotas grandes (modo 1 / modo 2)
-  if (d.valor === "click") {
-    if (estado.modo === "modo1") gotas.push(new GotaPinturaModo1());
-    if (estado.modo === "modo2") gotas.push(new GotaPinturaModo2());
-  }
+          // CLICK → gotas grandes
+          if (d.valor === "click") {
+            if (estado.modo === "modo1") gotas.push(new GotaPinturaModo1());
+            if (estado.modo === "modo2") gotas.push(new GotaPinturaModo2());
+          }
 
-  // MOVE → gotas sólidas pequeñas
-  if (d.valor === "move" && d.x && d.y) {
-   const xMap = map(
-  Number(d.x),
-  0, window.innerWidth,
-  marcoX, marcoX + marcoW
-);
+          // MOVE → gotas sólidas pequeñas
+          if (d.valor === "move") {
+            const x = random(marcoX, marcoX + marcoW);
+            const y = random(marcoY, marcoY + marcoH);
+            gotasSolidas.push(new GotaSolida(x, y));
+          }
 
-const yMap = map(
-  Number(d.y),
-  0, window.innerHeight,
-  marcoY, marcoY + marcoH
-);
-
-gotasSolidas.push(new GotaSolida(xMap, yMap));
- 
-    
-  }
-
-  idsExistentes.add(idUnico);
-}
-
+          idsExistentes.add(d.timestamp);
+        }
       });
     })
     .catch(() => {});
 }
+
 
 // ==========================
 // CLASES DE GOTAS
@@ -392,6 +374,7 @@ class GotaSolida {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
