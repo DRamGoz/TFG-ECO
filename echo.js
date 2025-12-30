@@ -355,7 +355,7 @@ class GotaSolida {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.radio = random(3, 8);            // tamaño aleatorio
+    this.radio = random(2, 4);            // tamaño aleatorio
     this.color = color(random(100, 255), random(100, 255), random(100, 255), random(150, 255)); // color y transparencia
     this.noiseX = random(1000);
     this.noiseY = random(1000);
@@ -378,6 +378,7 @@ class GotaSolida {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
