@@ -239,16 +239,26 @@ function cargarDatos() {
     .then(r => r.json())
     .then(datos => {
       datos.forEach(d => {
-        if (!idsExistentes.has(d.timestamp)) {
-          if (estado.modo === "modo1") gotas.push(new GotaPinturaModo1());
-          if (estado.modo === "modo2") gotas.push(new GotaPinturaModo2());
-          
-          // NUEVO: si valor es "move" creamos una gota sólida en las coordenadas x, y
-    if (d.valor === "move" && d.x && d.y) {
-      gotasSolidas.push(new GotaSolida(Number(d.x), Number(d.y)));
-    }
-          idsExistentes.add(d.timestamp);
-        }
+        const idUnico = d.timestamp + "_" + d.valor;
+
+if (!idsExistentes.has(idUnico)) {
+
+  // CLICK → gotas grandes (modo 1 / modo 2)
+  if (d.valor === "click") {
+    if (estado.modo === "modo1") gotas.push(new GotaPinturaModo1());
+    if (estado.modo === "modo2") gotas.push(new GotaPinturaModo2());
+  }
+
+  // MOVE → gotas sólidas pequeñas
+  if (d.valor === "move" && d.x && d.y) {
+    gotasSolidas.push(
+      new GotaSolida(Number(d.x), Number(d.y))
+    );
+  }
+
+  idsExistentes.add(idUnico);
+}
+
       });
     })
     .catch(() => {});
@@ -367,6 +377,7 @@ class GotaSolida {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
