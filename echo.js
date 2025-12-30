@@ -89,9 +89,18 @@ function draw() {
   drawingContext.rect(marcoX, marcoY, marcoW, marcoH);
   drawingContext.clip();
   gotas.forEach(g => g.mostrar());
-  gotasSolidas.forEach(g => g.mostrar());
-  drawingContext.restore();
-  pop();
+
+ // --- paso 2: dibujar gotas sólidas y limpiarlas ---
+  
+for (let i = gotasSolidas.length - 1; i >= 0; i--) {
+  gotasSolidas[i].mostrar();
+  if (gotasSolidas[i].estaMuerta()) {
+    gotasSolidas.splice(i, 1);
+  }
+}
+
+drawingContext.restore();
+pop();
   
 
   // --------------------------
@@ -360,20 +369,49 @@ class GotaSolida {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.radio = random(2, 5); // tamaño pequeño
-    this.color = color(random(200, 255), random(50, 150), random(50, 150), 240); // colores brillantes
+
+    this.r = random(2, 4);
+
+    this.alpha = random(180, 220);   // transparencia inicial
+    this.fadeSpeed = random(1, 3);   // velocidad de desaparición
+
+    this.color = color(
+      random(120, 255),
+      random(120, 255),
+      random(120, 255),
+      this.alpha
+    );
+
+    this.nx = random(1000);
+    this.ny = random(1000);
   }
 
   mostrar() {
+    if (this.alpha <= 0) return;
+
+    let dx = noise(this.nx) * 4 - 2;
+    let dy = noise(this.ny) * 4 - 2;
+
+    this.color.setAlpha(this.alpha);
+
     noStroke();
     fill(this.color);
-    ellipse(this.x, this.y, this.radio * 2);
+    ellipse(this.x + dx, this.y + dy, this.r * 2);
+
+    this.alpha -= this.fadeSpeed; // DESVANECER
+    this.nx += 0.02;
+    this.ny += 0.02;
+  }
+
+  estaMuerta() {
+    return this.alpha <= 0;
   }
 }
 
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
