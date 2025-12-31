@@ -15,19 +15,17 @@ const A4_RATIO = 210 / 297;
 // ==========================
 let titulo = "ECO — Generación de Arte Digital";
 let subtitulo = "Interacción de usuarios en tiempo real";
-let gotasSolidas = [];
-let imgFondo; // Imagen de fondo del canvas
+let imgFondo;
 
 window.estado = {
-  modo: "modo1",            // "modo1" | "modo2"
-  fondoA4: "blanco",        // "blanco" | "negro" | "imagen"
+  modo: "modo1",
+  fondoA4: "blanco",
   mostrarTexto: true,
   monocromo: false,
   orientacion: "vertical"
 };
 
-const API_URL =
-  "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpnsHnDcAIKQ-SWU8FoIpdu-PUwO0KsdIk3klratrjgCHfskg/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpnsHnDcAIKQ-SWU8FoIpdu-PUwO0KsdIk3klratrjgCHfskg/exec";
 
 let gotas = [];
 let idsExistentes = new Set();
@@ -38,7 +36,6 @@ let canvas;
 // PRELOAD
 // ==========================
 function preload() {
-  // Cambia esta URL por la imagen que quieras usar de fondo
   imgFondo = loadImage("fondomadera.jpg");
 }
 
@@ -50,29 +47,23 @@ function setup() {
   canvas.parent("a4-container");
   recalcularMarco();
   cargarDatos();
-  setInterval(cargarDatos, 200);
+  setInterval(cargarDatos, 2000);
 }
 
 // ==========================
 // DRAW
 // ==========================
 function draw() {
-  // --------------------------
-  // FONDO DEL CANVAS
-  // --------------------------
   if (imgFondo) {
     imageMode(CORNER);
-    image(imgFondo, 0, 0, width, height); // solo el fondo
+    image(imgFondo, 0, 0, width, height);
   } else {
     background(estado.fondoA4 === "blanco" ? 255 : 0);
   }
 
-  // --------------------------
-  // Marco A4
-  // --------------------------
   strokeWeight(4);
   if (estado.fondoA4 === "blanco") {
-    fill(255, 255);
+    fill(255);
     stroke(0);
   } else {
     fill(0);
@@ -80,32 +71,15 @@ function draw() {
   }
   rect(marcoX, marcoY, marcoW, marcoH);
 
-  // --------------------------
-  // Clipping de gotas
-  // --------------------------
   push();
   drawingContext.save();
   drawingContext.beginPath();
   drawingContext.rect(marcoX, marcoY, marcoW, marcoH);
   drawingContext.clip();
   gotas.forEach(g => g.mostrar());
+  drawingContext.restore();
+  pop();
 
- // --- paso 2: dibujar gotas sólidas y limpiarlas ---
-  
-for (let i = gotasSolidas.length - 1; i >= 0; i--) {
-  gotasSolidas[i].mostrar();
-  if (gotasSolidas[i].estaMuerta()) {
-    gotasSolidas.splice(i, 1);
-  }
-}
-
-drawingContext.restore();
-pop();
-  
-
-  // --------------------------
-  // Texto dentro del marco
-  // --------------------------
   if (estado.mostrarTexto) {
     textAlign(CENTER, TOP);
     noStroke();
@@ -117,9 +91,6 @@ pop();
     text(subtitulo, marcoX + marcoW / 2, marcoY + 60);
   }
 
-  // --------------------------
-  // Contador en el marco
-  // --------------------------
   let franjaH = 26;
   let franjaY = marcoY + marcoH - franjaH - 30;
   noStroke();
@@ -129,7 +100,7 @@ pop();
   textAlign(CENTER, CENTER);
   textSize(13);
   text("Nº Interacción Usuarios: " + gotas.length,
-       marcoX + marcoW / 2, franjaY + franjaH / 2);
+    marcoX + marcoW / 2, franjaY + franjaH / 2);
 }
 
 // ==========================
@@ -147,7 +118,6 @@ function exportarA4() {
 
   let pg = createGraphics(w, h);
 
-  // Fondo exportación
   if (estado.fondoA4 === "blanco") pg.background(255);
   else if (estado.fondoA4 === "negro") pg.background(0);
   else if (estado.fondoA4 === "imagen" && imgFondo) pg.image(imgFondo, 0, 0, w, h);
@@ -164,7 +134,6 @@ function exportarA4() {
   });
   pg.pop();
 
-  // Texto exportado
   if (estado.mostrarTexto) {
     pg.textAlign(CENTER, TOP);
     pg.noStroke();
@@ -177,53 +146,6 @@ function exportarA4() {
   }
 
   saveCanvas(pg, "ECO_A4", "png");
-}
-
-// ==========================
-// DIBUJO DE GOTAS
-// ==========================
-function dibujarGotaModo1(pg, g) {
-  if (!g.vertices.length) return;
-  pg.noStroke();
-  pg.fill(g.color);
-  pg.beginShape();
-  g.vertices.forEach(v => pg.vertex(v.x, v.y));
-  pg.endShape(CLOSE);
-}
-
-function dibujarGotaModo2(pg, g) {
-  pg.noStroke();
-  pg.fill(g.color);
-  pg.beginShape();
-  for (let i = 0; i < g.pasos; i++) {
-    let ang = map(i, 0, g.pasos, 0, TWO_PI);
-    let r = g.radio * map(
-      noise(cos(ang) + g.offset, sin(ang) + g.offset),
-      0, 1, 0.7, 1.3
-    );
-    pg.vertex(g.x + cos(ang) * r, g.y + sin(ang) * r);
-  }
-  pg.endShape(CLOSE);
-}
-
-// ==========================
-// BOTONES / ESTADO
-// ==========================
-function activarModo1() { estado.modo = "modo1"; refrescarLienzo(); }
-function activarModo2() { estado.modo = "modo2"; refrescarLienzo(); }
-function refrescarLienzo() { gotas = []; idsExistentes.clear(); }
-
-function alternarFondo() {
-  if (estado.fondoA4 === "blanco") estado.fondoA4 = "negro";
-  else if (estado.fondoA4 === "negro") estado.fondoA4 = "imagen";
-  else estado.fondoA4 = "blanco";
-}
-
-function alternarTexto() { estado.mostrarTexto = !estado.mostrarTexto; }
-
-function rotarLienzo() {
-  estado.orientacion = estado.orientacion === "vertical" ? "horizontal" : "vertical";
-  recalcularMarco();
 }
 
 // ==========================
@@ -248,27 +170,14 @@ function cargarDatos() {
     .then(datos => {
       datos.forEach(d => {
         if (!idsExistentes.has(d.timestamp)) {
-
-          // CLICK → gotas grandes
-          if (d.valor === "click") {
-            if (estado.modo === "modo1") gotas.push(new GotaPinturaModo1());
-            if (estado.modo === "modo2") gotas.push(new GotaPinturaModo2());
-          }
-
-          // MOVE → gotas sólidas pequeñas
-          if (d.valor === "move") {
-            const x = random(marcoX, marcoX + marcoW);
-            const y = random(marcoY, marcoY + marcoH);
-            gotasSolidas.push(new GotaSolida(x, y));
-          }
-
+          if (estado.modo === "modo1") gotas.push(new GotaPinturaModo1());
+          if (estado.modo === "modo2") gotas.push(new GotaPinturaModo2());
           idsExistentes.add(d.timestamp);
         }
       });
     })
     .catch(() => {});
 }
-
 
 // ==========================
 // CLASES DE GOTAS
@@ -325,9 +234,8 @@ class GotaPinturaModo1 {
     this.pasos = 120;
     this.vertices = [];
     this.noiseX = random(1000);
-this.noiseY = random(1000);
-this.movimiento = 50; // intensidad del desplazamiento
-
+    this.noiseY = random(1000);
+    this.movimiento = 50;
     this.color = color(random(255), random(255), random(255), ALPHA_COLOR);
   }
 
@@ -353,65 +261,22 @@ this.movimiento = 50; // intensidad del desplazamiento
     }
 
     let dx = noise(this.noiseX) * this.movimiento - this.movimiento / 2;
-let dy = noise(this.noiseY) * this.movimiento - this.movimiento / 2;
-
-noStroke();
-fill(this.color);
-beginShape();
-this.vertices.forEach(v => vertex(v.x + dx, v.y + dy));
-endShape(CLOSE);
-
-this.noiseX += 0.004;
-this.noiseY += 0.004;
-  }
-}
-class GotaSolida {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-
-    this.r = random(2, 4);
-
-    this.alpha = random(180, 220);   // transparencia inicial
-    this.fadeSpeed = random(1, 3);   // velocidad de desaparición
-
-    this.color = color(
-      random(120, 255),
-      random(120, 255),
-      random(120, 255),
-      this.alpha
-    );
-
-    this.nx = random(1000);
-    this.ny = random(1000);
-  }
-
-  mostrar() {
-    if (this.alpha <= 0) return;
-
-    let dx = noise(this.nx) * 4 - 2;
-    let dy = noise(this.ny) * 4 - 2;
-
-    this.color.setAlpha(this.alpha);
+    let dy = noise(this.noiseY) * this.movimiento - this.movimiento / 2;
 
     noStroke();
     fill(this.color);
-    ellipse(this.x + dx, this.y + dy, this.r * 2);
+    beginShape();
+    this.vertices.forEach(v => vertex(v.x + dx, v.y + dy));
+    endShape(CLOSE);
 
-    this.alpha -= this.fadeSpeed; // DESVANECER
-    this.nx += 0.02;
-    this.ny += 0.02;
-  }
-
-  estaMuerta() {
-    return this.alpha <= 0;
+    this.noiseX += 0.004;
+    this.noiseY += 0.004;
   }
 }
 
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
-
 
 
 
