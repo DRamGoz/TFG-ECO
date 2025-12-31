@@ -50,7 +50,7 @@ function setup() {
   canvas.parent("a4-container");
   recalcularMarco();
   cargarDatos();
-  setInterval(cargarDatos, 2000);
+  setInterval(cargarDatos, 200);
 }
 
 // ==========================
@@ -411,6 +411,7 @@ class GotaSolida {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
