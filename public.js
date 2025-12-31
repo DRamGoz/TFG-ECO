@@ -106,7 +106,7 @@ data.append("y", mouseY);
     .catch(console.error);
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
+/*///////////////////////////////////////////////////////////////////////////////////////
 let lastSent = 0;       // tiempo del último envío
 const throttle = 500;   // tiempo mínimo entre envíos (ms)
 
@@ -138,10 +138,11 @@ window.addEventListener("mousemove", (e) => {
 });
 // ==========================
 // RESIZE VENTANA
-// ==========================
+// ==========================*/
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
+
 
 
 
