@@ -285,6 +285,3 @@ function windowResized(){
 
 
 
-
-
-
