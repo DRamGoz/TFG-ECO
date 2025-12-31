@@ -60,7 +60,9 @@ function draw() {
   } else {
     background(estado.fondoA4 === "blanco" ? 255 : 0);
   }
-
+//=====================
+  // MARCO A4
+  //===================
   strokeWeight(4);
   if (estado.fondoA4 === "blanco") {
     fill(255);
@@ -68,9 +70,13 @@ function draw() {
   } else {
     fill(0);
     stroke(255);
+  
   }
   rect(marcoX, marcoY, marcoW, marcoH);
-
+//=============================
+  // CLIPPING DE GOTAS
+  //=======================
+  
   push();
   drawingContext.save();
   drawingContext.beginPath();
@@ -79,6 +85,10 @@ function draw() {
   gotas.forEach(g => g.mostrar());
   drawingContext.restore();
   pop();
+
+  //=======================
+  // TEXTO
+  //====================
 
   if (estado.mostrarTexto) {
     textAlign(CENTER, TOP);
@@ -91,6 +101,10 @@ function draw() {
     text(subtitulo, marcoX + marcoW / 2, marcoY + 60);
   }
 
+  //==========================
+  // CONTADOR
+  //===========================
+  
   let franjaH = 26;
   let franjaY = marcoY + marcoH - franjaH - 30;
   noStroke();
@@ -106,6 +120,7 @@ function draw() {
 // ==========================
 // EXPORTAR A4
 // ==========================
+
 function exportarA4() {
   const dpi = 300;
   let wMM = 210, hMM = 297;
@@ -148,6 +163,42 @@ function exportarA4() {
   saveCanvas(pg, "ECO_A4", "png");
 }
 
+// ========================== 
+// DIBUJO DE GOTAS 
+// ========================== 
+function dibujarGotaModo1(pg, g) {
+  if (!g.vertices.length) return;
+  pg.noStroke();
+  pg.fill(g.color);
+  pg.beginShape();
+  g.vertices.forEach(v => pg.vertex(v.x, v.y));
+  pg.endShape(CLOSE); } function dibujarGotaModo2(pg, g) { pg.noStroke();
+  pg.fill(g.color);
+  pg.beginShape();
+  for (let i = 0; i < g.pasos; i++) {
+  let ang = map(i, 0, g.pasos, 0, TWO_PI);
+  let r = g.radio * map( noise(cos(ang) + g.offset, sin(ang) + g.offset), 0, 1, 0.7, 1.3 );
+  pg.vertex(g.x + cos(ang) * r, g.y + sin(ang) * r);
+  } pg.endShape(CLOSE);
+  }
+
+// ========================== 
+// BOTONES / ESTADO 
+// ========================== 
+function activarModo1() { estado.modo = "modo1";
+refrescarLienzo();
+} function activarModo2() { estado.modo = "modo2";
+refrescarLienzo();
+} function refrescarLienzo() { gotas = [];idsExistentes.clear();
+} function alternarFondo() { if (estado.fondoA4 === "blanco") estado.fondoA4 = "negro";
+else if (estado.fondoA4 === "negro") estado.fondoA4 = "imagen";
+else estado.fondoA4 = "blanco";
+} 
+function alternarTexto() { estado.mostrarTexto = !estado.mostrarTexto; }
+function rotarLienzo() {
+estado.orientacion = estado.orientacion === "vertical" ? "horizontal" : "vertical";
+recalcularMarco(); 
+}
 // ==========================
 // AUXILIARES
 // ==========================
@@ -277,6 +328,7 @@ class GotaPinturaModo1 {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
