@@ -2,7 +2,7 @@
 // CONFIGURACIÓN
 // ==========================
 const NUM_VERTICES_MIN = 20;
-const NUM_VERTICES_MAX = 200;
+const NUM_VERTICES_MAX = 120;
 const RADIO_MIN = 10;
 const RADIO_MAX = 120;
 const ALPHA_COLOR = 70;
@@ -114,7 +114,7 @@ function draw() {
   textAlign(CENTER, CENTER);
   textSize(13);
   text("Nº Interacción Usuarios: " + gotas.length,
-    marcoX + marcoW / 2, franjaY + franjaH / 2);
+    marcoX + marcoW / 2, franjaY + franjaH / 2,"intervenciones");
 }
 
 // ==========================
@@ -328,6 +328,7 @@ class GotaPinturaModo1 {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
