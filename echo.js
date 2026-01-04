@@ -115,7 +115,6 @@ function draw() {
   textSize(13);
   text("Nº Interacción Usuarios: " + gotas.length,
     marcoX + marcoW / 2, franjaY + franjaH / 2);
-  text(gotas.lenght + "absdn");
 }
 
 // ==========================
@@ -329,6 +328,7 @@ class GotaPinturaModo1 {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
