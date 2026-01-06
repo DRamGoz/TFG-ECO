@@ -217,13 +217,10 @@ function rotarLienzo() {
 estado.orientacion = estado.orientacion === "vertical" ? "horizontal" : "vertical";
 recalcularMarco(); 
 }
-function activarOverlay(){ 
-  console.log("Overlay activado"); /////////////////////////////////////////////////////////////////
-  mostrarOverlay = true;
+function actdesOverlay(){ 
+  mostrarOverlay = !mostrarOverlay;
 }
-function desactivarOverlay(){
-  mostrarOverlay = false;
-}
+
 // ==========================
 // AUXILIARES
 // ==========================
@@ -353,6 +350,7 @@ class GotaPinturaModo1 {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
