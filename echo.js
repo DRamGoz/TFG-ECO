@@ -334,6 +334,17 @@ class GotaPinturaModo1 {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+if (mostrarOverlay && overlayImg) {
+  image(
+    overlayImg,
+    marcoX,
+    marcoY,
+    marcoW,
+    marcoH
+  );
+}
+
+
 
 
 
