@@ -96,7 +96,7 @@ function draw() {
 if (mostrarOverlay && overlayImg) {
   imageMode(CORNER);
   image(
-    overlayImg,
+    overlayImg,0, 0, width, height,
     marcoX,
     marcoY,
     marcoW,
@@ -350,6 +350,7 @@ class GotaPinturaModo1 {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
