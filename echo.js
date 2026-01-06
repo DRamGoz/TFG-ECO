@@ -221,6 +221,9 @@ function activarOverlay(){
   console.log("Overlay activado"); /////////////////////////////////////////////////////////////////
   mostrarOverlay = true;
 }
+function desactivarOverlay(){
+  mostrarOverlay = false;
+}
 // ==========================
 // AUXILIARES
 // ==========================
@@ -350,6 +353,7 @@ class GotaPinturaModo1 {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
