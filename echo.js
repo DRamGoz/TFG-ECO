@@ -96,7 +96,7 @@ function draw() {
 if (mostrarOverlay && overlayImg) {
   imageMode(CORNER);
   image(
-    overlayImg,0, 0, width, height,
+    overlayImg,
     marcoX,
     marcoY,
     marcoW,
@@ -219,6 +219,7 @@ recalcularMarco();
 }
 function actdesOverlay(){ 
   mostrarOverlay = !mostrarOverlay;
+  estado.mostrarTexto = !estado.mostrarTexto;
 }
 
 // ==========================
@@ -350,6 +351,7 @@ class GotaPinturaModo1 {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
