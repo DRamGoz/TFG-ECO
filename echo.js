@@ -243,6 +243,7 @@ recalcularMarco();
 function actdesOverlay(){ 
   mostrarOverlay = !mostrarOverlay;
   estado.mostrarTexto = !estado.mostrarTexto;
+  estado.fondoA4 === "blanco" ? 0 : 0;
 }
 
 // ==========================
@@ -374,6 +375,7 @@ class GotaPinturaModo1 {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
