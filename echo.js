@@ -39,8 +39,7 @@ let canvas;
 // ==========================
 function preload() {
   imgFondo = loadImage("fondomadera.jpg");
-  overlayImg = loadImage("mascara_1.png",console.log("OK"),console.error("NOK")
-  );
+  overlayImg = loadImage("mascara_1.png");
 }
 
 // ==========================
@@ -345,6 +344,7 @@ if (mostrarOverlay && overlayImg) {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
