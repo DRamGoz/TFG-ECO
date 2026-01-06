@@ -63,11 +63,7 @@ function draw() {
   } else {
     background(estado.fondoA4 === "blanco" ? 255 : 0);
   }
-  if (mostrarOverlay && overlayImg){
-    imageMode(CORNER);
-    tint(255,150);
-    image(overlayImg,0,0,width,height);
-  }
+
 //=====================
   // MARCO A4
   //===================
@@ -354,6 +350,7 @@ class GotaPinturaModo1 {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
