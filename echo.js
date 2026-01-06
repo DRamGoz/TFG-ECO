@@ -143,7 +143,7 @@ function exportarA4() {
   const dpi = 300;
   let wMM = 210, hMM = 297;
 
-  if (estado.orientacion === "horizontal") [wMM, hMM] = [hMM, wMM];
+  if (estado.orientacion === "vertical") [wMM, hMM] = [hMM, wMM];
 
   const pxMM = dpi / 25.4;
   const w = Math.round(wMM * pxMM);
@@ -351,6 +351,7 @@ class GotaPinturaModo1 {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
