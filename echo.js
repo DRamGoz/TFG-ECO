@@ -94,6 +94,20 @@ function draw() {
   drawingContext.restore();
   pop();
 
+  // ==========================
+// OVERLAY / MÁSCARA (ENCIMA DE LAS GOTAS)
+// ==========================
+if (mostrarOverlay && overlayImg) {
+  imageMode(CORNER);
+  image(
+    overlayImg,
+    marcoX,
+    marcoY,
+    marcoW,
+    marcoH
+  );
+}
+
   //=======================
   // TEXTO
   //====================
@@ -336,19 +350,11 @@ class GotaPinturaModo1 {
     this.noiseY += 0.004;
   }
 }
-if (mostrarOverlay && overlayImg) {
-  imageMode(CORNER);
-  image(
-    overlayImg,
-    marcoX,
-    marcoY,
-    marcoW,
-    marcoH
-  );
-}
+
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
