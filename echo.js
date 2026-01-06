@@ -93,7 +93,7 @@ function draw() {
   // ==========================
 // OVERLAY / MÁSCARA (ENCIMA DE LAS GOTAS)
 // ==========================
-if (mostrarOverlay && overlayImg) {
+/*if (mostrarOverlay && overlayImg) {
   imageMode(CORNER);
   image(
     overlayImg,
@@ -102,6 +102,28 @@ if (mostrarOverlay && overlayImg) {
     marcoW,
     marcoH
   );
+}*/
+  if (mostrarOverlay && overlayImg) {
+
+  const imgRatio = overlayImg.width / overlayImg.height;
+  const marcoRatio = marcoW / marcoH;
+
+  let drawW, drawH;
+
+  // Escalado proporcional (contain)
+  if (imgRatio > marcoRatio) {
+    drawW = marcoW;
+    drawH = marcoW / imgRatio;
+  } else {
+    drawH = marcoH;
+    drawW = marcoH * imgRatio;
+  }
+
+  const drawX = marcoX + (marcoW - drawW) / 2;
+  const drawY = marcoY + (marcoH - drawH) / 2;
+
+  imageMode(CORNER);
+  image(overlayImg, drawX, drawY, drawW, drawH);
 }
 
   //=======================
@@ -352,6 +374,7 @@ class GotaPinturaModo1 {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
