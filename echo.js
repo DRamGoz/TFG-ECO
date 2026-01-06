@@ -24,7 +24,7 @@ window.estado = {
   fondoA4: "blanco",
   mostrarTexto: true,
   monocromo: false,
-  orientacion: "horizontal"
+  orientacion: "vertical"
 };
 
 const API_URL = "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpnsHnDcAIKQ-SWU8FoIpdu-PUwO0KsdIk3klratrjgCHfskg/exec";
@@ -143,7 +143,7 @@ function exportarA4() {
   const dpi = 300;
   let wMM = 210, hMM = 297;
 
-  if (estado.orientacion === "vertical") [wMM, hMM] = [hMM, wMM];
+  if (estado.orientacion === "horizontal") [wMM, hMM] = [hMM, wMM];
 
   const pxMM = dpi / 25.4;
   const w = Math.round(wMM * pxMM);
@@ -207,7 +207,8 @@ function activarModo1() { estado.modo = "modo1";
 refrescarLienzo();
 } function activarModo2() { estado.modo = "modo2";
 refrescarLienzo();
-} function refrescarLienzo() { gotas = [];idsExistentes.clear();
+} function refrescarLienzo() { gotas = [];
+idsExistentes.clear();
 } function alternarFondo() { if (estado.fondoA4 === "blanco") estado.fondoA4 = "negro";
 else if (estado.fondoA4 === "negro") estado.fondoA4 = "imagen";
 else estado.fondoA4 = "blanco";
@@ -351,6 +352,7 @@ class GotaPinturaModo1 {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
