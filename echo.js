@@ -94,7 +94,7 @@ function draw() {
 // OVERLAY / MÁSCARA (ENCIMA DE LAS GOTAS)
 // ==========================
 if (mostrarOverlay && overlayImg) {
-  imageMode(CORNER);
+  imageMode(CENTER);
   image(
     overlayImg,
     marcoX,
@@ -352,6 +352,7 @@ class GotaPinturaModo1 {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
