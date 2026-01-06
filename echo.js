@@ -63,6 +63,11 @@ function draw() {
   } else {
     background(estado.fondoA4 === "blanco" ? 255 : 0);
   }
+  if (mostrarOverlay && overlayImg){
+    imageMode(CORNER);
+    tint(255,150);
+    image(overlayImg,0,0,300,300);
+  }
 //=====================
   // MARCO A4
   //===================
@@ -344,6 +349,7 @@ if (mostrarOverlay && overlayImg) {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
