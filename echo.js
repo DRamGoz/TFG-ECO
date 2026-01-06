@@ -330,10 +330,6 @@ class GotaPinturaModo1 {
     this.noiseY += 0.004;
   }
 }
-
-function windowResized(){
-  resizeCanvas(windowWidth,windowHeight);
-}
 if (mostrarOverlay && overlayImg) {
   image(
     overlayImg,
@@ -343,6 +339,11 @@ if (mostrarOverlay && overlayImg) {
     marcoH
   );
 }
+function windowResized(){
+  resizeCanvas(windowWidth,windowHeight);
+}
+
+
 
 
 
