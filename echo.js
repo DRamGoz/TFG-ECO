@@ -39,7 +39,8 @@ let canvas;
 // ==========================
 function preload() {
   imgFondo = loadImage("fondomadera.jpg");
-  overlayImg = loadImage("mascara_1.png");
+  overlayImg = loadImage("mascara_1.png",console.log("OK"),console.error("NOK")
+  );
 }
 
 // ==========================
@@ -203,6 +204,7 @@ estado.orientacion = estado.orientacion === "vertical" ? "horizontal" : "vertica
 recalcularMarco(); 
 }
 function activarOverlay(){ 
+  console.log("Overlay activado"); /////////////////////////////////////////////////////////////////
   mostrarOverlay = true;
 }
 // ==========================
@@ -331,6 +333,7 @@ class GotaPinturaModo1 {
   }
 }
 if (mostrarOverlay && overlayImg) {
+  imageMode(CORNER);
   image(
     overlayImg,
     marcoX,
@@ -342,6 +345,7 @@ if (mostrarOverlay && overlayImg) {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
