@@ -66,7 +66,7 @@ function draw() {
   if (mostrarOverlay && overlayImg){
     imageMode(CORNER);
     tint(255,150);
-    image(overlayImg,0,0,300,300);
+    image(overlayImg,0,0,width,height);
   }
 //=====================
   // MARCO A4
@@ -349,6 +349,7 @@ if (mostrarOverlay && overlayImg) {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
