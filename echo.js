@@ -116,7 +116,7 @@ if (mostrarOverlay && overlayImg) {
     text(titulo, marcoX + marcoW / 2, marcoY + 20);
     fill(estado.fondoA4 === "blanco" ? 50 : 200);
     textSize(16);
-    text(subtitulo, marcoX + marcoW / 2, marcoY + 30);
+    text(subtitulo, marcoX + marcoW / 2, marcoY + 40); ///// INTERLINEADO SUBTITULO
   }
 
   //==========================
@@ -352,6 +352,7 @@ class GotaPinturaModo1 {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
