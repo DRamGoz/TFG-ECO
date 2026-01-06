@@ -24,7 +24,7 @@ window.estado = {
   fondoA4: "blanco",
   mostrarTexto: true,
   monocromo: false,
-  orientacion: "vertical"
+  orientacion: "horizontal"
 };
 
 const API_URL = "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpnsHnDcAIKQ-SWU8FoIpdu-PUwO0KsdIk3klratrjgCHfskg/exec";
@@ -351,6 +351,7 @@ class GotaPinturaModo1 {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
