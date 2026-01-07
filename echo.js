@@ -87,6 +87,23 @@ function draw() {
   drawingContext.rect(marcoX, marcoY, marcoW, marcoH);
   drawingContext.clip();
   gotas.forEach(g => g.mostrar());
+  // Overlay / máscara (COVER + CLIP)
+if (mostrarOverlay && overlayImg) {
+
+  const scaleFactor = max(
+    marcoW / overlayImg.width,
+    marcoH / overlayImg.height
+  );
+
+  const drawW = overlayImg.width * scaleFactor;
+  const drawH = overlayImg.height * scaleFactor;
+
+  const drawX = marcoX + (marcoW - drawW) / 2;
+  const drawY = marcoY + (marcoH - drawH) / 2;
+
+  imageMode(CORNER);
+  image(overlayImg, drawX, drawY, drawW, drawH);
+}
   drawingContext.restore();
   pop();
 
@@ -375,6 +392,7 @@ class GotaPinturaModo1 {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
