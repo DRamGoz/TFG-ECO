@@ -172,9 +172,6 @@ function exportarA4() {
     if (g instanceof GotaPinturaModo1) dibujarGotaModo1(pg, g);
     if (g instanceof GotaPinturaModo2) dibujarGotaModo2(pg, g);
   });
-  pg.imageMode(CORNER);
-  pg.image(overlayImg, drawX, drawY, drawW, drawH);
-}
 
   pg.pop();
 
@@ -364,6 +361,7 @@ class GotaPinturaModo1 {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
