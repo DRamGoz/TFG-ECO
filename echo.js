@@ -103,21 +103,19 @@ function draw() {
     marcoH
   );
 }*/
-  if (mostrarOverlay && overlayImg) {
+ // --------------------------
+// OVERLAY / MÁSCARA (AJUSTE PERFECTO A MARCO)
+// --------------------------
+if (mostrarOverlay && overlayImg) {
 
-  const imgRatio = overlayImg.width / overlayImg.height;
-  const marcoRatio = marcoW / marcoH;
+  // Factor de escala proporcional (contain)
+  const scaleFactor = min(
+    marcoW / overlayImg.width,
+    marcoH / overlayImg.height
+  );
 
-  let drawW, drawH;
-
-  // Escalado proporcional (contain)
-  if (imgRatio > marcoRatio) {
-    drawW = marcoW;
-    drawH = marcoW / imgRatio;
-  } else {
-    drawH = marcoH;
-    drawW = marcoH * imgRatio;
-  }
+  const drawW = overlayImg.width * scaleFactor;
+  const drawH = overlayImg.height * scaleFactor;
 
   const drawX = marcoX + (marcoW - drawW) / 2;
   const drawY = marcoY + (marcoH - drawH) / 2;
@@ -125,6 +123,7 @@ function draw() {
   imageMode(CORNER);
   image(overlayImg, drawX, drawY, drawW, drawH);
 }
+
 
   //=======================
   // TEXTO
@@ -375,6 +374,7 @@ class GotaPinturaModo1 {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
