@@ -108,19 +108,7 @@ if (mostrarOverlay && overlayImg) {
   drawingContext.restore();
   pop();
 
-  // ==========================
-// OVERLAY / MÁSCARA (ENCIMA DE LAS GOTAS)
-// ==========================
-/*if (mostrarOverlay && overlayImg) {
-  imageMode(CORNER);
-  image(
-    overlayImg,
-    marcoX,
-    marcoY,
-    marcoW,
-    marcoH
-  );
-}*/
+
 
 
   //=======================
@@ -184,6 +172,26 @@ function exportarA4() {
     if (g instanceof GotaPinturaModo1) dibujarGotaModo1(pg, g);
     if (g instanceof GotaPinturaModo2) dibujarGotaModo2(pg, g);
   });
+  // --------------------------
+// MÁSCARA EN EXPORTACIÓN
+// --------------------------
+if (mostrarOverlay && overlayImg) {
+
+  const scaleFactor = max(
+    marcoW / overlayImg.width,
+    marcoH / overlayImg.height
+  );
+
+  const drawW = overlayImg.width * scaleFactor;
+  const drawH = overlayImg.height * scaleFactor;
+
+  const drawX = (w - drawW) / 2;
+  const drawY = (h - drawH) / 2;
+
+  pg.imageMode(CORNER);
+  pg.image(overlayImg, drawX, drawY, drawW, drawH);
+}
+
   pg.pop();
 
   if (estado.mostrarTexto) {
@@ -372,6 +380,7 @@ class GotaPinturaModo1 {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
