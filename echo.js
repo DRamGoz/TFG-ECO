@@ -87,9 +87,10 @@ function draw() {
   drawingContext.rect(marcoX, marcoY, marcoW, marcoH);
   drawingContext.clip();
   gotas.forEach(g => g.mostrar());
+  
   // Overlay / máscara (COVER + CLIP)
+  
 if (mostrarOverlay && overlayImg) {
-
   const scaleFactor = max(
     marcoW / overlayImg.width,
     marcoH / overlayImg.height
@@ -120,27 +121,6 @@ if (mostrarOverlay && overlayImg) {
     marcoH
   );
 }*/
-// --------------------------
-// OVERLAY / MÁSCARA (COVER TOTAL DEL MARCO)
-// --------------------------
-if (mostrarOverlay && overlayImg) {
-
-  // COVER: la imagen llena todo el marco
-  const scaleFactor = max(
-    marcoW / overlayImg.width,
-    marcoH / overlayImg.height
-  );
-
-  const drawW = overlayImg.width * scaleFactor;
-  const drawH = overlayImg.height * scaleFactor;
-
-  const drawX = marcoX + (marcoW - drawW) / 2;
-  const drawY = marcoY + (marcoH - drawH) / 2;
-
-  imageMode(CORNER);
-  image(overlayImg, drawX, drawY, drawW, drawH);
-}
-
 
 
   //=======================
@@ -392,6 +372,7 @@ class GotaPinturaModo1 {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
