@@ -103,13 +103,13 @@ function draw() {
     marcoH
   );
 }*/
- // --------------------------
-// OVERLAY / MÁSCARA (AJUSTE PERFECTO A MARCO)
+// --------------------------
+// OVERLAY / MÁSCARA (COVER TOTAL DEL MARCO)
 // --------------------------
 if (mostrarOverlay && overlayImg) {
 
-  // Factor de escala proporcional (contain)
-  const scaleFactor = min(
+  // COVER: la imagen llena todo el marco
+  const scaleFactor = max(
     marcoW / overlayImg.width,
     marcoH / overlayImg.height
   );
@@ -123,6 +123,7 @@ if (mostrarOverlay && overlayImg) {
   imageMode(CORNER);
   image(overlayImg, drawX, drawY, drawW, drawH);
 }
+
 
 
   //=======================
@@ -374,6 +375,7 @@ class GotaPinturaModo1 {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
