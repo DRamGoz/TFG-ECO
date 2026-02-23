@@ -16,7 +16,7 @@ const A4_RATIO = 210 / 297;
 let titulo = "ECO — Generación de Arte Digital";
 let subtitulo = "Interacción de usuarios en tiempo real";
 let imgFondo;
-//let overlayImg;
+let overlayImg;
  let mostrarOverlay = false;
 
 
@@ -91,7 +91,7 @@ function draw() {
   
   // Overlay / máscara (COVER + CLIP)
   
-/*if (mostrarOverlay && overlayImg) {
+if (mostrarOverlay && overlayImg) {
   const scaleFactor = max(
     marcoW / overlayImg.width,
     marcoH / overlayImg.height
@@ -108,7 +108,7 @@ function draw() {
 }
   drawingContext.restore();
   pop();
-*/
+
 
 
 
@@ -366,6 +366,7 @@ class GotaPinturaModo1 {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
