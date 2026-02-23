@@ -17,7 +17,7 @@ let titulo = "ECO — Generación de Arte Digital";
 let subtitulo = "Interacción de usuarios en tiempo real";
 let imgFondo;
 // let overlayImg;
-// let mostrarOverlay = false;
+ let mostrarOverlay = false;
 
 
 window.estado = {
@@ -370,6 +370,7 @@ class GotaPinturaModo1 {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
