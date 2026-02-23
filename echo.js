@@ -16,10 +16,9 @@ const A4_RATIO = 210 / 297;
 let titulo = "ECO — Generación de Arte Digital";
 let subtitulo = "Interacción de usuarios en tiempo real";
 let imgFondo;
-let overlayImg;
-let mostrarOverlay = false;
-let imgMascara = null;
-let mascaraActiva = false;
+// let overlayImg;
+// let mostrarOverlay = false;
+
 
 window.estado = {
   modo: "modo1",
@@ -41,7 +40,7 @@ let canvas;
 // ==========================
 function preload() {
   imgFondo = loadImage("fondomadera.jpg");
-  overlayImg = loadImage("mascara_1.png");
+ // overlayImg = loadImage("mascara_1.png");
 }
 
 // ==========================
@@ -94,7 +93,7 @@ function draw() {
   
   // Overlay / máscara (COVER + CLIP)
   
-if (mostrarOverlay && overlayImg) {
+/*if (mostrarOverlay && overlayImg) {
   const scaleFactor = max(
     marcoW / overlayImg.width,
     marcoH / overlayImg.height
@@ -108,7 +107,7 @@ if (mostrarOverlay && overlayImg) {
 
   imageMode(CORNER);
   image(overlayImg, drawX, drawY, drawW, drawH);
-}
+}*/
   drawingContext.restore();
   pop();
 
@@ -230,35 +229,13 @@ function rotarLienzo() {
 estado.orientacion = estado.orientacion === "vertical" ? "horizontal" : "vertical";
 recalcularMarco(); 
 }
-function actdesOverlay(){ 
+/*function actdesOverlay(){ 
   mostrarOverlay = !mostrarOverlay;
   estado.mostrarTexto = !estado.mostrarTexto;
-  /*estado.fondoA4 = !estado.fondoA4;*/
-  
-  function crearBotonMascara() {
-  // Buscamos el contenedor de los botones izquierdo
-  const contBotones = document.getElementById("botones-izquierda");
-
-  // Creamos el botón
-  const btn = document.createElement("button");
-  btn.innerText = "Cargar Máscara";
-
-  // Acción al pulsarlo
-  btn.onclick = () => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = "image/png"; // solo PNG
-    input.onchange = e => {
-      const file = e.target.files[0];
-      if (file) {
-        imgMascara = loadImage(URL.createObjectURL(file), () => {
-          mascaraActiva = true;
-          console.log("Máscara cargada correctamente");
-        });
-      }
-    };
-    input.click();
-  };
+ //estado.fondoA4 = !estado.fondoA4;//
+}
+ */ 
+ 
 
   // Añadimos el botón al contenedor
   contBotones.appendChild(btn);
@@ -393,26 +370,7 @@ class GotaPinturaModo1 {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
-// ==========================
-// APLICAR MÁSCARA PNG
-// ==========================
-if (mascaraActiva && imgMascara) {
-  push();
 
-  // Modo multiplicar: negro oculta, blanco deja pasar
-  blendMode(MULTIPLY);
-
-  image(
-    imgMascara,
-    marcoX,
-    marcoY,
-    marcoAncho,
-    marcoAlto
-  );
-
-  blendMode(NORMAL);
-  pop();
-}
 
 
 
