@@ -16,8 +16,8 @@ const A4_RATIO = 210 / 297;
 let titulo = "ECO — Generación de Arte Digital";
 let subtitulo = "Interacción de usuarios en tiempo real";
 let imgFondo;
-let overlayImg;
- let mostrarOverlay = false;
+// let overlayImg;
+// let mostrarOverlay = false;
 
 
 window.estado = {
@@ -40,7 +40,7 @@ let canvas;
 // ==========================
 function preload() {
   imgFondo = loadImage("fondomadera.jpg");
- // overlayImg = loadImage("mascara_1.png");
+ // overlayImg = loadImage("mascara_1.png"); // PLANTILLA deshabilitada
 }
 
 // ==========================
@@ -91,21 +91,21 @@ function draw() {
   
   // Overlay / máscara (COVER + CLIP)
   
-if (mostrarOverlay && overlayImg) {
-  const scaleFactor = max(
-    marcoW / overlayImg.width,
-    marcoH / overlayImg.height
-  );
-
-  const drawW = overlayImg.width * scaleFactor;
-  const drawH = overlayImg.height * scaleFactor;
-
-  const drawX = marcoX + (marcoW - drawW) / 2;
-  const drawY = marcoY + (marcoH - drawH) / 2;
-
-  imageMode(CORNER);
-  image(overlayImg, drawX, drawY, drawW, drawH);
-}
+// if (mostrarOverlay && overlayImg) {
+ //  const scaleFactor = max(
+   // marcoW / overlayImg.width,
+   // marcoH / overlayImg.height
+ // );
+//
+//  const drawW = overlayImg.width * scaleFactor;
+//  const drawH = overlayImg.height * scaleFactor;
+//
+//  const drawX = marcoX + (marcoW - drawW) / 2;
+//  const drawY = marcoY + (marcoH - drawH) / 2;
+//
+//  imageMode(CORNER);
+//  image(overlayImg, drawX, drawY, drawW, drawH);
+//}
   drawingContext.restore();
   pop();
 
@@ -228,8 +228,8 @@ estado.orientacion = estado.orientacion === "vertical" ? "horizontal" : "vertica
 recalcularMarco(); 
 }
 function actdesOverlay(){ 
-  mostrarOverlay = !mostrarOverlay;
-  estado.mostrarTexto = !estado.mostrarTexto;
+//  mostrarOverlay = !mostrarOverlay;
+//  estado.mostrarTexto = !estado.mostrarTexto;
  //estado.fondoA4 = !estado.fondoA4;//
 }
  
@@ -366,6 +366,7 @@ class GotaPinturaModo1 {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
