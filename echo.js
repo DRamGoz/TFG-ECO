@@ -52,8 +52,6 @@ function setup() {
   recalcularMarco();
   cargarDatos();
   setInterval(cargarDatos, 2000);
-   // CREAR BOTÓN DE MÁSCARA
-  crearBotonMascara();
 }
 
 // ==========================
@@ -237,9 +235,7 @@ function actdesOverlay(){
  
  
 
-  // Añadimos el botón al contenedor
-  contBotones.appendChild(btn);
-}
+ 
 
 // ==========================
 // AUXILIARES
@@ -370,6 +366,7 @@ class GotaPinturaModo1 {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
