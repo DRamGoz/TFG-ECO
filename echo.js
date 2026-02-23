@@ -10,14 +10,16 @@ const RUEDO_MOVIMIENTO = 50;
 const CRECIMIENTO = 0.8;
 const A4_RATIO = 210 / 297;
 
-// ==========================
-// ESTADO GLOBAL
-// ==========================
+// ==================================
+// ESTADO GLOBAL / VARIABLES GLOBALES
+// ==================================
 let titulo = "ECO — Generación de Arte Digital";
 let subtitulo = "Interacción de usuarios en tiempo real";
 let imgFondo;
 let overlayImg;
 let mostrarOverlay = false;
+let imgMascara = null;
+let mascaraActiva = false;
 
 window.estado = {
   modo: "modo1",
@@ -51,6 +53,8 @@ function setup() {
   recalcularMarco();
   cargarDatos();
   setInterval(cargarDatos, 2000);
+   // CREAR BOTÓN DE MÁSCARA
+  crearBotonMascara();
 }
 
 // ==========================
@@ -230,6 +234,33 @@ function actdesOverlay(){
   mostrarOverlay = !mostrarOverlay;
   estado.mostrarTexto = !estado.mostrarTexto;
   /*estado.fondoA4 = !estado.fondoA4;*/
+  function crearBotonMascara() {
+  // Buscamos el contenedor de los botones izquierdo
+  const contBotones = document.getElementById("botones-izquierda");
+
+  // Creamos el botón
+  const btn = document.createElement("button");
+  btn.innerText = "Cargar Máscara";
+
+  // Acción al pulsarlo
+  btn.onclick = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/png"; // solo PNG
+    input.onchange = e => {
+      const file = e.target.files[0];
+      if (file) {
+        imgMascara = loadImage(URL.createObjectURL(file), () => {
+          mascaraActiva = true;
+          console.log("Máscara cargada correctamente");
+        });
+      }
+    };
+    input.click();
+  };
+
+  // Añadimos el botón al contenedor
+  contBotones.appendChild(btn);
 }
 
 // ==========================
@@ -361,6 +392,7 @@ class GotaPinturaModo1 {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
