@@ -40,7 +40,7 @@ let canvas;
 // ==========================
 function preload() {
   imgFondo = loadImage("fondomadera.jpg");
- // overlayImg = loadImage("mascara_1.png");
+  overlayImg = loadImage("mascara_1.png");
 }
 
 // ==========================
@@ -370,6 +370,7 @@ class GotaPinturaModo1 {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
