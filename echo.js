@@ -93,7 +93,7 @@ function draw() {
   
   // Overlay / máscara (COVER + CLIP)
   
-/*if (mostrarOverlay && overlayImg) {
+if (mostrarOverlay && overlayImg) {
   const scaleFactor = max(
     marcoW / overlayImg.width,
     marcoH / overlayImg.height
@@ -107,7 +107,7 @@ function draw() {
 
   imageMode(CORNER);
   image(overlayImg, drawX, drawY, drawW, drawH);
-}*/
+}
   drawingContext.restore();
   pop();
 
@@ -370,6 +370,7 @@ class GotaPinturaModo1 {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
