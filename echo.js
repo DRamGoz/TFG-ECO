@@ -234,6 +234,7 @@ function actdesOverlay(){
   mostrarOverlay = !mostrarOverlay;
   estado.mostrarTexto = !estado.mostrarTexto;
   /*estado.fondoA4 = !estado.fondoA4;*/
+  
   function crearBotonMascara() {
   // Buscamos el contenedor de los botones izquierdo
   const contBotones = document.getElementById("botones-izquierda");
@@ -391,6 +392,26 @@ class GotaPinturaModo1 {
 
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
+}
+// ==========================
+// APLICAR MÁSCARA PNG
+// ==========================
+if (mascaraActiva && imgMascara) {
+  push();
+
+  // Modo multiplicar: negro oculta, blanco deja pasar
+  blendMode(MULTIPLY);
+
+  image(
+    imgMascara,
+    marcoX,
+    marcoY,
+    marcoAncho,
+    marcoAlto
+  );
+
+  blendMode(NORMAL);
+  pop();
 }
 
 
