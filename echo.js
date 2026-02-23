@@ -229,12 +229,12 @@ function rotarLienzo() {
 estado.orientacion = estado.orientacion === "vertical" ? "horizontal" : "vertical";
 recalcularMarco(); 
 }
-/*function actdesOverlay(){ 
+function actdesOverlay(){ 
   mostrarOverlay = !mostrarOverlay;
   estado.mostrarTexto = !estado.mostrarTexto;
  //estado.fondoA4 = !estado.fondoA4;//
 }
- */ 
+ 
  
 
   // Añadimos el botón al contenedor
@@ -370,6 +370,7 @@ class GotaPinturaModo1 {
 function windowResized(){
   resizeCanvas(windowWidth,windowHeight);
 }
+
 
 
 
