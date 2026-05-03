@@ -1,91 +1,684 @@
-/* RESET BÁSICO */
-html, body {
+﻿/* =============================================
+   ECHO  ·  Arte Digital Interactivo
+   Estilo premium — dark glassmorphism
+   ============================================= */
+
+/* ---------- GOOGLE FONTS (importado tambien en HTML) ---------- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* ---------- VARIABLES ---------- */
+:root {
+  --bg-deep: #0a0a0f;
+  --glass-bg: rgba(40, 40, 55, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-blur: 22px;
+  --glass-radius: 16px;
+  --btn-bg: rgba(255, 255, 255, 0.06);
+  --btn-hover: rgba(255, 255, 255, 0.12);
+  --btn-radius: 10px;
+  --accent-cyan: #00e5ff;
+  --accent-magenta: #e040fb;
+  --accent-gradient: linear-gradient(135deg, #00e5ff 0%, #7c4dff 50%, #e040fb 100%);
+  --text-primary: #eaeaea;
+  --text-secondary: #9a9aaa;
+  --text-disabled: #505060;
+  --shadow-glow-cyan: 0 0 18px rgba(0, 229, 255, 0.35);
+  --shadow-glow-magenta: 0 0 18px rgba(224, 64, 251, 0.30);
+  --transition-fast: 0.18s ease;
+  --transition-med: 0.28s ease;
+}
+
+/* ---------- RESET ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background: #111;
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg-deep);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+}
+/* ---------- LOGO PANTALLA ---------- */
+#logo-pantalla {
+  position: fixed;
+  top: 28px;
+  left: 28px;
+  z-index: 30;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.5; /* Transparencia del 50% */
+  transition: all 0.3s ease;
 }
 
-/* CONTENEDOR DEL CANVAS */
+#logo-pantalla img {
+  width: 180px;
+  height: auto;
+  display: block;
+}
+
+/* Botón oculto Modo 0 */
+.btn-modo0-oculto {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 25px;
+  height: 25px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 12px;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: auto;
+}
+
+.btn-modo0-oculto:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.8);
+  transform: scale(1.1);
+}
+
+#logo-pantalla:hover .btn-modo0-oculto {
+  opacity: 0.7;
+}
+
+/* Responsive para logo-pantalla */
+@media (max-width: 1366px) {
+  #logo-pantalla {
+    top: 20px;
+    left: 20px;
+  }
+  #logo-pantalla img {
+    width: 160px;
+  }
+}
+
+@media (max-width: 1024px) {
+  #logo-pantalla {
+    top: 16px;
+    left: 16px;
+  }
+  #logo-pantalla img {
+    width: 140px;
+  }
+}
+
+@media (max-width: 768px) {
+  #logo-pantalla {
+    top: 12px;
+    left: 12px;
+  }
+  #logo-pantalla img {
+    width: 120px;
+  }
+}
+
+/* ---------- CONTAINER A4 ---------- */
 #a4-container {
   position: fixed;
   inset: 0;
-  pointer-events: none; /* p5 manda */
+  pointer-events: none;
+  display: block !important;
+  visibility: visible !important;
+  z-index: 1;
 }
 
-/* ===============================
-   BOTONES (BASE)
-   =============================== */
+#a4-container canvas {
+  pointer-events: auto;
+}
 
+/* Forzar que los botones estén por encima de todo y sean visibles */
+#botones-izquierda,
+#botones-derecha {
+  z-index: 100 !important;
+  pointer-events: auto !important;
+  opacity: 1 !important; /* Forzar visibilidad completa */
+}
+
+/* Transparencia para iconos cuando modo guía está activo */
+/*.modo-guia-activo #botones-izquierda button:not(#btn-nuevo-documento):not(#btn-modo-guia),
+.modo-guia-activo #botones-derecha button:not(#btn-nuevo-documento):not(#btn-modo-guia) {
+  opacity: 0.1;
+}*/
+
+/* ---------- PANEL HEADER ---------- */
+.panel-header {
+  padding: 10px 0 5px 0; /* Reducir padding superior */
+  text-align: center;
+  border-bottom: 1px solid;
+  border-image: linear-gradient(90deg, rgba(0, 229, 255, 0.8), rgba(224, 64, 251, 0.8)) 1;
+  margin-bottom: 5px;
+}
+
+.panel-title {
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 16px; /* Aumentar más el tamaño de fuente */
+  font-weight: 700; /* Negritas más fuertes */
+  background: linear-gradient(90deg, rgba(0, 229, 255, 0.9), rgba(224, 64, 251, 0.9));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent; /* Fallback para navegadores */
+  text-transform: uppercase;
+  letter-spacing: 2px; /* Aumentar más el espaciado */
+  margin: 0;
+  padding: 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* ---------- PANEL CONTENT ---------- */
+.panel-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centrar botones horizontalmente */
+  justify-content: flex-start; /* Alinear al inicio para controlar el espacio inferior */
+  gap: 12px; /* Espaciado entre botones */
+  width: 100%;
+  padding: 20px 0 0 0; /* Padding normal */
+}
+
+/* ---------- PANELES LATERALES (glassmorphism) ---------- */
 #botones-izquierda,
 #botones-derecha {
   position: fixed;
   top: 50%;
   transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
   z-index: 20;
   pointer-events: auto;
+
+  /* Glass effect */
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--glass-radius);
+  padding: 14px 10px 24px 10px;
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.75),
+    inset 0 2px 0 rgba(255, 255, 255, 0.1);
+  /* Animación eliminada para evitar desplazamiento */
+  
+  /* Estado inicial visible */
+  opacity: 1; /* Visible desde el inicio */
+  /* Transición elegante para deslizamiento */
+  transition: left 0.8s cubic-bezier(0.4, 0, 0.2, 1), right 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease-in-out;
 }
 
-/* IZQUIERDA / DERECHA */
-#botones-izquierda { left: 0; }
-#botones-derecha { right: 0; }
+#botones-izquierda,
+#panel-izquierdo {
+  /* Posición inicial fuera de pantalla a la izquierda */
+  position: fixed;
+  left: -260px; /* 40px más separado del lienzo (220px + 40px) */
+  top: 50%;
+  transform: translateY(-50%);
+  max-height: 85vh; /* Altura normal para pantallas grandes */
+  overflow-y: auto;
+  max-width: 220px; /* Ancho normal para pantallas grandes */
+  border: 2px solid rgba(0, 229, 255, 0.4); /* Borde cyan con transparencia */
+  border-radius: 15px; /* Mantener bordes redondeados */
+  box-shadow: 
+    0 0 10px rgba(0, 229, 255, 0.3), /* Glow cyan suave */
+    0 0 20px rgba(0, 229, 255, 0.15), /* Glow cyan exterior */
+    inset 0 0 8px rgba(0, 229, 255, 0.1), /* Glow cyan interior */
+    inset 0 0 15px rgba(0, 229, 255, 0.05); /* Glow cyan profundo */
+  animation: panelNeonPulse 3s ease-in-out infinite alternate; /* Pulso neon en panel */
+}
 
-/* BOTONES */
+#botones-derecha {
+  /* Posición inicial fuera de pantalla a la derecha usando left */
+  position: fixed;
+  left: calc(100% + 40px); /* 40px más separado del lienzo */
+  top: 50%;
+  transform: translateY(-50%);
+  max-height: 90vh; /* Altura normal para pantallas grandes */
+  overflow-y: auto;
+  max-width: 220px; /* Ancho normal para pantallas grandes */
+  border: 2px solid rgba(0, 229, 255, 0.4); /* Borde cyan con transparencia */
+  border-radius: 15px; /* Mantener bordes redondeados */
+  box-shadow: 
+    0 0 10px rgba(0, 229, 255, 0.3), /* Glow cyan suave */
+    0 0 20px rgba(0, 229, 255, 0.15), /* Glow cyan exterior */
+    inset 0 0 8px rgba(0, 229, 255, 0.1), /* Glow cyan interior */
+    inset 0 0 15px rgba(0, 229, 255, 0.05); /* Glow cyan profundo */
+  animation: panelNeonPulse 3s ease-in-out infinite alternate; /* Pulso neon en panel */
+}
+
+/* ---------- BOTONES ---------- */
 #botones-izquierda button,
-#botones-derecha button {
-  background: #222;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 8px 14px;
-  font-size: 13px;
+#botones-derecha button,
+#panel-izquierdo button,
+#panel-derecho button {
+  background: var(--btn-bg);
+  color: var(--text-primary);
+  border: 1px solid rgba(0, 204, 255, 1.0);
+  border-radius: var(--btn-radius);
+  padding: 10px 14px; /* Reducir padding de botones */
+  box-shadow:
+    0 4px 12px rgb(0, 0, 0),
+    inset 0 0 22px rgb(0, 195, 255, 0.2),
+    0 0 15px rgba(0, 229, 255, 0.3), /* Efecto neon cyan */
+    0 0 30px rgba(224, 64, 251, 0.15); /* Efecto neon magenta */
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 11px; /* Reducir tamaño de fuente */
+  font-weight: 500;
+  letter-spacing: 0.1px; /* Reducir espaciado entre letras */
+  text-align: center;
+  width: 170px; /* Reducir ancho de botones */
+  white-space: nowrap; /* Forzar que el texto esté en una sola línea */
+  overflow: hidden; /* Ocultar texto que se desborde */
+  text-overflow: ellipsis; /* Añadir puntos suspensivos si el texto es muy largo */
   cursor: pointer;
-  white-space: nowrap;
-  transition: background 0.2s ease, transform 0.15s ease;
+  position: relative;
+  overflow: hidden;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-med),
+    transform var(--transition-fast);
+  opacity: 0.85;
 }
 
+/* ---------- ANIMACIÓN NEON PULSE ---------- */
+@keyframes neonPulse {
+  0% {
+    box-shadow:
+      0 4px 12px rgb(0, 0, 0),
+      inset 0 0 22px rgb(0, 195, 255, 0.2),
+      0 0 15px rgba(0, 229, 255, 0.3),
+      0 0 30px rgba(224, 64, 251, 0.15);
+  }
+  50% {
+    box-shadow:
+      0 4px 12px rgb(0, 0, 0),
+      inset 0 0 22px rgb(0, 195, 255, 0.2),
+      0 0 25px rgba(0, 229, 255, 0.6), /* Pulso cyan más intenso */
+      0 0 40px rgba(224, 64, 251, 0.3); /* Pulso magenta más intenso */
+  }
+  100% {
+    box-shadow:
+      0 4px 12px rgb(0, 0, 0),
+      inset 0 0 22px rgb(0, 195, 255, 0.2),
+      0 0 15px rgba(0, 229, 255, 0.3),
+      0 0 30px rgba(224, 64, 251, 0.15);
+  }
+}
+
+/* ---------- ANIMACIÓN PANEL NEON PULSE ---------- */
+@keyframes panelNeonPulse {
+  0% {
+    box-shadow:
+      0 0 10px rgba(0, 229, 255, 0.3),
+      0 0 20px rgba(0, 229, 255, 0.15),
+      inset 0 0 8px rgba(0, 229, 255, 0.1),
+      inset 0 0 15px rgba(0, 229, 255, 0.05);
+  }
+  50% {
+    box-shadow:
+      0 0 15px rgba(0, 229, 255, 0.5), /* Pulso cyan suave */
+      0 0 30px rgba(0, 229, 255, 0.25), /* Pulso cyan exterior suave */
+      inset 0 0 12px rgba(0, 229, 255, 0.2), /* Pulso cyan interior suave */
+      inset 0 0 20px rgba(0, 229, 255, 0.1); /* Pulso cyan profundo suave */
+  }
+  100% {
+    box-shadow:
+      0 0 10px rgba(0, 229, 255, 0.3),
+      0 0 20px rgba(0, 229, 255, 0.15),
+      inset 0 0 8px rgba(0, 229, 255, 0.1),
+      inset 0 0 15px rgba(0, 229, 255, 0.05);
+  }
+}
+
+/* Subtle shimmer line on top */
+#botones-izquierda button::before,
+#botones-derecha button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  opacity: 0;
+  transition: opacity var(--transition-med);
+}
+
+#botones-izquierda button:hover::before,
+#botones-derecha button:hover::before {
+  opacity: 1;
+}
+
+/* ---------- HOVER ---------- */
 #botones-izquierda button:hover,
 #botones-derecha button:hover {
-  background: #444;
+  background: var(--btn-hover);
+  border-color: rgba(0, 229, 255);
+  box-shadow: 0 0 14px rgb(0, 229, 255, 0.5);
   transform: translateX(2px);
+  opacity: 1;
 }
 
-/* ===============================
-   AJUSTE FINO SEGÚN ORIENTACIÓN
-   (se activa desde JS)
-   =============================== */
-
-/* A4 VERTICAL → botones pegados */
-body.a4-vertical #botones-izquierda {
-  left: calc(50% - 210px);
+#botones-derecha button:hover::before {
+  opacity: 1;
 }
 
-body.a4-vertical #botones-derecha {
-  right: calc(50% - 210px);
+/* ---------- ACTIVE PRESS ---------- */
+#botones-izquierda button:active,
+#botones-derecha button:active {
+  transform: scale(0.97);
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.2);
 }
 
-/* A4 HORIZONTAL → botones más fuera */
-body.a4-horizontal #botones-izquierda {
-  left: 40px;
+/* ---------- BOTON ACTIVO UX (seleccionado) ---------- */
+#botones-izquierda button.boton-activo-ux,
+#botones-derecha button.boton-activo-ux {
+  background: linear-gradient(135deg, #00e5ff, #e040fb) !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
+  color: #000 !important;
+  text-shadow: none !important;
+  box-shadow:
+    0 0 20px rgba(0, 229, 255, 0.4),
+    0 0 40px rgba(224, 64, 251, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+  transform: scale(1.02) translateX(2px) !important;
 }
 
-body.a4-horizontal #botones-derecha {
-  right: 40px;
+#botones-izquierda button.boton-activo-ux:hover,
+#botones-derecha button.boton-activo-ux:hover {
+  background: linear-gradient(135deg, rgba(0, 229, 255, 0.25), rgba(124, 77, 255, 0.25)) !important;
+  box-shadow:
+    0 0 24px rgba(0, 229, 255, 0.30),
+    0 0 48px rgba(124, 77, 255, 0.15);
 }
 
-/* ===============================
-   IMPRESIÓN
-   =============================== */
+
+/* ---------- PIE DE PÁGINA ---------- */
+#footer-ecodiv {
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.footer-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+}
+
+.footer-text {
+  font-size: 12px;
+  font-weight: 500;
+  background: linear-gradient(135deg, #00e5ff 0%, #e040fb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+  letter-spacing: 0.5px;
+}
+
+.footer-copyright {
+  font-size: 14px;
+  font-weight: bold;
+  background: linear-gradient(135deg, #00e5ff 0%, #e040fb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+}
+#btn-modo-guia.guia-on {
+  background: rgba(30, 180, 70, 0.22) !important;
+  border-color: rgba(30, 180, 70) !important;
+  color: #ffffff;
+  box-shadow: 0 0 14px rgb(28, 194, 72);
+}
+
+#btn-modo-guia.guia-on:hover {
+  background: rgba(30, 180, 70, 0.32) !important;
+  box-shadow: 0 0 20px rgb(28, 194, 72);
+}
+
+#btn-modo-guia.guia-off {
+  background: rgba(255, 0, 0, 0.22) !important;
+  border-color: rgb(175, 37, 37) !important;
+  color: #ffffff;
+  box-shadow: 0 0 14px rgba(200, 50, 50, 0.8);
+}
+
+#btn-modo-guia.guia-off:hover {
+  background: rgba(200, 50, 50, 0.32) !important;
+  box-shadow: 0 0 20px rgba(200, 50, 50, 0.8);
+}
+
+/* ---------- INPUT MASCARA (oculto) ---------- */
+#input-mascara {
+  display: none;
+}
+
+/* ---------- MODAL DE TEXTO ---------- */
+.modal {
+  display: none; /* Oculto por defecto */
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+.modal-content {
+  background: linear-gradient(135deg, rgba(20, 20, 30, 0.95), rgba(40, 40, 60, 0.95));
+  margin: 15% auto;
+  padding: 30px;
+  border: 2px solid rgba(0, 229, 255, 0.6);
+  border-radius: 15px;
+  box-shadow: 
+    0 0 20px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(0, 229, 255, 0.3),
+    inset 0 0 20px rgba(0, 229, 255, 0.1);
+  width: 90%;
+  max-width: 500px;
+  text-align: center;
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+.modal-content h3 {
+  color: rgba(0, 229, 255, 0.9);
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  color: rgba(255, 255, 255, 0.9);
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  text-align: left;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid rgba(0, 229, 255, 0.4);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: rgba(0, 229, 255, 0.8);
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 25px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, rgba(0, 229, 255, 0.8), rgba(224, 64, 251, 0.8));
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- PANELES REDUCIDOS (1366px) ---------- */
+@media (max-width: 1366px) {
+
+  /* Reducir tamaño del panel general */
+  #botones-izquierda,
+  #botones-derecha {
+    width: 200px !important; /* Aumentado de 180px a 200px */
+    max-height: 420px !important; /* Reducido de 450px a 420px */
+  }
+
+  /* Reducir tamaño del título del panel - SELECTORES ESPECÍFICOS */
+  div#botones-izquierda .panel-title,
+  div#botones-derecha .panel-title {
+    font-size: 12px !important; /* Aumentado de 8px a 12px */
+    margin-bottom: 0px !important; /* Eliminado margen inferior */
+    padding: 4px 0 0px 0 !important; /* Solo padding arriba */
+    line-height: 1.0 !important; /* Altura de línea mínima */
+  }
+
+  /* También afectar el h2 dentro de los paneles */
+  #botones-izquierda h2.panel-title,
+  #botones-derecha h2.panel-title {
+    font-size: 12px !important; /* Aumentado de 8px a 12px */
+    margin-bottom: 0px !important; /* Eliminado margen inferior */
+    padding: 4px 0 0px 0 !important; /* Solo padding arriba */
+    line-height: 1.0 !important; /* Altura de línea mínima */
+  }
+
+  /* Reducir tamaño de los botones */
+  #botones-izquierda button,
+  #botones-derecha button {
+    padding: 4px 6px !important; /* Padding mínimo */
+    font-size: 10px !important; /* Texto más pequeño */
+    margin: 0px 0 !important; /* Sin margen entre botones */
+    min-height: 22px !important; /* Altura mínima */
+  }
+
+  /* Reducir espaciado interno del panel */
+  #botones-izquierda .panel-body,
+  #botones-derecha .panel-body {
+    padding: 0px !important; /* Sin padding */
+    margin-top: -5px !important; /* Subir botones con margen negativo */
+  }
+
+  /* Ocultar scrollbars */
+  #botones-izquierda::-webkit-scrollbar,
+  #botones-derecha::-webkit-scrollbar {
+    display: none !important;
+  }
+  
+  #botones-izquierda,
+  #botones-derecha {
+    overflow: hidden !important;
+  }
+
+  /* Reducir tamaño de iconos en botones */
+  #botones-izquierda button .icono-completo-editar,
+  #botones-izquierda button .icono-completo-color,
+  #botones-derecha button .icono-completo-editar,
+  #botones-derecha button .icono-completo-color {
+    font-size: 10px !important;
+  }
+
+  /* Reducir tamaño del contador y franja */
+  #contador-container {
+    font-size: 10px !important; /* Texto más pequeño */
+    padding: 3px 6px !important; /* Padding reducido */
+  }
+
+  #franja-contador {
+    height: 20px !important; /* Altura reducida */
+    padding: 2px 8px !important; /* Padding mínimo */
+  }
+}
+
+/* ---------- PRINT ---------- */
 @media print {
-
   @page {
     size: A4;
     margin: 0;
-  }
+  }mas pequeño
+  
 
   body {
     background: white;
@@ -104,25 +697,10 @@ body.a4-horizontal #botones-derecha {
     position: absolute;
     inset: 0;
   }
+
+  #echo-logo,
+  #botones-izquierda,
+  #botones-derecha {
+    display: none !important;
+  }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

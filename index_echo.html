@@ -1,55 +1,108 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
-  <title>ECHO — Arte Digital Interactivo</title>
+  <title>ECODIV - Arte Digital Interactivo</title>
+  <meta name="description"
+    content="ECHO — Generación de arte digital interactivo en tiempo real mediante la interacción de usuarios.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- CSS -->
   <link rel="stylesheet" href="estilo_echo.css">
 
   <!-- p5.js -->
   <script src="https://cdn.jsdelivr.net/npm/p5@1.11.7/lib/p5.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/simplex-noise@2.4.0/simplex-noise.js"></script>
 
   <!-- Sketch -->
-  <script src="echo.js" defer></script>
+  <script src="echo.js"></script>
 </head>
 
 <body>
-
-  <!-- CONTENEDOR DEL CANVAS / A4 -->
+  <!-- Contenedor principal -->
   <div id="a4-container"></div>
 
-  <!-- BOTONES IZQUIERDA -->
-  <div id="botones-izquierda">
-    <button onclick="exportarA4()">Exportar A4</button>
-    <button onclick="refrescarLienzo()">Refrescar lienzo</button>
-    <button onclick="alternarFondo()">Fondo A4</button>
-    <button onclick="alternarTexto()">Título / Subtítulo</button>
-    <button onclick="rotarLienzo()">Rotar A4</button>
+  <!-- Panel izquierdo -->
+  <div id="botones-izquierda" class="panel">
+    <div class="panel-header">
+      <h2 class="panel-title">FUNCIONES</h2>
+    </div>
+    <div class="panel-content">
+      <button id="btn-formato" class="btn-panel" onclick="rotarLienzo()">⭐ Formato</button>
+      <button id="btn-texto" class="btn-panel" onclick="alternarTexto()">𝑻𝑻 Titulo / Subtitulo</button>
+      <button id="btn-cargar-datos" class="btn-panel" onclick="cargarInteracciones()">🔄 Cargar interacciones</button>
+      <button id="btn-vista-3d" class="btn-panel" onclick="activarVista3D()">🧊 Vista 3D · Mockup</button>
+      <button id="btn-vista-2d" class="btn-panel" style="display: none;" onclick="window.location.reload()">📱 Vista 2D · Edicion</button>
+      <button id="btn-editar-texto" class="btn-panel" onclick="editarTextoUsuario()">✏️ Editar texto</button>
+      <button id="btn-color" class="btn-panel" onclick="alternarFiltroColor()">🎨 Color
+        
+      </button>
+      <button id="btn-fondo" class="btn-panel" onclick="alternarFondo()">🌗 Fondo B / N</button>
+      <button id="btn-contador" class="btn-panel" onclick="alternarContador()">🧑‍🧑‍🧒‍🧒 Nº Usuarios</button>
+      <button id="btn-cargar-mascara" class="btn-panel" onclick="abrirSelectorMascara()">📂 Cargar mascara</button>
+    </div>
   </div>
 
-  <!-- BOTONES DERECHA -->
-  <div id="botones-derecha">
-    <button onclick="activarModo1()">MODO 1 · Acrílico</button>
-    <button onclick="activarModo2()">MODO 2 · Acuarela</button>
-    <!-- <button onclick="actdesOverlay()">PLANTILLA</button> -->
+  <!-- Panel derecho -->
+  <div id="botones-derecha" class="panel">
+    <div class="panel-header">
+      <h2 class="panel-title">MODOS</h2>
+    </div>
+    <div class="panel-content">
+      <button id="btn-modo1" class="btn-panel" onclick="activarModo1()">💧 MODO 1 · Acrilico</button>
+      <button id="btn-modo2" class="btn-panel" onclick="activarModo2()">💦 MODO 2 · Acuarela</button>
+      <button id="btn-modo3" class="btn-panel" onclick="activarModo3()">➿ MODO 3 · Ondas</button>
+      <button id="btn-modo4" class="btn-panel" onclick="activarModo4()">🔺 MODO 4 · Triangulos</button>
+      <button id="btn-modo5" class="btn-panel" onclick="activarModo5()">🟡 MODO 5 · Círculos</button>
+      <button id="btn-modo6" class="btn-panel" onclick="activarModo6()">🟩 MODO 6 · Cuadrados</button>
+      <button id="btn-modo7" class="btn-panel" onclick="activarModo7()">🔠 MODO 7 · Letras</button>
+      <button id="btn-modo8" class="btn-panel" onclick="activarModo8()">🗯️ MODO 8 · Miscelánea</button>
+      <button id="btn-modo9" class="btn-panel" onclick="activarModo9()">🌟 MODO 9 · Estrellas</button>
+    </div>
   </div>
 
+  <!-- Input oculto para cargar máscara -->
+  <input type="file" id="input-mascara" accept="image/*" style="display: none;" onchange="cargarMascaraArchivo(event)">
+
+  <!-- Modal para editar texto -->
+  <div id="modal-texto" class="modal">
+    <div class="modal-content">
+      <h3>✏️ Editar Título y Subtítulo</h3>
+      <div class="form-group">
+        <label for="input-titulo">Título:</label>
+        <input type="text" id="input-titulo" placeholder="Escribe el título...">
+      </div>
+      <div class="form-group">
+        <label for="input-subtitulo">Subtítulo:</label>
+        <input type="text" id="input-subtitulo" placeholder="Escribe el subtítulo...">
+      </div>
+      <div class="modal-buttons">
+        <button id="btn-guardar-texto" class="btn-primary" onclick="guardarTexto()">💾 Guardar</button>
+        <button id="btn-cancelar-texto" class="btn-secondary" onclick="cerrarModalTexto()">❌ Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Logo Pantalla -->
+  <div id="logo-pantalla">
+    <img id="logo-pantalla-img" src="logotipo_ECODIV.png" alt="ECODIV Logo">
+    <button id="btn-modo0" class="btn-modo0-oculto" onclick="activarModo0()">🌟</button>
+  </div>
+
+  <!-- Footer -->
+  <footer id="footer-ecodiv">
+    <div class="footer-content">
+      <span class="footer-text">ECODIV · DAVID RAMGÖZ · 2026 ©</span>
+   
+    </div>
+  </footer>
 </body>
+
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
