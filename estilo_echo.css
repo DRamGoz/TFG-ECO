@@ -46,6 +46,52 @@ body {
   -webkit-font-smoothing: antialiased;
   position: relative;
 }
+
+/* ---------- BOTÓN JELLY (superior derecha) ---------- */
+#btn-jelly {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 110;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 2px solid rgba(0, 229, 255, 0.4);
+  box-shadow:
+    0 0 10px rgba(0, 229, 255, 0.3),
+    0 0 20px rgba(0, 229, 255, 0.15),
+    inset 0 0 8px rgba(0, 229, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+#btn-jelly img {
+  width: 58px;
+  height: 58px;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+#btn-jelly:hover {
+  transform: scale(1.1);
+  border-color: rgba(0, 229, 255, 0.8);
+  box-shadow:
+    0 0 15px rgba(0, 229, 255, 0.5),
+    0 0 30px rgba(0, 229, 255, 0.25),
+    0 0 40px rgba(224, 64, 251, 0.2);
+}
+
+#btn-jelly:active {
+  transform: scale(0.95);
+}
+
 /* ---------- LOGO PANTALLA ---------- */
 #logo-pantalla {
   position: fixed;
@@ -54,7 +100,8 @@ body {
   z-index: 30;
   pointer-events: none;
   user-select: none;
-  opacity: 0.5; /* Transparencia del 50% */
+  opacity: 0.5;
+  /* Transparencia del 50% */
   transition: all 0.3s ease;
 }
 
@@ -99,6 +146,7 @@ body {
     top: 20px;
     left: 20px;
   }
+
   #logo-pantalla img {
     width: 160px;
   }
@@ -109,6 +157,7 @@ body {
     top: 16px;
     left: 16px;
   }
+
   #logo-pantalla img {
     width: 140px;
   }
@@ -119,6 +168,7 @@ body {
     top: 12px;
     left: 12px;
   }
+
   #logo-pantalla img {
     width: 120px;
   }
@@ -143,7 +193,8 @@ body {
 #botones-derecha {
   z-index: 100 !important;
   pointer-events: auto !important;
-  opacity: 1 !important; /* Forzar visibilidad completa */
+  opacity: 1 !important;
+  /* Forzar visibilidad completa */
 }
 
 /* Transparencia para iconos cuando modo guía está activo */
@@ -154,7 +205,8 @@ body {
 
 /* ---------- PANEL HEADER ---------- */
 .panel-header {
-  padding: 10px 0 5px 0; /* Reducir padding superior */
+  padding: 10px 0 5px 0;
+  /* Reducir padding superior */
   text-align: center;
   border-bottom: 1px solid;
   border-image: linear-gradient(90deg, rgba(0, 229, 255, 0.8), rgba(224, 64, 251, 0.8)) 1;
@@ -163,16 +215,20 @@ body {
 
 .panel-title {
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 16px; /* Aumentar más el tamaño de fuente */
-  font-weight: 700; /* Negritas más fuertes */
+  font-size: 16px;
+  /* Aumentar más el tamaño de fuente */
+  font-weight: 700;
+  /* Negritas más fuertes */
   background: linear-gradient(90deg, rgba(0, 229, 255, 0.9), rgba(224, 64, 251, 0.9));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  color: transparent; /* Fallback para navegadores */
+  color: transparent;
+  /* Fallback para navegadores */
   text-transform: uppercase;
-  letter-spacing: 2px; /* Aumentar más el espaciado */
+  letter-spacing: 2px;
+  /* Aumentar más el espaciado */
   margin: 0;
   padding: 0;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
@@ -182,11 +238,15 @@ body {
 .panel-content {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centrar botones horizontalmente */
-  justify-content: flex-start; /* Alinear al inicio para controlar el espacio inferior */
-  gap: 12px; /* Espaciado entre botones */
+  align-items: center;
+  /* Centrar botones horizontalmente */
+  justify-content: flex-start;
+  /* Alinear al inicio para controlar el espacio inferior */
+  gap: 12px;
+  /* Espaciado entre botones */
   width: 100%;
-  padding: 20px 0 0 0; /* Padding normal */
+  padding: 20px 0 0 0;
+  /* Padding normal */
 }
 
 /* ---------- PANELES LATERALES (glassmorphism) ---------- */
@@ -209,9 +269,10 @@ body {
     0 20px 60px rgba(0, 0, 0, 0.75),
     inset 0 2px 0 rgba(255, 255, 255, 0.1);
   /* Animación eliminada para evitar desplazamiento */
-  
+
   /* Estado inicial visible */
-  opacity: 1; /* Visible desde el inicio */
+  opacity: 1;
+  /* Visible desde el inicio */
   /* Transición elegante para deslizamiento */
   transition: left 0.8s cubic-bezier(0.4, 0, 0.2, 1), right 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease-in-out;
 }
@@ -220,39 +281,59 @@ body {
 #panel-izquierdo {
   /* Posición inicial fuera de pantalla a la izquierda */
   position: fixed;
-  left: -260px; /* 40px más separado del lienzo (220px + 40px) */
+  left: -260px;
+  /* 40px más separado del lienzo (220px + 40px) */
   top: 50%;
   transform: translateY(-50%);
-  max-height: 85vh; /* Altura normal para pantallas grandes */
+  max-height: 85vh;
+  /* Altura normal para pantallas grandes */
   overflow-y: auto;
-  max-width: 220px; /* Ancho normal para pantallas grandes */
-  border: 2px solid rgba(0, 229, 255, 0.4); /* Borde cyan con transparencia */
-  border-radius: 15px; /* Mantener bordes redondeados */
-  box-shadow: 
-    0 0 10px rgba(0, 229, 255, 0.3), /* Glow cyan suave */
-    0 0 20px rgba(0, 229, 255, 0.15), /* Glow cyan exterior */
-    inset 0 0 8px rgba(0, 229, 255, 0.1), /* Glow cyan interior */
-    inset 0 0 15px rgba(0, 229, 255, 0.05); /* Glow cyan profundo */
-  animation: panelNeonPulse 3s ease-in-out infinite alternate; /* Pulso neon en panel */
+  max-width: 220px;
+  /* Ancho normal para pantallas grandes */
+  border: 2px solid rgba(0, 229, 255, 0.4);
+  /* Borde cyan con transparencia */
+  border-radius: 15px;
+  /* Mantener bordes redondeados */
+  box-shadow:
+    0 0 10px rgba(0, 229, 255, 0.3),
+    /* Glow cyan suave */
+    0 0 20px rgba(0, 229, 255, 0.15),
+    /* Glow cyan exterior */
+    inset 0 0 8px rgba(0, 229, 255, 0.1),
+    /* Glow cyan interior */
+    inset 0 0 15px rgba(0, 229, 255, 0.05);
+  /* Glow cyan profundo */
+  animation: panelNeonPulse 3s ease-in-out infinite alternate;
+  /* Pulso neon en panel */
 }
 
 #botones-derecha {
   /* Posición inicial fuera de pantalla a la derecha usando left */
   position: fixed;
-  left: calc(100% + 40px); /* 40px más separado del lienzo */
+  left: calc(100% + 40px);
+  /* 40px más separado del lienzo */
   top: 50%;
   transform: translateY(-50%);
-  max-height: 90vh; /* Altura normal para pantallas grandes */
+  max-height: 90vh;
+  /* Altura normal para pantallas grandes */
   overflow-y: auto;
-  max-width: 220px; /* Ancho normal para pantallas grandes */
-  border: 2px solid rgba(0, 229, 255, 0.4); /* Borde cyan con transparencia */
-  border-radius: 15px; /* Mantener bordes redondeados */
-  box-shadow: 
-    0 0 10px rgba(0, 229, 255, 0.3), /* Glow cyan suave */
-    0 0 20px rgba(0, 229, 255, 0.15), /* Glow cyan exterior */
-    inset 0 0 8px rgba(0, 229, 255, 0.1), /* Glow cyan interior */
-    inset 0 0 15px rgba(0, 229, 255, 0.05); /* Glow cyan profundo */
-  animation: panelNeonPulse 3s ease-in-out infinite alternate; /* Pulso neon en panel */
+  max-width: 220px;
+  /* Ancho normal para pantallas grandes */
+  border: 2px solid rgba(0, 229, 255, 0.4);
+  /* Borde cyan con transparencia */
+  border-radius: 15px;
+  /* Mantener bordes redondeados */
+  box-shadow:
+    0 0 10px rgba(0, 229, 255, 0.3),
+    /* Glow cyan suave */
+    0 0 20px rgba(0, 229, 255, 0.15),
+    /* Glow cyan exterior */
+    inset 0 0 8px rgba(0, 229, 255, 0.1),
+    /* Glow cyan interior */
+    inset 0 0 15px rgba(0, 229, 255, 0.05);
+  /* Glow cyan profundo */
+  animation: panelNeonPulse 3s ease-in-out infinite alternate;
+  /* Pulso neon en panel */
 }
 
 /* ---------- BOTONES ---------- */
@@ -264,21 +345,30 @@ body {
   color: var(--text-primary);
   border: 1px solid rgba(0, 204, 255, 1.0);
   border-radius: var(--btn-radius);
-  padding: 10px 14px; /* Reducir padding de botones */
+  padding: 10px 14px;
+  /* Reducir padding de botones */
   box-shadow:
     0 4px 12px rgb(0, 0, 0),
     inset 0 0 22px rgb(0, 195, 255, 0.2),
-    0 0 15px rgba(0, 229, 255, 0.3), /* Efecto neon cyan */
-    0 0 30px rgba(224, 64, 251, 0.15); /* Efecto neon magenta */
+    0 0 15px rgba(0, 229, 255, 0.3),
+    /* Efecto neon cyan */
+    0 0 30px rgba(224, 64, 251, 0.15);
+  /* Efecto neon magenta */
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 11px; /* Reducir tamaño de fuente */
+  font-size: 11px;
+  /* Reducir tamaño de fuente */
   font-weight: 500;
-  letter-spacing: 0.1px; /* Reducir espaciado entre letras */
+  letter-spacing: 0.1px;
+  /* Reducir espaciado entre letras */
   text-align: center;
-  width: 170px; /* Reducir ancho de botones */
-  white-space: nowrap; /* Forzar que el texto esté en una sola línea */
-  overflow: hidden; /* Ocultar texto que se desborde */
-  text-overflow: ellipsis; /* Añadir puntos suspensivos si el texto es muy largo */
+  width: 170px;
+  /* Reducir ancho de botones */
+  white-space: nowrap;
+  /* Forzar que el texto esté en una sola línea */
+  overflow: hidden;
+  /* Ocultar texto que se desborde */
+  text-overflow: ellipsis;
+  /* Añadir puntos suspensivos si el texto es muy largo */
   cursor: pointer;
   position: relative;
   overflow: hidden;
@@ -299,13 +389,17 @@ body {
       0 0 15px rgba(0, 229, 255, 0.3),
       0 0 30px rgba(224, 64, 251, 0.15);
   }
+
   50% {
     box-shadow:
       0 4px 12px rgb(0, 0, 0),
       inset 0 0 22px rgb(0, 195, 255, 0.2),
-      0 0 25px rgba(0, 229, 255, 0.6), /* Pulso cyan más intenso */
-      0 0 40px rgba(224, 64, 251, 0.3); /* Pulso magenta más intenso */
+      0 0 25px rgba(0, 229, 255, 0.6),
+      /* Pulso cyan más intenso */
+      0 0 40px rgba(224, 64, 251, 0.3);
+    /* Pulso magenta más intenso */
   }
+
   100% {
     box-shadow:
       0 4px 12px rgb(0, 0, 0),
@@ -324,13 +418,19 @@ body {
       inset 0 0 8px rgba(0, 229, 255, 0.1),
       inset 0 0 15px rgba(0, 229, 255, 0.05);
   }
+
   50% {
     box-shadow:
-      0 0 15px rgba(0, 229, 255, 0.5), /* Pulso cyan suave */
-      0 0 30px rgba(0, 229, 255, 0.25), /* Pulso cyan exterior suave */
-      inset 0 0 12px rgba(0, 229, 255, 0.2), /* Pulso cyan interior suave */
-      inset 0 0 20px rgba(0, 229, 255, 0.1); /* Pulso cyan profundo suave */
+      0 0 15px rgba(0, 229, 255, 0.5),
+      /* Pulso cyan suave */
+      0 0 30px rgba(0, 229, 255, 0.25),
+      /* Pulso cyan exterior suave */
+      inset 0 0 12px rgba(0, 229, 255, 0.2),
+      /* Pulso cyan interior suave */
+      inset 0 0 20px rgba(0, 229, 255, 0.1);
+    /* Pulso cyan profundo suave */
   }
+
   100% {
     box-shadow:
       0 0 10px rgba(0, 229, 255, 0.3),
@@ -440,6 +540,7 @@ body {
   background-clip: text;
   text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
 }
+
 #btn-modo-guia.guia-on {
   background: rgba(30, 180, 70, 0.22) !important;
   border-color: rgba(30, 180, 70) !important;
@@ -471,7 +572,8 @@ body {
 
 /* ---------- MODAL DE TEXTO ---------- */
 .modal {
-  display: none; /* Oculto por defecto */
+  display: none;
+  /* Oculto por defecto */
   position: fixed;
   z-index: 1000;
   left: 0;
@@ -489,7 +591,7 @@ body {
   padding: 30px;
   border: 2px solid rgba(0, 229, 255, 0.6);
   border-radius: 15px;
-  box-shadow: 
+  box-shadow:
     0 0 20px rgba(0, 0, 0, 0.5),
     0 0 40px rgba(0, 229, 255, 0.3),
     inset 0 0 20px rgba(0, 229, 255, 0.1);
@@ -591,6 +693,7 @@ body {
     opacity: 0;
     transform: translateY(-50px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -603,42 +706,58 @@ body {
   /* Reducir tamaño del panel general */
   #botones-izquierda,
   #botones-derecha {
-    width: 200px !important; /* Aumentado de 180px a 200px */
-    max-height: 420px !important; /* Reducido de 450px a 420px */
+    width: 200px !important;
+    /* Aumentado de 180px a 200px */
+    max-height: 420px !important;
+    /* Reducido de 450px a 420px */
   }
 
   /* Reducir tamaño del título del panel - SELECTORES ESPECÍFICOS */
   div#botones-izquierda .panel-title,
   div#botones-derecha .panel-title {
-    font-size: 12px !important; /* Aumentado de 8px a 12px */
-    margin-bottom: 0px !important; /* Eliminado margen inferior */
-    padding: 4px 0 0px 0 !important; /* Solo padding arriba */
-    line-height: 1.0 !important; /* Altura de línea mínima */
+    font-size: 12px !important;
+    /* Aumentado de 8px a 12px */
+    margin-bottom: 0px !important;
+    /* Eliminado margen inferior */
+    padding: 4px 0 0px 0 !important;
+    /* Solo padding arriba */
+    line-height: 1.0 !important;
+    /* Altura de línea mínima */
   }
 
   /* También afectar el h2 dentro de los paneles */
   #botones-izquierda h2.panel-title,
   #botones-derecha h2.panel-title {
-    font-size: 12px !important; /* Aumentado de 8px a 12px */
-    margin-bottom: 0px !important; /* Eliminado margen inferior */
-    padding: 4px 0 0px 0 !important; /* Solo padding arriba */
-    line-height: 1.0 !important; /* Altura de línea mínima */
+    font-size: 12px !important;
+    /* Aumentado de 8px a 12px */
+    margin-bottom: 0px !important;
+    /* Eliminado margen inferior */
+    padding: 4px 0 0px 0 !important;
+    /* Solo padding arriba */
+    line-height: 1.0 !important;
+    /* Altura de línea mínima */
   }
 
   /* Reducir tamaño de los botones */
   #botones-izquierda button,
   #botones-derecha button {
-    padding: 4px 6px !important; /* Padding mínimo */
-    font-size: 10px !important; /* Texto más pequeño */
-    margin: 0px 0 !important; /* Sin margen entre botones */
-    min-height: 22px !important; /* Altura mínima */
+    padding: 4px 6px !important;
+    /* Padding mínimo */
+    font-size: 10px !important;
+    /* Texto más pequeño */
+    margin: 0px 0 !important;
+    /* Sin margen entre botones */
+    min-height: 22px !important;
+    /* Altura mínima */
   }
 
   /* Reducir espaciado interno del panel */
   #botones-izquierda .panel-body,
   #botones-derecha .panel-body {
-    padding: 0px !important; /* Sin padding */
-    margin-top: -5px !important; /* Subir botones con margen negativo */
+    padding: 0px !important;
+    /* Sin padding */
+    margin-top: -5px !important;
+    /* Subir botones con margen negativo */
   }
 
   /* Ocultar scrollbars */
@@ -646,7 +765,7 @@ body {
   #botones-derecha::-webkit-scrollbar {
     display: none !important;
   }
-  
+
   #botones-izquierda,
   #botones-derecha {
     overflow: hidden !important;
@@ -662,13 +781,17 @@ body {
 
   /* Reducir tamaño del contador y franja */
   #contador-container {
-    font-size: 10px !important; /* Texto más pequeño */
-    padding: 3px 6px !important; /* Padding reducido */
+    font-size: 10px !important;
+    /* Texto más pequeño */
+    padding: 3px 6px !important;
+    /* Padding reducido */
   }
 
   #franja-contador {
-    height: 20px !important; /* Altura reducida */
-    padding: 2px 8px !important; /* Padding mínimo */
+    height: 20px !important;
+    /* Altura reducida */
+    padding: 2px 8px !important;
+    /* Padding mínimo */
   }
 }
 
@@ -677,10 +800,9 @@ body {
   @page {
     size: A4;
     margin: 0;
-  }mas pequeño
-  
+  }
 
-  body {
+  mas pequeño body {
     background: white;
   }
 
