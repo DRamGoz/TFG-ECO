@@ -25,7 +25,7 @@ class GotaPinturaModo2 {
     // Ahora sí podemos usar funciones de p5.js
     this.radioFinal = random(RADIO_MIN, RADIO_MAX);
     this.pasos = int(random(NUM_VERTICES_MIN, NUM_VERTICES_MAX));
-    this.velocidad = 0.5; // Velocidad adecuada para efecto de zoom
+    this.velocidad = 9.0; // Velocidad del efecto de zoom
     this.offset = random(1000);
     this.color = estado.filtroColor ?
       color(random(255), random(255), random(255), ALPHA_COLOR) :
@@ -95,7 +95,9 @@ class GotaPinturaModo3 {
     if (this.inicializado) return;
 
     // Ahora sí podemos usar funciones de p5.js
-    this.color = generarColorSegunFiltro();
+    this.color = estado.filtroColor ?
+      color(random(255), random(255), random(255), ALPHA_COLOR) :
+      color(random(100, 155), random(100, 155), random(100, 155), ALPHA_COLOR);
 
     // Asignar ancho completo del lienzo cuando marcoW esté disponible
     this.anchura = marcoW;
@@ -369,7 +371,7 @@ class GotaPinturaModo4 {
     this.y = 0;
     this.radio = 0;
     this.radioFinal = 50; // Valor por defecto
-    this.velocidad = 0.5; // Velocidad adecuada para efecto de zoom
+    this.velocidad = 9.0; // Velocidad del efecto de zoom
     this.creciendo = true;
     this.color = { r: 100, g: 100, b: 100, a: 70 }; // Objeto color por defecto
     this.noiseX = 500; // Para movimiento sutil
@@ -1114,11 +1116,9 @@ class GotaPinturaModo1 {
 
     // Ahora sí podemos usar funciones de p5.js
     this.radioFinal = random(40, 120);
-    this.velocidad = 0.5; // Velocidad adecuada para efecto de zoom // Asegurar velocidad rápida también en inicialización
+    this.velocidad = 9.0; // Velocidad del efecto de zoom
     this.ruidoOffset = random(1000);
-    this.color = estado.filtroColor ?
-      color(random(255), random(255), random(255), ALPHA_COLOR) :
-      color(random(100, 155), random(100, 155), random(100, 155), ALPHA_COLOR);
+    this.color = generarColorSegunFiltro();
     this.noiseX = random(1000);
     this.noiseY = random(1000);
 
@@ -2469,7 +2469,12 @@ function añadirNuevasGotas(cantidad) {
 // ==========================
 // FUNCIONES DE BOTONES
 // ==========================
+function reiniciarColorAModoRGB() {
+  estado.modoColor = 'rgb';
+}
+
 function activarModo1() {
+  reiniciarColorAModoRGB();
   estado.modo = "modo1";
   console.log("🌟 Modo 1 activado");
 
@@ -2487,6 +2492,7 @@ function activarModo1() {
 }
 
 function activarModo2() {
+  reiniciarColorAModoRGB();
   estado.modo = "modo2";
   console.log("🌟 Modo 2 activado");
 
@@ -2504,6 +2510,7 @@ function activarModo2() {
 }
 
 function activarModo3() {
+  reiniciarColorAModoRGB();
   estado.modo = "modo3";
   console.log("🌟 Modo 3 activado");
 
@@ -2521,6 +2528,7 @@ function activarModo3() {
 }
 
 function activarModo0() {
+  reiniciarColorAModoRGB();
   console.log("🌟🌟🌟 BOTÓN MODO 0 PRESIONADO 🌟🌟🌟");
   console.log("🌟 Estado antes de cambiar:", estado.modo, estado.mostrarTexto, estado.mostrarContador);
 
@@ -2632,6 +2640,7 @@ function cargarDatosParaModo0() {
 }
 
 function activarModo4() {
+  reiniciarColorAModoRGB();
   estado.modo = "modo4";
 
   if (gotas.length > 0) {
@@ -2646,6 +2655,7 @@ function activarModo4() {
 }
 
 function activarModo5() {
+  reiniciarColorAModoRGB();
   estado.modo = "modo5";
 
   if (gotas.length > 0) {
@@ -2660,6 +2670,7 @@ function activarModo5() {
 }
 
 function activarModo6() {
+  reiniciarColorAModoRGB();
   estado.modo = "modo6";
 
   if (gotas.length > 0) {
@@ -2674,6 +2685,7 @@ function activarModo6() {
 }
 
 function activarModo7() {
+  reiniciarColorAModoRGB();
   estado.modo = "modo7";
 
   if (gotas.length > 0) {
@@ -2688,6 +2700,7 @@ function activarModo7() {
 }
 
 function activarModo8() {
+  reiniciarColorAModoRGB();
   estado.modo = "modo8";
 
   if (gotas.length > 0) {
@@ -2702,6 +2715,7 @@ function activarModo8() {
 }
 
 function activarModo9() {
+  reiniciarColorAModoRGB();
   estado.modo = "modo9";
 
   if (gotas.length > 0) {
@@ -3817,12 +3831,70 @@ function posicionarPanelesBotones() {
   // Posicionar botón Jelly junto al borde derecho del lienzo
   const btnJelly = document.getElementById('btn-jelly');
   if (btnJelly) {
-    btnJelly.style.left = derechaX + 'px';
+    const offsetJelly = windowWidth >= 1920 ? 88 : -4;
+    btnJelly.style.left = (derechaX + 18) + 'px';
     btnJelly.style.right = 'auto';
-    btnJelly.style.top = (marcoY + 70) + 'px';
+    btnJelly.style.top = (marcoY + offsetJelly) + 'px';
+
+    const btnTooltips = document.getElementById('btn-tooltips');
+    if (btnTooltips) {
+      btnTooltips.style.left = (derechaX + 72) + 'px';
+      btnTooltips.style.right = 'auto';
+      btnTooltips.style.top = (marcoY + offsetJelly) + 'px';
+    }
+
+    const btnInfo = document.getElementById('btn-info');
+    if (btnInfo) {
+      btnInfo.style.left = (derechaX + 126) + 'px';
+      btnInfo.style.right = 'auto';
+      btnInfo.style.top = (marcoY + offsetJelly) + 'px';
+    }
   }
 
   // console.log(`📍 Paneles deslizándose elegantemente: Izquierda=${izquierdaX}px, Derecha=${derechaX}px`);
+}
+
+function alternarTooltips() {
+  const btnTooltips = document.getElementById('btn-tooltips');
+  const tooltipsActivos = btnTooltips?.dataset.activos !== 'false';
+  const elementosConTooltip = document.querySelectorAll('[title], [data-tooltip]');
+
+  elementosConTooltip.forEach(el => {
+    if (el === btnTooltips) return;
+
+    if (tooltipsActivos) {
+      if (el.title) {
+        el.dataset.tooltip = el.title;
+        el.removeAttribute('title');
+      }
+    } else if (el.dataset.tooltip) {
+      el.title = el.dataset.tooltip;
+    }
+  });
+
+  if (btnTooltips) {
+    const nuevosActivos = !tooltipsActivos;
+    btnTooltips.dataset.activos = String(nuevosActivos);
+    btnTooltips.classList.toggle('tooltips-desactivados', !nuevosActivos);
+    btnTooltips.title = nuevosActivos ? 'Desactivar tooltips' : 'Activar tooltips';
+    btnTooltips.setAttribute('aria-label', btnTooltips.title);
+  }
+}
+
+function abrirModalInfo() {
+  const modal = document.getElementById('modal-info');
+  if (modal) {
+    modal.style.display = 'block';
+  }
+}
+
+function cerrarModalInfo(event) {
+  if (event && event.target.id !== 'modal-info') return;
+
+  const modal = document.getElementById('modal-info');
+  if (modal) {
+    modal.style.display = 'none';
+  }
 }
 
 // Función para detectar scroll del mouse
