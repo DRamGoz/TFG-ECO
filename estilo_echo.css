@@ -42,7 +42,7 @@ body {
   overflow: hidden;
   background: var(--bg-deep);
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  color: var(--text-primary);
+  color: var(--accent-cyan);
   -webkit-font-smoothing: antialiased;
   position: relative;
 }
@@ -56,8 +56,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 60px;
-  height: 60px;
+  width: 46px;
+  height: 46px;
   border-radius: 12px;
   background: var(--glass-bg);
   backdrop-filter: blur(var(--glass-blur));
@@ -73,8 +73,8 @@ body {
 }
 
 #btn-jelly img {
-  width: 58px;
-  height: 58px;
+  width: 42px;
+  height: 42px;
   object-fit: contain;
   pointer-events: none;
 }
@@ -89,6 +89,115 @@ body {
 }
 
 #btn-jelly:active {
+  transform: scale(0.95);
+}
+
+/* ---------- BOTON TOOLTIPS ---------- */
+#btn-tooltips {
+  position: fixed;
+  top: 74px;
+  right: 20px;
+  z-index: 110;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 2px solid rgba(0, 229, 255, 0.4);
+  box-shadow:
+    0 0 10px rgba(0, 229, 255, 0.3),
+    0 0 20px rgba(0, 229, 255, 0.15),
+    inset 0 0 8px rgba(0, 229, 255, 0.1);
+  color: var(--accent-cyan);
+  cursor: pointer;
+  line-height: 1;
+  transition: all 0.3s ease;
+}
+
+#btn-tooltips svg {
+  width: 30px;
+  height: 30px;
+  display: block;
+  overflow: visible;
+}
+
+#btn-tooltips .tooltip-cursor,
+#btn-tooltips .tooltip-note,
+#btn-tooltips .tooltip-line {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+#btn-tooltips .tooltip-note {
+  fill: rgba(0, 229, 255, 0.12);
+}
+
+#btn-tooltips.tooltips-desactivados .tooltip-note {
+  fill: rgba(224, 64, 251, 0.12);
+}
+
+#btn-tooltips:hover {
+  transform: scale(1.1);
+  border-color: rgba(0, 229, 255, 0.8);
+  box-shadow:
+    0 0 15px rgba(0, 229, 255, 0.5),
+    0 0 30px rgba(0, 229, 255, 0.25),
+    0 0 40px rgba(224, 64, 251, 0.2);
+}
+
+#btn-tooltips:active {
+  transform: scale(0.95);
+}
+
+#btn-tooltips.tooltips-desactivados {
+  opacity: 0.45;
+  color: var(--accent-magenta);
+}
+
+#btn-info {
+  position: fixed;
+  top: 74px;
+  right: 20px;
+  z-index: 110;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 2px solid rgba(0, 229, 255, 0.4);
+  box-shadow:
+    0 0 10px rgba(0, 229, 255, 0.3),
+    0 0 20px rgba(0, 229, 255, 0.15),
+    inset 0 0 8px rgba(0, 229, 255, 0.1);
+  color: var(--accent-cyan);
+  cursor: pointer;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1;
+  transition: all 0.3s ease;
+}
+
+#btn-info:hover {
+  transform: scale(1.1);
+  border-color: rgba(0, 229, 255, 0.8);
+  box-shadow:
+    0 0 15px rgba(0, 229, 255, 0.5),
+    0 0 30px rgba(0, 229, 255, 0.25),
+    0 0 40px rgba(224, 64, 251, 0.2);
+}
+
+#btn-info:active {
   transform: scale(0.95);
 }
 
@@ -608,6 +717,31 @@ body {
   font-weight: 600;
   margin-bottom: 20px;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.modal-info-content {
+  max-width: 560px;
+  text-align: left;
+}
+
+.modal-info-content h3 {
+  text-align: center;
+}
+
+.info-app {
+  color: rgba(255, 255, 255, 0.86);
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.info-app p {
+  margin: 8px 0;
+}
+
+.info-app strong {
+  color: rgba(0, 229, 255, 0.92);
+  font-weight: 600;
 }
 
 .form-group {
