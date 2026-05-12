@@ -1,29 +1,191 @@
+/* ---------- VARIABLES ---------- */
+:root {
+  --bg-deep: #0a0a0f;
+  --glass-bg: rgba(40, 40, 55, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-blur: 22px;
+  --glass-radius: 16px;
+  --accent-cyan: #00e5ff;
+  --accent-magenta: #e040fb;
+  --text-primary: #eaeaea;
+}
+
 body {
   margin: 0;
   width: 100vw;
   height: 100vh;
-  background: #111;
+  background: var(--bg-deep);
   overflow: hidden;
-  font-family: Arial, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Video tutorial explicativo - Ocupa todo el contenedor */
+.video-tutorial {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  z-index: 1;
+  pointer-events: auto; /* Activar controles del video */
+  border-radius: calc(var(--glass-radius) - 4px);
+  min-width: 100%;
+  min-height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* Animación de pulso para el borde */
+@keyframes borderPulse {
+  0% {
+    border-image: linear-gradient(135deg, rgba(0, 229, 255, 0.9), rgba(224, 64, 251, 0.9)) 1;
+    box-shadow: 
+      0 0 10px rgba(0, 229, 255, 0.3),
+      0 0 20px rgba(0, 229, 255, 0.15),
+      0 20px 60px rgba(0, 0, 0, 0.75);
+  }
+  50% {
+    border-image: linear-gradient(135deg, rgba(0, 229, 255, 1), rgba(224, 64, 251, 1)) 1;
+    box-shadow: 
+      0 0 20px rgba(0, 229, 255, 0.6),
+      0 0 40px rgba(224, 64, 251, 0.4),
+      0 20px 60px rgba(0, 0, 0, 0.75);
+  }
+  100% {
+    border-image: linear-gradient(135deg, rgba(0, 229, 255, 0.9), rgba(224, 64, 251, 0.9)) 1;
+    box-shadow: 
+      0 0 10px rgba(0, 229, 255, 0.3),
+      0 0 20px rgba(0, 229, 255, 0.15),
+      0 20px 60px rgba(0, 0, 0, 0.75);
+  }
+}
+
+/* Contenedor de video - Con marco glassmorphism y pulso */
+.video-container {
+  position: absolute;
+  top: 46%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 95%;
+  max-width: 1400px;
+  height: 60vh;
+  z-index: 1;
+  pointer-events: auto;
+  
+  /* Glass effect de ECO */
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 4px solid;
+  border-image: linear-gradient(135deg, rgba(0, 229, 255, 0.9), rgba(224, 64, 251, 0.9)) 1;
+  border-radius: var(--glass-radius);
+  box-shadow: 
+    0 0 10px rgba(0, 229, 255, 0.3), /* Glow cyan suave */
+    0 0 20px rgba(0, 229, 255, 0.15), /* Glow cyan exterior */
+    0 20px 60px rgba(0, 0, 0, 0.75); /* Sombra profunda */
+  animation: borderPulse 3s ease-in-out infinite;
+}
+
+/* Monitores TV (≥1920px) - proporción exacta 16:9 */
+@media (min-width: 1920px) {
+  .video-tutorial {
+    width: 100%;
+    height: 100%;
+    object-fit: cover !important; /* Llenar todo el contenedor */
+  }
+  
+  .video-container {
+    width: 95%;
+    max-width: 1400px;
+    height: 80vh; /* Altura aumentada para TV */
+  }
+}
+
+/* Monitores PC (desktop) - rango específico */
+@media (min-width: 1366px) and (max-width: 1919px) {
+  .video-tutorial {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .video-container {
+    width: 55%;
+    max-width: 800px;
+    height: 75vh;
+  }
 }
 
 #app {
   position: relative;
   width: 100%;
   height: 100%;
+  z-index: 5;
 }
 
 canvas {
   display: block;
+  opacity: 1;
+  z-index: 0;
+}
+
+/* ---------- LOGO PANTALLA ---------- */
+#logo-pantalla {
+  position: fixed;
+  top: 28px;
+  left: 28px;
+  z-index: 30;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.5; /* Transparencia del 50% */
+  transition: all 0.3s ease;
+}
+
+#logo-pantalla img {
+  width: 180px;
+  height: auto;
+  display: block;
+}
+
+/* Responsive para logo-pantalla */
+@media (max-width: 1366px) {
+  #logo-pantalla {
+    top: 20px;
+    left: 20px;
+  }
+  #logo-pantalla img {
+    width: 160px;
+  }
+}
+
+@media (max-width: 1024px) {
+  #logo-pantalla {
+    top: 16px;
+    left: 16px;
+  }
+  #logo-pantalla img {
+    width: 140px;
+  }
+}
+
+@media (max-width: 768px) {
+  #logo-pantalla {
+    top: 12px;
+    left: 12px;
+  }
+  #logo-pantalla img {
+    width: 120px;
+  }
 }
 
 /* --- CONTENEDOR PARA BOTÓN Y TEXTO --- */
 #buttonContainer {
   position: absolute;
-  top: 50%; /* ajusta este valor para mover todo hacia arriba o abajo */
+  top: 90%; /* ajusta este valor para mover todo hacia arriba o abajo */
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
+  z-index: 10;
 }
 
 /* --- TEXTO MOTIVADOR SOBRE EL BOTÓN --- */
@@ -43,26 +205,46 @@ canvas {
   100% { opacity: 1; transform: scale(1.02); }
 }
 
-/* --- BOTÓN ESTILO CIRCULAR --- */
+/* --- BOTÓN ESTILO RECTANGULAR --- */
 #sendBtn {
-  width: 240px;   /* ancho del botón */
-  height: 240px;  /* alto del botón */
-  border-radius: 50%;
-  border: none;
-  background-color: #0096ff;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
+  background: linear-gradient(135deg, rgba(0, 229, 255, 0.15), rgba(0, 195, 255, 0.08));
+  color: #eaeaea;
+  border: 2px solid rgba(0, 229, 255, 1.0);
+  width: 200px;   /* ancho del botón - más pequeño */
+  height: 50px;   /* alto del botón - más pequeño */
+  border-radius: 8px;  /* bordes redondeados suaves */
+  padding: 8px 12px;
+  box-shadow:
+    0 4px 12px rgb(0, 0, 0),
+    inset 0 0 25px rgba(0, 229, 255, 0.3),
+    0 0 20px rgba(0, 229, 255, 0.6), /* Efecto neon cyan más intenso */
+    0 0 40px rgba(0, 195, 255, 0.4), /* Efecto neon turquesa */
+    0 0 60px rgba(224, 64, 251, 0.2); /* Efecto neon magenta */
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
   cursor: pointer;
-  box-shadow: 0 0 20px rgba(0, 150, 255, 0.5);
-  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.28s ease,
+    transform 0.18s ease;
+  opacity: 0.9;
 }
 
-/* Hover: halo difuso */
+/* Hover: efecto glassmorphism neon */
 #sendBtn:hover {
+  background: linear-gradient(135deg, rgba(0, 229, 255, 0.25), rgba(0, 195, 255, 0.15));
+  border-color: rgba(0, 255, 255, 1.0);
+  box-shadow:
+    0 0 25px rgba(0, 229, 255, 0.8),
+    0 0 50px rgba(0, 195, 255, 0.6),
+    0 0 80px rgba(224, 64, 251, 0.3);
   transform: scale(1.05);
-  box-shadow: 0 0 40px rgba(0, 255, 150, 0.7);
-  background-color: #00ff96;
+  opacity: 1;
 }
 
 /* Presionado */
@@ -70,6 +252,86 @@ canvas {
   transform: scale(0.95);
   background-color: #00c2ff;
   box-shadow: 0 0 15px rgba(0, 200, 255, 0.8);
+}
+
+/* ---------- RESPONSIVE DESIGN ---------- */
+
+/* Monitores portátiles y pantallas medianas */
+@media (max-width: 1365px) {
+  .video-tutorial {
+    width: 65%;
+    max-width: 850px;
+    height: 50vh;
+    top: 46%;
+  }
+  
+  .video-container {
+    width: 65%;
+    max-width: 850px;
+    height: 50vh;
+    top: 46%;
+  }
+}
+
+/* Tablets y pantallas más pequeñas */
+@media (max-width: 1024px) {
+  .video-tutorial {
+    width: 90%;
+    max-width: 900px;
+    height: 55vh;
+  }
+  
+  .video-container {
+    width: 90%;
+    max-width: 900px;
+    height: 55vh;
+  }
+}
+
+/* Móviles grandes y tablets pequeñas */
+@media (max-width: 768px) {
+  .video-tutorial {
+    width: 95%;
+    max-width: 600px;
+    height: 50vh;
+    top: 40%;
+  }
+  
+  .video-container {
+    width: 95%;
+    max-width: 600px;
+    height: 50vh;
+    top: 40%;
+  }
+  
+  #sendBtn {
+    width: 250px;
+    height: 60px;
+    font-size: 16px;
+  }
+}
+
+/* Móviles */
+@media (max-width: 480px) {
+  .video-tutorial {
+    width: 98%;
+    max-width: 400px;
+    height: 40vh;
+    top: 35%;
+  }
+  
+  .video-container {
+    width: 98%;
+    max-width: 400px;
+    height: 40vh;
+    top: 35%;
+  }
+  
+  #sendBtn {
+    width: 200px;
+    height: 50px;
+    font-size: 14px;
+  }
 }
 
 

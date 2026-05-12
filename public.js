@@ -1,23 +1,123 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpnsHnDcAIKQ-SWU8FoIpdu-PUwO0KsdIk3klratrjgCHfskg/exec";
 
-let stars = [];        // fondo de estrellas
+// Variables de fondo artístico espectacular (sistema ECO)
+let splatsFondo = [];
+let particulasFondo = [];
 let userStar = null;   // estrella única del usuario
 let showUserText = false; // controlar el texto
 let textTimer = 0;     // temporizador del texto
-const numStars = 200;  // cantidad de estrellas de fondo
+
+// Clases para el sistema de fondo artístico
+class SplatFondo {
+  constructor() {
+    this.x = random(width);
+    this.y = random(height);
+    this.size = random(80, 800);
+    this.alpha = random(1, 5); // Reducido de 3-10 a 1-5 para más difuminación
+    this.color = this.colorNeonAleatorio();
+    this.offset = random(1000);
+  }
+  
+  colorNeonAleatorio() {
+    const coloresNeon = [
+      color(0, 229, 255, this.alpha),     // Cyan
+      color(224, 64, 251, this.alpha),    // Magenta  
+      color(255, 0, 128, this.alpha),      // Rosa
+      color(128, 0, 255, this.alpha),     // Púrpura
+      color(0, 255, 128, this.alpha)       // Verde menta
+    ];
+    return random(coloresNeon);
+  }
+  
+  mostrar() {
+    push();
+    noStroke();
+    fill(this.color);
+    
+    // Aplicar blur al splat
+    drawingContext.filter = 'blur(12px)';
+    
+    let noiseScale = 0.01;
+    let vertices = 8;
+    beginShape();
+    for (let i = 0; i < vertices; i++) {
+      let angle = (TWO_PI / vertices) * i;
+      let noiseOffset = noise(this.x * noiseScale + this.offset, this.y * noiseScale + this.offset, frameCount * 0.001);
+      let radiusVariation = map(noiseOffset, 0, 1, this.size * 0.7, this.size * 1.3);
+      let px = this.x + cos(angle) * radiusVariation;
+      let py = this.y + sin(angle) * radiusVariation;
+      vertex(px, py);
+    }
+    endShape(CLOSE);
+    
+    // Resetear el filtro para no afectar a otros elementos
+    drawingContext.filter = 'none';
+    pop();
+  }
+}
+
+class ParticulaFondo {
+  constructor() {
+    this.x = random(width);
+    this.y = random(height);
+    this.size = random(1, 4);
+    this.alpha = random(50, 110);
+    this.color = this.colorNeonAleatorio();
+    this.vx = random(-0.5, 0.5);
+    this.vy = random(-0.5, 0.5);
+  }
+  
+  colorNeonAleatorio() {
+    const coloresNeon = [
+      color(0, 229, 255, this.alpha),     // Cyan
+      color(224, 64, 251, this.alpha),    // Magenta
+      color(255, 0, 128, this.alpha),      // Rosa
+      color(128, 0, 255, this.alpha),     // Púrpura
+      color(0, 255, 128, this.alpha)       // Verde menta
+    ];
+    return random(coloresNeon);
+  }
+  
+  actualizar() {
+    this.x += this.vx;
+    this.y += this.vy;
+    
+    // Rebotar en bordes
+    if (this.x < 0 || this.x > width) this.vx *= -1;
+    if (this.y < 0 || this.y > height) this.vy *= -1;
+  }
+  
+  mostrar() {
+    push();
+    noStroke();
+    fill(this.color);
+    ellipse(this.x, this.y, this.size);
+    pop();
+  }
+}
+
+function inicializarFondoArtistico() {
+  splatsFondo = [];
+  particulasFondo = [];
+
+  // Crear splats grandes y espectaculares - 15 splats
+  for (let i = 0; i < 15; i++) {
+    let splat = new SplatFondo();
+    splatsFondo.push(splat);
+  }
+  
+  // Crear partículas cinéticas - 50 partículas
+  for (let i = 0; i < 50; i++) {
+    let particula = new ParticulaFondo();
+    particulasFondo.push(particula);
+  }
+}
 
 function setup() {
   createCanvas(windowWidth, windowHeight).parent("app");
 
-  // generar estrellas de fondo
-  for (let i = 0; i < numStars; i++) {
-    stars.push({
-      x: random(width),
-      y: random(height),
-      size: random(1, 5),
-      alpha: random(50, 200)
-    });
-  }
+  // Inicializar fondo artístico espectacular (sistema ECO)
+  inicializarFondoArtistico();
 
   const btn = document.getElementById("sendBtn");
   const infoText = document.getElementById("infoText");
@@ -40,24 +140,23 @@ function setup() {
       textTimer = millis();
 
       // desaparecer botón y texto principal
-      [btn,infoText].forEach(el => {
+      [btn, infoText].filter(Boolean).forEach(el => {
         el.style.transition = "opacity 1s ease";
         el.style.opacity = 0;
         setTimeout(() => el.style.display = "none", 1000);
       });
+
+      // Redirigir a la web de ECO después de 2 segundos
+      setTimeout(() => {
+        window.location.href = "https://dramgoz.github.io/TFG-ECO/index_echo.html"; // <-- REEMPLAZAR ESTA URL
+      }, 2000);
     }
   });
 }
 
 function draw() {
-  background(0);
-
-  // dibujar estrellas de fondo
-  noStroke();
-  for (let s of stars) {
-    fill(255, s.alpha);
-    ellipse(s.x, s.y, s.size);
-  }
+  // Fondo artístico espectacular (sistema ECO)
+  dibujarFondoArtisticoDeepDark();
 
   // dibujar halo pulsante de la estrella del usuario
   if (userStar) {
@@ -82,13 +181,34 @@ function draw() {
     textAlign(LEFT, CENTER);
     textSize(10);
     text("Gracias", userStar.x + 15, userStar.y);
-
+    
     // desaparecer texto tras 5 segundos
     if (millis() - textTimer > 5000) {
       showUserText = false;
     }
   }
 }
+
+function dibujarFondoArtisticoDeepDark() {
+  // Fondo oscuro profundo como ECO
+  background(20, 20, 30);
+
+  // Dibujar splatters decorativos
+  if (splatsFondo.length > 0) {
+    splatsFondo.forEach(s => {
+      s.mostrar();
+    });
+  }
+
+  // Dibujar partículas cinéticas
+  if (particulasFondo.length > 0) {
+    particulasFondo.forEach(p => {
+      p.actualizar();
+      p.mostrar();
+    });
+  }
+}
+
 
 
 function enviarDato() {

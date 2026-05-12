@@ -3,24 +3,36 @@
 <head>
   <meta charset="utf-8" />
   <title>PUBLIC</title>
-  <link rel="stylesheet" href="estilo_public.css">
+  <link rel="stylesheet" href="estilo_public.css?v=2">
   <script src="https://cdn.jsdelivr.net/npm/p5@1.11.7/lib/p5.js"></script>
   <script src="public.js" defer></script>
 </head>
 <body>
 
+  <!-- Logo ECODIV en misma posición que ECO -->
+  <div id="logo-pantalla">
+    <img src="logotipo_ECODIV.png" alt="ECODIV Logo">
+  </div>
+
   <div id="app">
+    <div class="video-container">
+  <video class="video-tutorial" controls autoplay muted loop>
+    <source src="tutorial_ecodiv.mp4" type="video/mp4">
+    Tu navegador no soporta videos.
+  </video>
+</div>
     <div id="buttonContainer">
-    <p id="infoText">
+  <!--
+   <p id="infoText">
       Con cada click construimos juntos un nuevo UNIVERSO.<br>
       Deja tu HUELLA y forma parte de esta experiencia interactiva.
     </p>
-    <button id="sendBtn">DEJAR HUELLA</button>
+  -->
+    <button id="sendBtn" onclick="window.location.href='https://dramgoz.github.io/TFG-ECO/index_echo.html'">SKIP INTRO</button>
   </div>
 
 </body>
 </html>
-
 
 
 
