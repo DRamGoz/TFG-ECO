@@ -35,25 +35,33 @@
       <h2 class="panel-title">FUNCIONES</h2>
     </div>
     <div class="panel-content">
-      <button id="btn-formato" class="btn-panel" onclick="rotarLienzo()">⭐ Formato</button>
-      <button id="btn-texto" class="btn-panel" onclick="alternarTexto()">𝑻𝑻 Titulo / Subtitulo</button>
-      <button id="btn-cargar-datos" class="btn-panel" onclick="cargarInteracciones()">🔄 Cargar interacciones</button>
-      <button id="btn-vista-3d" class="btn-panel" onclick="activarVista3D()">🧊 Vista 3D · Mockup</button>
-      <button id="btn-vista-2d" class="btn-panel" style="display: none;" onclick="window.location.reload()">📱 Vista 2D · Edicion</button>
-      <button id="btn-editar-texto" class="btn-panel" onclick="editarTextoUsuario()">✏️ Editar texto</button>
-      <button id="btn-color" class="btn-panel" onclick="alternarFiltroColor()">🎨 Color
+      <button id="btn-formato" class="btn-panel" onclick="rotarLienzo()" title="Cambiar formato del lienzo">⭐ Formato</button>
+      <button id="btn-texto" class="btn-panel" onclick="alternarTexto()" title="Mostrar u ocultar titulo y subtitulo">𝑻𝑻 Titulo / Subtitulo</button>
+      <button id="btn-cargar-datos" class="btn-panel" onclick="cargarInteracciones()" title="Cargar interacciones">🔄 Cargar interacciones</button>
+      <button id="btn-vista-3d" class="btn-panel" onclick="activarVista3D()" title="Activar vista 3D mockup">🧊 Vista 3D · Mockup</button>
+      <button id="btn-vista-2d" class="btn-panel" style="display: none;" onclick="window.location.reload()" title="Volver a vista 2D de edicion">📱 Vista 2D · Edicion</button>
+      <button id="btn-editar-texto" class="btn-panel" onclick="editarTextoUsuario()" title="Editar titulo y subtitulo">✏️ Editar texto</button>
+      <button id="btn-color" class="btn-panel" onclick="alternarFiltroColor()" title="Activar o desactivar filtro de color">🎨 Color
         
       </button>
-      <button id="btn-fondo" class="btn-panel" onclick="alternarFondo()">🌗 Fondo B / N</button>
-      <button id="btn-contador" class="btn-panel" onclick="alternarContador()">🧑‍🧑‍🧒‍🧒 Nº Usuarios</button>
-      <button id="btn-cargar-mascara" class="btn-panel" onclick="abrirSelectorMascara()">📂 Cargar mascara</button>
+      <button id="btn-fondo" class="btn-panel" onclick="alternarFondo()" title="Cambiar fondo blanco o negro">🌗 Fondo B / N</button>
+      <button id="btn-contador" class="btn-panel" onclick="alternarContador()" title="Mostrar u ocultar numero de usuarios">🧑‍🧑‍🧒‍🧒 Nº Usuarios</button>
+      <button id="btn-cargar-mascara" class="btn-panel" onclick="abrirSelectorMascara()" title="Cargar mascara desde archivo">📂 Cargar mascara</button>
     </div>
   </div>
 
   <!-- Botón Jelly (superior derecha) -->
-  <a id="btn-jelly" href="index.html" title="Ir a inicio">
+  <a id="btn-jelly" href="index.html" title="Volver al tutorial">
     <img src="jelly.png" alt="Jelly">
   </a>
+  <button id="btn-tooltips" type="button" onclick="alternarTooltips()" title="Desactivar tooltips" aria-label="Desactivar tooltips">
+    <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+      <path class="tooltip-cursor" d="M8 4L22 18L15 19L12 27L8 4Z" />
+      <path class="tooltip-note" d="M17 5H28V15H22L18 19V15H17V5Z" />
+      <path class="tooltip-line" d="M20 8H25M20 11H24" />
+    </svg>
+  </button>
+  <button id="btn-info" type="button" onclick="abrirModalInfo()" title="Informacion de la aplicacion" aria-label="Informacion de la aplicacion">i</button>
 
   <!-- Panel derecho -->
   <div id="botones-derecha" class="panel">
@@ -61,15 +69,15 @@
       <h2 class="panel-title">MODOS</h2>
     </div>
     <div class="panel-content">
-      <button id="btn-modo1" class="btn-panel" onclick="activarModo1()">💧 MODO 1 · Acrilico</button>
-      <button id="btn-modo2" class="btn-panel" onclick="activarModo2()">💦 MODO 2 · Acuarela</button>
-      <button id="btn-modo3" class="btn-panel" onclick="activarModo3()">➿ MODO 3 · Ondas</button>
-      <button id="btn-modo4" class="btn-panel" onclick="activarModo4()">🔺 MODO 4 · Triangulos</button>
-      <button id="btn-modo5" class="btn-panel" onclick="activarModo5()">🟡 MODO 5 · Círculos</button>
-      <button id="btn-modo6" class="btn-panel" onclick="activarModo6()">🟩 MODO 6 · Cuadrados</button>
-      <button id="btn-modo7" class="btn-panel" onclick="activarModo7()">🔠 MODO 7 · Letras</button>
-      <button id="btn-modo8" class="btn-panel" onclick="activarModo8()">🗯️ MODO 8 · Miscelánea</button>
-      <button id="btn-modo9" class="btn-panel" onclick="activarModo9()">🌟 MODO 9 · Estrellas</button>
+      <button id="btn-modo1" class="btn-panel" onclick="activarModo1()" title="Activar modo acrilico">💧 MODO 1 · Acrilico</button>
+      <button id="btn-modo2" class="btn-panel" onclick="activarModo2()" title="Activar modo acuarela">💦 MODO 2 · Acuarela</button>
+      <button id="btn-modo3" class="btn-panel" onclick="activarModo3()" title="Activar modo ondas">➿ MODO 3 · Ondas</button>
+      <button id="btn-modo4" class="btn-panel" onclick="activarModo4()" title="Activar modo triangulos">🔺 MODO 4 · Triangulos</button>
+      <button id="btn-modo5" class="btn-panel" onclick="activarModo5()" title="Activar modo circulos">🟡 MODO 5 · Círculos</button>
+      <button id="btn-modo6" class="btn-panel" onclick="activarModo6()" title="Activar modo cuadrados">🟩 MODO 6 · Cuadrados</button>
+      <button id="btn-modo7" class="btn-panel" onclick="activarModo7()" title="Activar modo letras">🔠 MODO 7 · Letras</button>
+      <button id="btn-modo8" class="btn-panel" onclick="activarModo8()" title="Activar modo miscelanea">🗯️ MODO 8 · Miscelánea</button>
+      <button id="btn-modo9" class="btn-panel" onclick="activarModo9()" title="Activar modo estrellas">🌟 MODO 9 · Estrellas</button>
     </div>
   </div>
 
@@ -91,6 +99,25 @@
       <div class="modal-buttons">
         <button id="btn-guardar-texto" class="btn-primary" onclick="guardarTexto()">💾 Guardar</button>
         <button id="btn-cancelar-texto" class="btn-secondary" onclick="cerrarModalTexto()">❌ Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de información -->
+  <div id="modal-info" class="modal" onclick="cerrarModalInfo(event)">
+    <div class="modal-content modal-info-content" onclick="event.stopPropagation()">
+      <h3>ECODIVTool</h3>
+      <div class="info-app">
+        <p><strong>Version:</strong> 1.0.0 (Beta)</p>
+        <p><strong>Aplicacion:</strong> Arte digital interactivo generativo</p>
+        <p><strong>Autor:</strong> David Ramgoz</p>
+        <p><strong>Año:</strong> 2026</p>
+        <p><strong>Nº Funciones:</strong> 9 (1 - 9)</p>
+        <p><strong>Nº Modos:</strong> 9 (1 - 9)</p>
+        <p><strong>Elementos Ayuda (U/X):</strong> 3 Tutorial, Tooltips, Info. Version</p>
+      </div>
+      <div class="modal-buttons">
+        <button type="button" class="btn-secondary" onclick="cerrarModalInfo()">Cerrar</button>
       </div>
     </div>
   </div>
