@@ -1215,6 +1215,8 @@ window.estado = {
 };
 
 const API_URL = "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpnsHnDcAIKQ-SWU8FoIpdu-PUwO0KsdIk3klratrjgCHfskg/exec";
+const PASSWORD_MODO0 = "ecodiv0";
+const TEST_EXPORTACION_URL = "https://script.google.com/macros/s/AKfycbxHOBb4ofglXhYDES8nGY_m-lEcdG6dzg1nQJIjDaETLLuYIYOZuQv0LhWkf7ljRqJoSw/exec";
 
 let gotas = [];
 let idsExistentes = new Set(); // Para evitar duplicados
@@ -1226,6 +1228,8 @@ let sincronizacionInicialDatos = false; // Control de sincronización inicial
 let intervaloActualizacion = null;
 let ultimaActualizacion = 0;
 const INTERVALO_ACTUALIZACION = 3000; // 3 segundos
+let testExportacionEnviado = false;
+let exportacionPendiente = null;
 
 // Variables globales para el marco del lienzo
 let marcoX, marcoY, marcoW, marcoH; // Controla si las gotas se muestran o no
@@ -1274,6 +1278,8 @@ function setup() {
 
     // Inicializar fondo artístico espectacular
     inicializarFondoArtistico();
+
+    restaurarEstadoTrasVista3D();
 
     // Forzar posicionamiento inmediato de paneles ANTES de cualquier renderizado
     setTimeout(() => {
@@ -2527,6 +2533,83 @@ function activarModo3() {
   }
 }
 
+function abrirModalPasswordModo0() {
+  if (estado.modo === "modo0") {
+    activarModo0();
+    return;
+  }
+
+  const modal = document.getElementById('modal-password-modo0');
+  const input = document.getElementById('input-password-modo0');
+  const error = document.getElementById('error-password-modo0');
+
+  if (error) error.textContent = '';
+  if (input) input.value = '';
+  if (modal) modal.style.display = 'block';
+  setTimeout(() => input?.focus(), 50);
+}
+
+function cerrarModalPasswordModo0(event) {
+  if (event && event.target.id !== 'modal-password-modo0') return;
+
+  const modal = document.getElementById('modal-password-modo0');
+  const input = document.getElementById('input-password-modo0');
+  const error = document.getElementById('error-password-modo0');
+
+  if (modal) modal.style.display = 'none';
+  if (input) input.value = '';
+  if (error) error.textContent = '';
+}
+
+function enviarPasswordModo0(event) {
+  if (event.key === 'Enter') {
+    validarPasswordModo0();
+  }
+}
+
+function validarPasswordModo0() {
+  const input = document.getElementById('input-password-modo0');
+  const error = document.getElementById('error-password-modo0');
+  const password = input ? input.value.trim() : '';
+
+  if (password !== PASSWORD_MODO0) {
+    if (error) error.textContent = 'Password incorrecto.';
+    if (input) {
+      input.value = '';
+      input.focus();
+    }
+    return;
+  }
+
+  cerrarModalPasswordModo0();
+  activarModo0();
+}
+
+function deshabilitarBotonesModo0() {
+  const botonesFunciones = [
+    'btn-formato',
+    'btn-texto',
+    'btn-editar-texto',
+    'btn-cargar-mascara'
+  ];
+
+  botonesFunciones.forEach(id => {
+    const boton = document.getElementById(id);
+    if (!boton) return;
+
+    boton.disabled = true;
+    boton.style.opacity = '0.3';
+    boton.style.cursor = 'not-allowed';
+  });
+
+  const botonesModos = document.querySelectorAll('#botones-derecha button');
+  botonesModos.forEach(boton => {
+    boton.disabled = true;
+    boton.style.opacity = '0.3';
+    boton.style.cursor = 'not-allowed';
+  });
+}
+
 function activarModo0() {
   reiniciarColorAModoRGB();
   console.log("🌟🌟🌟 BOTÓN MODO 0 PRESIONADO 🌟🌟🌟");
@@ -2563,6 +2646,9 @@ function activarModo0() {
   // Ocultar título y contador
   estado.mostrarTexto = false;
   estado.mostrarContador = false;
+
+  // Bloquear controles que no deben usarse durante el Modo 0
+  deshabilitarBotonesModo0();
 
   // Cargar datos del sheet para Modo 0
   let btnCargar = document.getElementById('btn-cargar-datos');
@@ -3126,10 +3212,7 @@ function activarVista3D() {
 }
 
 function activarVista2D() {
-  // console.log("📱 Recargando página para volver a modo 2D/Edición...");
-
-  // Recargar la página completamente como F5
-  window.location.reload();
+  volverAModo2D();
 }
 
 function actualizarBotonVista3D(texto) {
@@ -3443,31 +3526,148 @@ function dibujarGotaModo2D(pg, gota) {
   }
 }
 
+function serializarColorSeguro(valor) {
+  if (!valor) return valor;
+
+  try {
+    return {
+      __tipo: 'color',
+      niveles: [red(valor), green(valor), blue(valor), alpha(valor)]
+    };
+  } catch (error) {
+    return valor;
+  }
+}
+
+function serializarValorEstado(valor) {
+  if (valor === null || typeof valor !== 'object') return valor;
+
+  if (Array.isArray(valor)) {
+    return valor.map(serializarValorEstado);
+  }
+
+  if (typeof valor.x === 'number' && typeof valor.y === 'number' && typeof valor.copy === 'function') {
+    return {
+      __tipo: 'vector',
+      x: valor.x,
+      y: valor.y,
+      z: valor.z || 0
+    };
+  }
+
+  const salida = {};
+  Object.keys(valor).forEach(clave => {
+    salida[clave] = clave === 'color'
+      ? serializarColorSeguro(valor[clave])
+      : serializarValorEstado(valor[clave]);
+  });
+  return salida;
+}
+
+function restaurarValorEstado(valor) {
+  if (valor === null || typeof valor !== 'object') return valor;
+
+  if (Array.isArray(valor)) {
+    return valor.map(restaurarValorEstado);
+  }
+
+  if (valor.__tipo === 'color') {
+    return color(valor.niveles[0], valor.niveles[1], valor.niveles[2], valor.niveles[3]);
+  }
+
+  if (valor.__tipo === 'vector') {
+    return createVector(valor.x, valor.y, valor.z || 0);
+  }
+
+  const salida = {};
+  Object.keys(valor).forEach(clave => {
+    salida[clave] = restaurarValorEstado(valor[clave]);
+  });
+  return salida;
+}
+
+function crearGotaPorClase(nombreClase) {
+  switch (nombreClase) {
+    case 'GotaPinturaModo0': return new GotaPinturaModo0();
+    case 'GotaPinturaModo1': return new GotaPinturaModo1();
+    case 'GotaPinturaModo2': return new GotaPinturaModo2();
+    case 'GotaPinturaModo3': return new GotaPinturaModo3();
+    case 'GotaPinturaModo4': return new GotaPinturaModo4();
+    case 'GotaPinturaModo5': return new GotaPinturaModo5();
+    case 'GotaPinturaModo6': return new GotaPinturaModo6();
+    case 'GotaPinturaModo7': return new GotaPinturaModo7();
+    case 'GotaPinturaModo8': return new GotaPinturaModo8();
+    case 'GotaPinturaModo9': return new GotaPinturaModo9();
+    default: return null;
+  }
+}
+
+function guardarEstadoParaVolverDe3D() {
+  const mascaraDataUrl = window.mascaraActual?.canvas
+    ? window.mascaraActual.canvas.toDataURL('image/png')
+    : null;
+
+  const estadoGuardado = {
+    estado: { ...estado },
+    gotas: gotas.map(gota => ({
+      clase: gota.constructor.name,
+      datos: serializarValorEstado(gota)
+    })),
+    titulo,
+    subtitulo,
+    tituloPersonalizado: window.tituloPersonalizado || '',
+    subtituloPersonalizado: window.subtituloPersonalizado || '',
+    contadorRealUsuarios,
+    mascaraDataUrl,
+    mascaraAnchoOriginal,
+    mascaraAltoOriginal
+  };
+
+  sessionStorage.setItem('ecodiv_estado_vista_2d', JSON.stringify(estadoGuardado));
+}
+
+function restaurarEstadoTrasVista3D() {
+  const estadoGuardadoTexto = sessionStorage.getItem('ecodiv_estado_vista_2d');
+  if (!estadoGuardadoTexto) return;
+
+  sessionStorage.removeItem('ecodiv_estado_vista_2d');
+
+  try {
+    const estadoGuardado = JSON.parse(estadoGuardadoTexto);
+
+    if (estadoGuardado.estado) {
+      Object.assign(estado, estadoGuardado.estado);
+    }
+
+    titulo = estadoGuardado.titulo || titulo;
+    subtitulo = estadoGuardado.subtitulo || subtitulo;
+    window.tituloPersonalizado = estadoGuardado.tituloPersonalizado || '';
+    window.subtituloPersonalizado = estadoGuardado.subtituloPersonalizado || '';
+    contadorRealUsuarios = estadoGuardado.contadorRealUsuarios || contadorRealUsuarios;
+    mascaraAnchoOriginal = estadoGuardado.mascaraAnchoOriginal || 0;
+    mascaraAltoOriginal = estadoGuardado.mascaraAltoOriginal || 0;
+
+    gotas = (estadoGuardado.gotas || []).map(gotaGuardada => {
+      const gota = crearGotaPorClase(gotaGuardada.clase);
+      if (!gota) return null;
+      Object.assign(gota, restaurarValorEstado(gotaGuardada.datos));
+      return gota;
+    }).filter(Boolean);
+
+    if (estadoGuardado.mascaraDataUrl) {
+      window.mascaraActual = loadImage(estadoGuardado.mascaraDataUrl);
+    }
+
+    modo3D = false;
+    primerFrame = true;
+  } catch (error) {
+    console.error('Error al restaurar la vista 2D:', error);
+  }
+}
+
 function volverAModo2D() {
-  modo3D = false;
-
-  // Limpiar contenedor
-
-  // Volver a canvas 2D
-  let canvas = createCanvas(windowWidth, windowHeight);
-  canvas.parent('a4-container');
-
-  // Cargar fuente para modo WebGL
-  textFont('Arial');
-
-  // Recalcular marco y reposicionar elementos del modo 2D
-  recalcularMarco();
-  posicionarPanelesBotones();
-
-  // Forzar redibujo del primer frame
-  primerFrame = true;
-
-  // console.log(" Vuelta al modo 2D completada");
-  // console.log(" Canvas 2D recreado:", windowWidth, "x", windowHeight);
-  // console.log(" Marco recalculado:", marcoW + "x" + marcoH);
-  // console.log("🔄 Vuelta al modo 2D completada");
-  // console.log("🎨 Canvas 2D recreado:", windowWidth, "x", windowHeight);
-  // console.log("📐 Marco recalculado:", marcoW + "x" + marcoH);
+  guardarEstadoParaVolverDe3D();
+  window.location.reload();
 }
 
 /* CÓDIGO MUERTO: Función overlay que podría no estar implementada */
@@ -3476,6 +3676,126 @@ function activarOverlay() {
 }
 
 function exportarA4PDF() {
+  solicitarTestAntesDeExportar('pdf');
+}
+
+function exportarA4() {
+  solicitarTestAntesDeExportar('png');
+}
+
+function solicitarTestAntesDeExportar(tipo) {
+  if (testExportacionEnviado) {
+    ejecutarExportacion(tipo);
+    return;
+  }
+
+  exportacionPendiente = tipo;
+  abrirModalTestExportacion();
+}
+
+function ejecutarExportacion(tipo) {
+  if (tipo === 'pdf') {
+    exportarA4PDFReal();
+  } else {
+    exportarA4Real();
+  }
+}
+
+function abrirModalTestExportacion() {
+  const modal = document.getElementById('modal-test-exportacion');
+  const estadoTest = document.getElementById('estado-test-exportacion');
+  const botonEnviar = document.getElementById('btn-enviar-test-exportacion');
+
+  if (estadoTest) estadoTest.textContent = '';
+  if (botonEnviar) {
+    botonEnviar.disabled = false;
+    botonEnviar.textContent = 'Enviar test';
+  }
+  if (modal) modal.style.display = 'block';
+}
+
+function cerrarModalTestExportacion() {
+  const modal = document.getElementById('modal-test-exportacion');
+  if (modal) modal.style.display = 'none';
+  exportacionPendiente = null;
+}
+
+async function enviarTestExportacion(event) {
+  event.preventDefault();
+
+  const form = document.getElementById('form-test-exportacion');
+  const contenido = document.getElementById('contenido-test-exportacion');
+  const estadoTest = document.getElementById('estado-test-exportacion');
+  const botonEnviar = document.getElementById('btn-enviar-test-exportacion');
+
+  if (form && !form.checkValidity()) {
+    form.reportValidity();
+    return;
+  }
+
+  if (!contenido || typeof html2canvas === 'undefined') {
+    if (estadoTest) estadoTest.textContent = 'No se pudo preparar la captura del test.';
+    return;
+  }
+
+  try {
+    if (botonEnviar) {
+      botonEnviar.disabled = true;
+      botonEnviar.textContent = 'Enviando...';
+    }
+    if (estadoTest) estadoTest.textContent = '';
+
+    const estilosOriginales = {
+      maxHeight: contenido.style.maxHeight,
+      overflowY: contenido.style.overflowY,
+      marginTop: contenido.style.marginTop,
+      scrollTop: contenido.scrollTop
+    };
+
+    contenido.scrollTop = 0;
+    contenido.style.maxHeight = 'none';
+    contenido.style.overflowY = 'visible';
+    contenido.style.marginTop = '0';
+
+    const canvas = await html2canvas(contenido, {
+      backgroundColor: '#14141e',
+      scale: 2,
+      windowWidth: contenido.scrollWidth,
+      windowHeight: contenido.scrollHeight
+    });
+
+    contenido.style.maxHeight = estilosOriginales.maxHeight;
+    contenido.style.overflowY = estilosOriginales.overflowY;
+    contenido.style.marginTop = estilosOriginales.marginTop;
+    contenido.scrollTop = estilosOriginales.scrollTop;
+    const imageBase64 = canvas.toDataURL('image/png');
+    const fecha = new Date().toISOString().replace(/[:.]/g, '-');
+
+    await fetch(TEST_EXPORTACION_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: JSON.stringify({
+        filename: `test-ecodiv-${fecha}.png`,
+        imageBase64
+      })
+    });
+
+    testExportacionEnviado = true;
+    const tipo = exportacionPendiente || 'png';
+    exportacionPendiente = null;
+    cerrarModalTestExportacion();
+    ejecutarExportacion(tipo);
+  } catch (error) {
+    console.error('Error al enviar el test:', error);
+    if (estadoTest) estadoTest.textContent = 'No se pudo enviar el test. Intentalo de nuevo.';
+    if (botonEnviar) {
+      botonEnviar.disabled = false;
+      botonEnviar.textContent = 'Enviar test';
+    }
+  }
+}
+
+function exportarA4PDFReal() {
   console.log("🔍 DEBUG: exportarA4PDF() llamada");
 
   try {
@@ -3550,7 +3870,7 @@ function exportarA4PDF() {
   }
 }
 
-function exportarA4() {
+function exportarA4Real() {
   console.log("🔍 DEBUG: exportarA4() llamada");
 
   // SIEMPRE CREAR CANVAS A4 COMPLETO CON DPI 300 - INCLUSO EN MODO 3D
@@ -3895,6 +4215,35 @@ function cerrarModalInfo(event) {
   if (modal) {
     modal.style.display = 'none';
   }
+}
+
+// FUNCIONES PARA EL MODAL DE OPCIONES DE MÁSCARA
+function abrirModalMascaraOpciones() {
+  const modal = document.getElementById('modal-mascara-opciones');
+  if (modal) {
+    modal.style.display = 'block';
+  }
+}
+
+function cerrarModalMascaraOpciones(event) {
+  if (event && event.target.id !== 'modal-mascara-opciones') return;
+  cerrarModalMascaraOpcionesDirecto();
+}
+
+function cerrarModalMascaraOpcionesDirecto() {
+  const modal = document.getElementById('modal-mascara-opciones');
+  if (modal) {
+    modal.style.display = 'none';
+  }
+}
+
+function cargarMascaraDesdePC() {
+  cerrarModalMascaraOpcionesDirecto();
+  document.getElementById('input-mascara').click();
+}
+
+function descargarMascaraAlmacenamiento() {
+  window.open('https://drive.google.com/drive/folders/1LTEbq0iLZfqxvcAm3Tl8-_tQAmlcFJVm?usp=sharing', '_blank');
 }
 
 // Función para detectar scroll del mouse

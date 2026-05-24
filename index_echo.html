@@ -20,6 +20,7 @@
   <script src="https://cdn.jsdelivr.net/npm/p5@1.11.7/lib/p5.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/simplex-noise@2.4.0/simplex-noise.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
   <!-- Sketch -->
   <script src="echo.js"></script>
@@ -38,15 +39,15 @@
       <button id="btn-formato" class="btn-panel" onclick="rotarLienzo()" title="Cambiar formato del lienzo">⭐ Formato</button>
       <button id="btn-texto" class="btn-panel" onclick="alternarTexto()" title="Mostrar u ocultar titulo y subtitulo">𝑻𝑻 Titulo / Subtitulo</button>
       <button id="btn-cargar-datos" class="btn-panel" onclick="cargarInteracciones()" title="Cargar interacciones">🔄 Cargar interacciones</button>
-      <button id="btn-vista-3d" class="btn-panel" onclick="activarVista3D()" title="Activar vista 3D mockup">🧊 Vista 3D · Mockup</button>
-      <button id="btn-vista-2d" class="btn-panel" style="display: none;" onclick="window.location.reload()" title="Volver a vista 2D de edicion">📱 Vista 2D · Edicion</button>
       <button id="btn-editar-texto" class="btn-panel" onclick="editarTextoUsuario()" title="Editar titulo y subtitulo">✏️ Editar texto</button>
       <button id="btn-color" class="btn-panel" onclick="alternarFiltroColor()" title="Activar o desactivar filtro de color">🎨 Color
         
       </button>
       <button id="btn-fondo" class="btn-panel" onclick="alternarFondo()" title="Cambiar fondo blanco o negro">🌗 Fondo B / N</button>
       <button id="btn-contador" class="btn-panel" onclick="alternarContador()" title="Mostrar u ocultar numero de usuarios">👥 Nº Usuarios</button>
-      <button id="btn-cargar-mascara" class="btn-panel" onclick="abrirSelectorMascara()" title="Cargar mascara desde archivo">📂 Cargar mascara</button>
+      <button id="btn-cargar-mascara" class="btn-panel" onclick="abrirModalMascaraOpciones()" title="Cargar mascara desde archivo">📂 Cargar mascara</button>
+      <button id="btn-vista-3d" class="btn-panel" onclick="activarVista3D()" title="Activar vista 3D mockup">🧊 Vista 3D · Mockup</button>
+      <button id="btn-vista-2d" class="btn-panel" style="display: none;" onclick="volverAModo2D()" title="Volver a vista 2D de edicion">📱 Vista 2D · Edicion</button>
     </div>
   </div>
 
@@ -122,10 +123,180 @@
     </div>
   </div>
 
+  <!-- Modal para seleccionar origen de la máscara -->
+  <div id="modal-mascara-opciones" class="modal" onclick="cerrarModalMascaraOpciones(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <h3>📂 Cargar Máscara</h3>
+      <div style="text-align: left; margin-bottom: 20px;">
+        <p style="color: var(--text-secondary); font-size: 13px; line-height: 1.6; margin: 0 0 12px 0;">
+          Selecciona cómo deseas obtener la máscara para tu diseño:
+        </p>
+        <p style="color: var(--text-primary); font-size: 13px; line-height: 1.6; margin: 0 0 8px 0;">
+          1. <strong>Cargar desde PC</strong>: Selecciona un archivo de imagen en formato PNG desde tu computadora.
+        </p>
+        <p style="color: var(--text-primary); font-size: 13px; line-height: 1.6; margin: 0 0 8px 0;">
+          2. <strong>Descargar del almacenamiento</strong>: Accede a las máscaras preestablecidas guardadas en el servidor.
+        </p>
+      </div>
+      <div class="modal-buttons" style="flex-direction: column; gap: 10px; margin-top: 20px;">
+        <button class="btn-primary" onclick="cargarMascaraDesdePC()" style="width: 100%;">💻 Subir desde PC</button>
+        <button class="btn-primary" onclick="descargarMascaraAlmacenamiento()" style="width: 100%; background: linear-gradient(135deg, #7c4dff 0%, #e040fb 100%); border: none;">🌐 Descargar de Almacenamiento</button>
+        <button class="btn-secondary" onclick="cerrarModalMascaraOpcionesDirecto()" style="width: 100%; margin-top: 5px;">❌ Cancelar</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Logo Pantalla -->
   <div id="logo-pantalla">
     <img id="logo-pantalla-img" src="logotipo_ECODIV.png" alt="ECODIV Logo">
-    <button id="btn-modo0" class="btn-modo0-oculto" onclick="activarModo0()">🌟</button>
+    <button id="btn-modo0" class="btn-modo0-oculto" onclick="abrirModalPasswordModo0()">🌟</button>
+  </div>
+
+  <!-- Modal de password para Modo 0 -->
+  <div id="modal-password-modo0" class="modal" onclick="cerrarModalPasswordModo0(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <h3>Acceso Modo 0</h3>
+      <div class="form-group">
+        <label for="input-password-modo0">Password:</label>
+        <input type="password" id="input-password-modo0" placeholder="Introduce el password..." autocomplete="current-password" onkeydown="enviarPasswordModo0(event)">
+        <p id="error-password-modo0" class="modal-error" aria-live="polite"></p>
+      </div>
+      <div class="modal-buttons">
+        <button type="button" class="btn-primary" onclick="validarPasswordModo0()">Entrar</button>
+        <button type="button" class="btn-secondary" onclick="cerrarModalPasswordModo0()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal temporal de test antes de exportar -->
+  <div id="modal-test-exportacion" class="modal">
+    <div id="contenido-test-exportacion" class="modal-content modal-test-content" onclick="event.stopPropagation()">
+      <h3>Antes de descargar tu imagen, por favor realiza el siguiente test, te llevará menos de 1 minuto</h3>
+      <form id="form-test-exportacion" onsubmit="enviarTestExportacion(event)">
+        <div id="preguntas-test-exportacion" class="sus-test">
+          <p class="sus-instrucciones">Valora cada afirmacion del 1 al 5.</p>
+          <div class="sus-leyenda">
+            <span>1 Totalmente en desacuerdo</span>
+            <span>5 Totalmente de acuerdo</span>
+          </div>
+
+          <div class="sus-item">
+            <p>1. Creo que me gustaria utilizar la herramienta ECODIV Tool con frecuencia.</p>
+            <div class="sus-opciones">
+              <label><input type="radio" name="sus_1" value="1" required>1</label>
+              <label><input type="radio" name="sus_1" value="2">2</label>
+              <label><input type="radio" name="sus_1" value="3">3</label>
+              <label><input type="radio" name="sus_1" value="4">4</label>
+              <label><input type="radio" name="sus_1" value="5">5</label>
+            </div>
+          </div>
+
+          <div class="sus-item">
+            <p>2. Encontre el sistema innecesariamente complejo.</p>
+            <div class="sus-opciones">
+              <label><input type="radio" name="sus_2" value="1" required>1</label>
+              <label><input type="radio" name="sus_2" value="2">2</label>
+              <label><input type="radio" name="sus_2" value="3">3</label>
+              <label><input type="radio" name="sus_2" value="4">4</label>
+              <label><input type="radio" name="sus_2" value="5">5</label>
+            </div>
+          </div>
+
+          <div class="sus-item">
+            <p>3. Pense que la interfaz era facil de usar.</p>
+            <div class="sus-opciones">
+              <label><input type="radio" name="sus_3" value="1" required>1</label>
+              <label><input type="radio" name="sus_3" value="2">2</label>
+              <label><input type="radio" name="sus_3" value="3">3</label>
+              <label><input type="radio" name="sus_3" value="4">4</label>
+              <label><input type="radio" name="sus_3" value="5">5</label>
+            </div>
+          </div>
+
+          <div class="sus-item">
+            <p>4. Creo que necesitaria el apoyo de un tecnico para poder utilizar este sistema.</p>
+            <div class="sus-opciones">
+              <label><input type="radio" name="sus_4" value="1" required>1</label>
+              <label><input type="radio" name="sus_4" value="2">2</label>
+              <label><input type="radio" name="sus_4" value="3">3</label>
+              <label><input type="radio" name="sus_4" value="4">4</label>
+              <label><input type="radio" name="sus_4" value="5">5</label>
+            </div>
+          </div>
+
+          <div class="sus-item">
+            <p>5. Encontre que las diversas funciones del sistema estaban bien integradas.</p>
+            <div class="sus-opciones">
+              <label><input type="radio" name="sus_5" value="1" required>1</label>
+              <label><input type="radio" name="sus_5" value="2">2</label>
+              <label><input type="radio" name="sus_5" value="3">3</label>
+              <label><input type="radio" name="sus_5" value="4">4</label>
+              <label><input type="radio" name="sus_5" value="5">5</label>
+            </div>
+          </div>
+
+          <div class="sus-item">
+            <p>6. Pense que habia demasiada inconsistencia en este sistema.</p>
+            <div class="sus-opciones">
+              <label><input type="radio" name="sus_6" value="1" required>1</label>
+              <label><input type="radio" name="sus_6" value="2">2</label>
+              <label><input type="radio" name="sus_6" value="3">3</label>
+              <label><input type="radio" name="sus_6" value="4">4</label>
+              <label><input type="radio" name="sus_6" value="5">5</label>
+            </div>
+          </div>
+
+          <div class="sus-item">
+            <p>7. Imagino que la mayoria de la gente aprenderia a usar ECODIV Tool muy rapidamente.</p>
+            <div class="sus-opciones">
+              <label><input type="radio" name="sus_7" value="1" required>1</label>
+              <label><input type="radio" name="sus_7" value="2">2</label>
+              <label><input type="radio" name="sus_7" value="3">3</label>
+              <label><input type="radio" name="sus_7" value="4">4</label>
+              <label><input type="radio" name="sus_7" value="5">5</label>
+            </div>
+          </div>
+
+          <div class="sus-item">
+            <p>8. Encontre el sistema muy engorroso de utilizar.</p>
+            <div class="sus-opciones">
+              <label><input type="radio" name="sus_8" value="1" required>1</label>
+              <label><input type="radio" name="sus_8" value="2">2</label>
+              <label><input type="radio" name="sus_8" value="3">3</label>
+              <label><input type="radio" name="sus_8" value="4">4</label>
+              <label><input type="radio" name="sus_8" value="5">5</label>
+            </div>
+          </div>
+
+          <div class="sus-item">
+            <p>9. Me senti muy seguro/a utilizando la plataforma.</p>
+            <div class="sus-opciones">
+              <label><input type="radio" name="sus_9" value="1" required>1</label>
+              <label><input type="radio" name="sus_9" value="2">2</label>
+              <label><input type="radio" name="sus_9" value="3">3</label>
+              <label><input type="radio" name="sus_9" value="4">4</label>
+              <label><input type="radio" name="sus_9" value="5">5</label>
+            </div>
+          </div>
+
+          <div class="sus-item">
+            <p>10. Necesite aprender muchas cosas antes de poder empezar a generar composiciones visuales.</p>
+            <div class="sus-opciones">
+              <label><input type="radio" name="sus_10" value="1" required>1</label>
+              <label><input type="radio" name="sus_10" value="2">2</label>
+              <label><input type="radio" name="sus_10" value="3">3</label>
+              <label><input type="radio" name="sus_10" value="4">4</label>
+              <label><input type="radio" name="sus_10" value="5">5</label>
+            </div>
+          </div>
+        </div>
+        <p id="estado-test-exportacion" class="modal-status" aria-live="polite"></p>
+        <div class="modal-buttons">
+          <button id="btn-enviar-test-exportacion" type="submit" class="btn-primary">Enviar test</button>
+          <button type="button" class="btn-secondary" onclick="cerrarModalTestExportacion()">Cancelar</button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <!-- Footer -->
