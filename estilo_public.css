@@ -21,17 +21,22 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Video tutorial explicativo - Ocupa todo el contenedor */
-.video-tutorial {
-  position: relative;
+html {
   width: 100%;
   height: 100%;
-  object-fit: fill;
+}
+
+/* Video tutorial explicativo - Ocupa todo el contenedor */
+.video-tutorial {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   z-index: 1;
   pointer-events: auto; /* Activar controles del video */
   border-radius: calc(var(--glass-radius) - 4px);
-  min-width: 100%;
-  min-height: 100%;
   max-width: 100%;
   max-height: 100%;
 }
@@ -63,15 +68,23 @@ body {
 
 /* Contenedor de video - Con marco glassmorphism y pulso */
 .video-container {
+  --video-width: 95vw;
+  --video-max-width: 1400px;
+  --video-max-height: calc(100vh - 170px);
+
   position: absolute;
   top: 46%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 95%;
-  max-width: 1400px;
-  height: 60vh;
+  box-sizing: border-box;
+  width: min(var(--video-width), var(--video-max-width));
+  aspect-ratio: 16 / 9;
+  max-height: var(--video-max-height);
   z-index: 1;
   pointer-events: auto;
+  overflow: hidden;
+  contain: layout paint;
+  clip-path: inset(0 round var(--glass-radius));
   
   /* Glass effect de ECO */
   background: var(--glass-bg);
@@ -92,13 +105,13 @@ body {
   .video-tutorial {
     width: 100%;
     height: 100%;
-    object-fit: cover !important; /* Llenar todo el contenedor */
+    object-fit: cover;
   }
   
   .video-container {
-    width: 95%;
-    max-width: 1400px;
-    height: 80vh; /* Altura aumentada para TV */
+    --video-width: 95vw;
+    --video-max-width: 1400px;
+    --video-max-height: 80vh; /* Altura aumentada para TV */
   }
 }
 
@@ -110,9 +123,9 @@ body {
   }
   
   .video-container {
-    width: 55%;
-    max-width: 800px;
-    height: 75vh;
+    --video-width: 55vw;
+    --video-max-width: 800px;
+    --video-max-height: 75vh;
   }
 }
 
@@ -259,16 +272,14 @@ canvas {
 /* Monitores portátiles y pantallas medianas */
 @media (max-width: 1365px) {
   .video-tutorial {
-    width: 65%;
-    max-width: 850px;
-    height: 50vh;
-    top: 46%;
+    width: 100%;
+    height: 100%;
   }
   
   .video-container {
-    width: 65%;
-    max-width: 850px;
-    height: 50vh;
+    --video-width: 90vw;
+    --video-max-width: 850px;
+    --video-max-height: 50vh;
     top: 46%;
   }
 }
@@ -276,31 +287,28 @@ canvas {
 /* Tablets y pantallas más pequeñas */
 @media (max-width: 1024px) {
   .video-tutorial {
-    width: 90%;
-    max-width: 900px;
-    height: 55vh;
+    width: 100%;
+    height: 100%;
   }
   
   .video-container {
-    width: 90%;
-    max-width: 900px;
-    height: 55vh;
+    --video-width: 92vw;
+    --video-max-width: 900px;
+    --video-max-height: 55vh;
   }
 }
 
 /* Móviles grandes y tablets pequeñas */
 @media (max-width: 768px) {
   .video-tutorial {
-    width: 95%;
-    max-width: 600px;
-    height: 50vh;
-    top: 40%;
+    width: 100%;
+    height: 100%;
   }
   
   .video-container {
-    width: 95%;
-    max-width: 600px;
-    height: 50vh;
+    --video-width: 94vw;
+    --video-max-width: 600px;
+    --video-max-height: 50vh;
     top: 40%;
   }
   
@@ -314,16 +322,14 @@ canvas {
 /* Móviles */
 @media (max-width: 480px) {
   .video-tutorial {
-    width: 98%;
-    max-width: 400px;
-    height: 40vh;
-    top: 35%;
+    width: 100%;
+    height: 100%;
   }
   
   .video-container {
-    width: 98%;
-    max-width: 400px;
-    height: 40vh;
+    --video-width: 94vw;
+    --video-max-width: 400px;
+    --video-max-height: 40vh;
     top: 35%;
   }
   
