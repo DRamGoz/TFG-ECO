@@ -1,19 +1,30 @@
+// ==========================================
+// CONFIGURACIÓN Y CONSTANTES
+// ==========================================
 const API_URL = "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpnsHnDcAIKQ-SWU8FoIpdu-PUwO0KsdIk3klratrjgCHfskg/exec";
 
-// Variables de fondo artístico espectacular (sistema ECO)
+// ==========================================
+// VARIABLES DE CONTROL - FONDO ARTÍSTICO (SISTEMA ECO)
+// ==========================================
 let splatsFondo = [];
 let particulasFondo = [];
-let userStar = null;   // estrella única del usuario
-let showUserText = false; // controlar el texto
-let textTimer = 0;     // temporizador del texto
+let userStar = null;      // Estrella única del usuario
+let showUserText = false; // Controlar la visualización del texto de agradecimiento
+let textTimer = 0;        // Temporizador para desvanecer el texto
 
-// Clases para el sistema de fondo artístico
+// ==========================================
+// CLASES DEL SISTEMA DE PARTÍCULAS Y FONDOS
+// ==========================================
+
+/**
+ * Representa una mancha decorativa difuminada en el fondo.
+ */
 class SplatFondo {
   constructor() {
     this.x = random(width);
     this.y = random(height);
     this.size = random(80, 800);
-    this.alpha = random(1, 5); // Reducido de 3-10 a 1-5 para más difuminación
+    this.alpha = random(1, 5); // Alpha bajo para mayor suavidad/difuminación
     this.color = this.colorNeonAleatorio();
     this.offset = random(1000);
   }
@@ -22,9 +33,9 @@ class SplatFondo {
     const coloresNeon = [
       color(0, 229, 255, this.alpha),     // Cyan
       color(224, 64, 251, this.alpha),    // Magenta  
-      color(255, 0, 128, this.alpha),      // Rosa
+      color(255, 0, 128, this.alpha),     // Rosa
       color(128, 0, 255, this.alpha),     // Púrpura
-      color(0, 255, 128, this.alpha)       // Verde menta
+      color(0, 255, 128, this.alpha)      // Verde menta
     ];
     return random(coloresNeon);
   }
@@ -34,7 +45,7 @@ class SplatFondo {
     noStroke();
     fill(this.color);
     
-    // Aplicar blur al splat
+    // Filtro de desenfoque nativo en canvas para efecto glassmorphism/glow
     drawingContext.filter = 'blur(12px)';
     
     let noiseScale = 0.01;
@@ -50,12 +61,14 @@ class SplatFondo {
     }
     endShape(CLOSE);
     
-    // Resetear el filtro para no afectar a otros elementos
-    drawingContext.filter = 'none';
+    drawingContext.filter = 'none'; // Resetear filtro
     pop();
   }
 }
 
+/**
+ * Representa una partícula pequeña en movimiento continuo por el fondo.
+ */
 class ParticulaFondo {
   constructor() {
     this.x = random(width);
@@ -71,9 +84,9 @@ class ParticulaFondo {
     const coloresNeon = [
       color(0, 229, 255, this.alpha),     // Cyan
       color(224, 64, 251, this.alpha),    // Magenta
-      color(255, 0, 128, this.alpha),      // Rosa
+      color(255, 0, 128, this.alpha),     // Rosa
       color(128, 0, 255, this.alpha),     // Púrpura
-      color(0, 255, 128, this.alpha)       // Verde menta
+      color(0, 255, 128, this.alpha)      // Verde menta
     ];
     return random(coloresNeon);
   }
@@ -82,7 +95,7 @@ class ParticulaFondo {
     this.x += this.vx;
     this.y += this.vy;
     
-    // Rebotar en bordes
+    // Rebote en bordes de la pantalla
     if (this.x < 0 || this.x > width) this.vx *= -1;
     if (this.y < 0 || this.y > height) this.vy *= -1;
   }
@@ -96,37 +109,46 @@ class ParticulaFondo {
   }
 }
 
+// ==========================================
+// FUNCIONES DE INICIALIZACIÓN Y RENDERIZADO (p5.js)
+// ==========================================
+
+/**
+ * Genera las manchas (splats) y partículas iniciales del fondo.
+ */
 function inicializarFondoArtistico() {
   splatsFondo = [];
   particulasFondo = [];
 
-  // Crear splats grandes y espectaculares - 15 splats
+  // Crear 15 splats difuminados
   for (let i = 0; i < 15; i++) {
-    let splat = new SplatFondo();
-    splatsFondo.push(splat);
+    splatsFondo.push(new SplatFondo());
   }
   
-  // Crear partículas cinéticas - 50 partículas
+  // Crear 50 partículas cinéticas
   for (let i = 0; i < 50; i++) {
-    let particula = new ParticulaFondo();
-    particulasFondo.push(particula);
+    particulasFondo.push(new ParticulaFondo());
   }
 }
 
+/**
+ * Configuración inicial del canvas y eventos de la página.
+ */
 function setup() {
   createCanvas(windowWidth, windowHeight).parent("app");
 
-  // Inicializar fondo artístico espectacular (sistema ECO)
+  // Crear el fondo artístico animado
   inicializarFondoArtistico();
 
   const btn = document.getElementById("sendBtn");
   const infoText = document.getElementById("infoText");
 
+  // Evento al pulsar "SKIP INTRO" o interactuar
   btn.addEventListener("click", () => {
     if (!userStar) {
       enviarDato();
 
-      // generar estrella única del usuario
+      // Crear estrella en posición aleatoria en pantalla
       userStar = {
         x: random(width * 0.2, width * 0.8),
         y: random(height * 0.2, height * 0.8),
@@ -135,72 +157,72 @@ function setup() {
         maxAlpha: 255
       };
 
-      // mostrar texto junto a la estrella
       showUserText = true;
       textTimer = millis();
 
-      // desaparecer botón y texto principal
+      // Desvanecer el botón y textos principales
       [btn, infoText].filter(Boolean).forEach(el => {
         el.style.transition = "opacity 1s ease";
         el.style.opacity = 0;
         setTimeout(() => el.style.display = "none", 1000);
       });
 
-      // Redirigir a la web de ECO después de 2 segundos
+      // Redirigir a la web principal de ECHO después de 2 segundos
       setTimeout(() => {
-        window.location.href = "https://dramgoz.github.io/TFG-ECO/index_echo.html"; // <-- REEMPLAZAR ESTA URL
+        window.location.href = "https://dramgoz.github.io/TFG-ECO/index_echo.html";
       }, 2000);
     }
   });
 }
 
+/**
+ * Ciclo principal de dibujo de p5.js.
+ */
 function draw() {
-  // Fondo artístico espectacular (sistema ECO)
+  // 1. Dibujar el fondo oscuro y partículas animadas
   dibujarFondoArtisticoDeepDark();
 
-  // dibujar halo pulsante de la estrella del usuario
+  // 2. Si el usuario ha interactuado, dibujar su estrella y halo pulsante
   if (userStar) {
-    // fade-in de la estrella
     if (userStar.alpha < userStar.maxAlpha) userStar.alpha += 5;
 
-    // pulso del halo
-    let haloPulse = sin(frameCount * 0.03) * 5; // oscila entre -10 y +10
+    let haloPulse = sin(frameCount * 0.03) * 5;
 
-    // halo difuso
+    // Halo difuso
     fill(0, 200, 255, 20);
     ellipse(userStar.x, userStar.y, (userStar.size + 20 + haloPulse) * 2);
 
-    // dibujar estrella estática con brillo oscilante
+    // Estrella central
     fill(220, 10, 10, userStar.alpha);
     ellipse(userStar.x, userStar.y, userStar.size * 2);
   }
 
-  // dibujar texto junto a la estrella
+  // 3. Dibujar el texto de agradecimiento al lado de la estrella
   if (showUserText && userStar) {
     fill(255, 255, 255, 120);
     textAlign(LEFT, CENTER);
     textSize(10);
     text("Gracias", userStar.x + 15, userStar.y);
     
-    // desaparecer texto tras 5 segundos
+    // Ocultar texto tras 5 segundos
     if (millis() - textTimer > 5000) {
       showUserText = false;
     }
   }
 }
 
+/**
+ * Renderiza el color base del fondo y los splats/partículas animadas.
+ */
 function dibujarFondoArtisticoDeepDark() {
-  // Fondo oscuro profundo como ECO
-  background(20, 20, 30);
+  background(20, 20, 30); // Fondo azul-gris oscuro profundo
 
-  // Dibujar splatters decorativos
+  // Mostrar splats estáticos/animados en el canvas
   if (splatsFondo.length > 0) {
-    splatsFondo.forEach(s => {
-      s.mostrar();
-    });
+    splatsFondo.forEach(s => s.mostrar());
   }
 
-  // Dibujar partículas cinéticas
+  // Actualizar y mostrar partículas móviles
   if (particulasFondo.length > 0) {
     particulasFondo.forEach(p => {
       p.actualizar();
@@ -209,73 +231,35 @@ function dibujarFondoArtisticoDeepDark() {
   }
 }
 
+// ==========================================
+// CONEXIÓN CON EL SERVIDOR (Google Apps Script)
+// ==========================================
 
-
+/**
+ * Envía la interacción y coordenadas del click del usuario a la base de datos de Google Sheets.
+ */
 function enviarDato() {
   const data = new URLSearchParams();
   data.append("valor", "click");
-data.append("x", mouseX);
-data.append("y", mouseY);
+  data.append("x", mouseX);
+  data.append("y", mouseY);
 
   fetch(API_URL, {
     method: "POST",
     body: data
   })
-    .then(r => r.text())
-    .then(console.log)
-    .catch(console.error);
+  .then(r => r.text())
+  .then(console.log)
+  .catch(console.error);
 }
 
-/*///////////////////////////////////////////////////////////////////////////////////////
-let lastSent = 0;       // tiempo del último envío
-const throttle = 500;   // tiempo mínimo entre envíos (ms)
+// ==========================================
+// MANEJO DE EVENTOS DE PANTALLA
+// ==========================================
 
-window.addEventListener("mousemove", (e) => {
-    const now = Date.now();
-
-    // Limitar frecuencia de envío
-    if (now - lastSent < throttle) return;
-    lastSent = now;
-
-    const x = e.clientX;
-    const y = e.clientY;
-
-    console.log(`Mouse move: X=${x}, Y=${y}`);
-
-    // Enviar datos al Apps Script
-    const data = new URLSearchParams();
-    data.append("valor", "move");
-    data.append("x", x);
-    data.append("y", y);
-
-    fetch(API_URL, {
-        method: "POST",
-        body: data
-    })
-    .then(r => r.text())
-    .then(res => console.log("Enviado:", res))
-    .catch(err => console.error("Error enviando:", err));
-});
-// ==========================
-// RESIZE VENTANA
-// ==========================*/
+/**
+ * Ajusta el tamaño del canvas al cambiar la escala del navegador.
+ */
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

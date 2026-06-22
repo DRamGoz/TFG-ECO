@@ -1,6 +1,11 @@
-﻿// ==========================
-// CLASES DE GOTAS (DE GITHUB)
-// ==========================
+// ==========================================================================
+// CLASES DE GOTAS / MODOS VISUALES (ECODIV)
+// ==========================================================================
+
+/**
+ * MODO 2: Representa una gota de pintura estilo Acuarela.
+ * Crece gradualmente y se deforma suavemente usando ruido Perlin.
+ */
 class GotaPinturaModo2 {
   constructor() {
     // Solo valores literales, sin funciones de p5.js
@@ -74,6 +79,10 @@ class GotaPinturaModo2 {
   }
 }
 
+/**
+ * MODO 3: Representa gotas que dibujan ondas continuas en el lienzo.
+ * Utiliza SimplexNoise para una animación fluida en forma de oleaje.
+ */
 class GotaPinturaModo3 {
   constructor() {
     // Propiedades para ondas con SimplexNoise
@@ -183,6 +192,10 @@ class GotaPinturaModo3 {
   }
 }
 
+/**
+ * MODO 0 (ESPECIAL): Sistema de partículas interactivo conectado en tiempo real.
+ * Dibuja líneas desde el centro y muestra los números de usuarios participantes.
+ */
 class GotaPinturaModo0 {
   constructor() {
     console.log("🌟 Constructor GotaPinturaModo0 llamado");
@@ -364,6 +377,10 @@ class GotaPinturaModo0 {
   }
 }
 
+/**
+ * MODO 4: Representa una gota con forma de Triángulo equilátero perfecto.
+ * Crece de forma animada y tiene rotación angular aleatoria.
+ */
 class GotaPinturaModo4 {
   constructor() {
     // Solo valores literales, sin funciones de p5.js
@@ -483,6 +500,10 @@ class GotaPinturaModo4 {
   }
 }
 
+/**
+ * MODO 6: Representa una gota con forma de Cuadrado perfecto.
+ * Animada con zoom de entrada y orientación angular aleatoria.
+ */
 class GotaPinturaModo6 {
   constructor() {
     // Solo valores literales, sin funciones de p5.js
@@ -594,6 +615,10 @@ class GotaPinturaModo6 {
   }
 }
 
+/**
+ * MODO 8 (MISCELÁNEA): Genera formas geométricas mixtas (círculos, cuadrados, triángulos)
+ * con trazo contrastado para añadir variedad a la composición.
+ */
 class GotaPinturaModo8 {
   constructor() {
     // Solo valores literales, sin funciones de p5.js
@@ -743,6 +768,10 @@ class GotaPinturaModo8 {
   }
 }
 
+/**
+ * MODO 7 (LETRAS): Dibuja caracteres tipográficos aleatorios del abecedario.
+ * Los caracteres giran y escalan de forma individual.
+ */
 class GotaPinturaModo7 {
   constructor() {
     // Solo valores literales, sin funciones de p5.js
@@ -864,6 +893,10 @@ class GotaPinturaModo7 {
   }
 }
 
+/**
+ * MODO 9 (ESTRELLAS): Dibuja estrellas perfectas de puntas variables.
+ * Se utiliza principalmente en composiciones de fantasía o festivas.
+ */
 class GotaPinturaModo9 {
   constructor() {
     // Solo valores literales, sin funciones de p5.js
@@ -989,6 +1022,10 @@ class GotaPinturaModo9 {
   }
 }
 
+/**
+ * MODO 5: Dibuja Círculos perfectos planos sin ruido ni distorsión.
+ * Proporciona un estilo minimalista y de formas limpias.
+ */
 class GotaPinturaModo5 {
   constructor() {
     // Solo valores literales, sin funciones de p5.js
@@ -1090,6 +1127,10 @@ class GotaPinturaModo5 {
   }
 }
 
+/**
+ * MODO 1: Representa una gota de pintura estilo Acrílico.
+ * Se deforma drásticamente en los ejes para crear manchas orgánicas de pintura densa.
+ */
 class GotaPinturaModo1 {
   constructor() {
     // Solo valores literales, sin funciones de p5.js
@@ -1216,7 +1257,7 @@ window.estado = {
 
 const API_URL = "https://script.google.com/macros/s/AKfycbyTMNP6s4KOhgA_qN4bXCpnsHnDcAIKQ-SWU8FoIpdu-PUwO0KsdIk3klratrjgCHfskg/exec";
 const PASSWORD_MODO0 = "ecodiv0";
-const TEST_EXPORTACION_URL = "https://script.google.com/macros/s/AKfycbxHOBb4ofglXhYDES8nGY_m-lEcdG6dzg1nQJIjDaETLLuYIYOZuQv0LhWkf7ljRqJoSw/exec";
+const TEST_EXPORTACION_URL = "https://script.google.com/macros/s/AKfycby9pKDp8y0OPz3zeHZMnRsVVVOOq2Fh-A_iIzcfUCoELu3aJC4yImjsWP5llcf-mXtNqQ/exec";
 
 let gotas = [];
 let idsExistentes = new Set(); // Para evitar duplicados
@@ -1224,12 +1265,19 @@ let contadorRealUsuarios = 0; // Contador global de usuarios reales del sheet
 let bloquearCargaDatos = false; // Control para evitar múltiples cargas simultáneas
 let sincronizacionInicialDatos = false; // Control de sincronización inicial
 
+// Control de la cuenta atrás de carga
+let enCuentaAtras = false; // Controla si se está ejecutando la cuenta atrás de carga
+let tiempoInicioCuenta = 0; // Tiempo en ms en que inició la cuenta atrás
+let numeroCuentaActual = ''; // Carácter del número actual ('3', '2', '1')
+let animacionCuentaProgreso = 0; // Progreso de la animación del número (0.0 a 1.0)
+let datosCargadosExitosamente = false; // Control de si los datos ya se cargaron desde la API
+
 // Sistema de actualización automática
 let intervaloActualizacion = null;
 let ultimaActualizacion = 0;
 const INTERVALO_ACTUALIZACION = 3000; // 3 segundos
-let testExportacionEnviado = false;
 let exportacionPendiente = null;
+let listadoPlantillasCache = null;
 
 // Variables globales para el marco del lienzo
 let marcoX, marcoY, marcoW, marcoH; // Controla si las gotas se muestran o no
@@ -1334,8 +1382,8 @@ function draw() {
   drawingContext.rect(marcoX, marcoY, marcoW, marcoH);
   drawingContext.clip();
 
-  // Dibujar gotas solo si mostrarGotas es true
-  if (estado.mostrarGotas) {
+  // Dibujar gotas solo si mostrarGotas es true y no estamos en cuenta atrás
+  if (estado.mostrarGotas && !enCuentaAtras) {
     gotas.forEach((g, i) => {
       if (typeof g.actualizar === 'function') {
         g.actualizar(); // Actualizar posición (importante para Modo 0)
@@ -1372,7 +1420,10 @@ function draw() {
     dibujarTexto();
   }
 
-  // Logo eliminado - se reemplazará con imagen mañana
+  // 11. Cuenta atrás de carga (si está activa) - Centrado en el lienzo
+  if (enCuentaAtras) {
+    dibujarCuentaAtras();
+  }
 }
 
 // ==========================
@@ -2204,6 +2255,78 @@ function dibujarContador() {
   pop();
 }
 
+/**
+ * Dibuja y anima la cuenta atrás (3, 2, 1) en el centro del lienzo
+ * con un efecto de escala (zoom) y desvanecimiento (fade-out) neon.
+ */
+function dibujarCuentaAtras() {
+  let tiempoTranscurrido = millis() - tiempoInicioCuenta;
+
+  if (tiempoTranscurrido < 1000) {
+    numeroCuentaActual = '3';
+    animacionCuentaProgreso = tiempoTranscurrido / 1000.0;
+  } else if (tiempoTranscurrido < 2000) {
+    numeroCuentaActual = '2';
+    animacionCuentaProgreso = (tiempoTranscurrido - 1000) / 1000.0;
+  } else if (tiempoTranscurrido < 3000) {
+    numeroCuentaActual = '1';
+    animacionCuentaProgreso = (tiempoTranscurrido - 2000) / 1000.0;
+  } else {
+    // Si la cuenta atrás de 3 segundos ha terminado, pero los datos AÚN no se han cargado:
+    if (!datosCargadosExitosamente) {
+      // Mantener en el número 1, muy tenue y pequeño esperando la respuesta
+      numeroCuentaActual = '1';
+      animacionCuentaProgreso = 0.95;
+    } else {
+      // ¡Los datos ya están listos! Finalizar la cuenta atrás
+      enCuentaAtras = false;
+      numeroCuentaActual = '';
+      estado.mostrarGotas = true;
+      console.log("🌐 Cuenta atrás finalizada y datos mostrados.");
+      return;
+    }
+  }
+
+  // La animación realiza un zoom in (crece) a un zoom out (se encoge) y desvanecimiento simétrico (transición suave de seno)
+  let p = animacionCuentaProgreso;
+  let factorEscala = Math.pow(sin(p * Math.PI), 0.8); // Curva simétrica y enérgica para escala
+  let tamañoTexto = map(factorEscala, 0, 1, 40, 260); // Zoom in: 40px -> 260px, Zoom out: 260px -> 40px
+  let opacidad = factorEscala * 255;                  // Desvanecimiento simétrico en los extremos (0 -> 255 -> 0)
+
+  push();
+  let centroX = marcoX + marcoW / 2;
+  let centroY = marcoY + marcoH / 2;
+
+  // Dibujar un halo pulsante de fondo
+  noStroke();
+  fill(0, 229, 255, opacidad * 0.15); // Glow cian muy suave
+  ellipse(centroX, centroY, tamañoTexto * 1.3);
+
+  // Configuración del texto de cuenta atrás
+  textAlign(CENTER, CENTER);
+  textFont('Poppins');
+  textStyle(BOLD);
+  textSize(tamañoTexto);
+
+  // Mezcla de colores (cian a magenta) para el efecto premium
+  let colorInicio = color(0, 229, 255);
+  let colorFin = color(224, 64, 251);
+  let colorMezcla = lerpColor(colorInicio, colorFin, animacionCuentaProgreso);
+
+  fill(red(colorMezcla), green(colorMezcla), blue(colorMezcla), opacidad);
+
+  // Sombra neon en el texto
+  drawingContext.shadowColor = `rgba(0, 229, 255, ${opacidad / 255.0})`;
+  drawingContext.shadowBlur = 25;
+
+  text(numeroCuentaActual, centroX, centroY);
+
+  // Resetear sombras de canvas para evitar sangrado a otros gráficos
+  drawingContext.shadowBlur = 0;
+  drawingContext.shadowColor = 'transparent';
+  pop();
+}
+
 // ==========================
 // FUNCIONES DE COLOR
 // ==========================
@@ -2254,54 +2377,50 @@ function recalcularMarco() {
     ratio = 210 / 297; // Por defecto vertical
   }
 
-  // Responsive: usar dimensiones reales de pantalla para visualización
+  // Márgenes fijos para versión exclusiva de escritorio
+  // Incrementamos margenH para dar espacio al pie de página (footer)
+  let margenH = 90;
+  let margenW = 40;
+
+  // Usar dimensiones reales de pantalla para visualización
   if (width / height > ratio) {
-    marcoH = height - 80; // Reducir altura vertical
+    marcoH = height - margenH; // Reducir altura vertical
     marcoW = marcoH * ratio;
   } else {
-    marcoW = width - 40;
+    marcoW = width - margenW;
     marcoH = marcoW / ratio;
   }
   marcoX = (width - marcoW) / 2;
-  marcoY = (height - marcoH) / 2;
+  // Desplazar 10px hacia arriba para mayor espacio estético respecto al footer
+  marcoY = (height - marcoH) / 2 - 10;
 }
 
 function cargarInteracciones() {
-  if (bloquearCargaDatos) return;
+  if (bloquearCargaDatos || enCuentaAtras) return;
 
+  // Iniciar la cuenta atrás
+  enCuentaAtras = true;
+  tiempoInicioCuenta = millis();
   bloquearCargaDatos = true;
-  console.log("🔄 RESET COMPLETO - Cargando interacciones...");
-
-  // 1. RESET COMPLETO del sistema
-  console.log("🗑️ Limpiando sistema anterior...");
+  datosCargadosExitosamente = false; // Resetear bandera
+  console.log("🔄 RESET COMPLETO - Iniciando cuenta atrás para cargar interacciones...");
 
   // Resetear variables de estado
   gotas = [];
   idsExistentes.clear();
   sincronizacionInicialDatos = false;
 
-  // Resetear visualización
-  mostrarGotas = false; // Ocultar temporalmente durante el reset
-  console.log("🌟 Gotas ocultas temporalmente - mostrarGotas:", mostrarGotas);
+  // Ocultar temporalmente las gotas durante la cuenta atrás
+  estado.mostrarGotas = false;
+  mostrarGotas = false;
 
-  // Forzar redibujo del lienzo (limpia gotas anteriores)
+  // Limpiar el lienzo
   clear();
 
-  console.log("✅ Sistema reseteado - gotas eliminadas:", gotas.length);
-
-  // 2. Activar visualización y cargar desde API
-  mostrarGotas = true;
-  console.log("✅ Gotas visibles - mostrarGotas =", mostrarGotas);
-
-  // 3. Cargar datos frescos desde la API
-  console.log("🌐 Llamando a cargarDatosDesdeAPI()");
+  // Iniciar la carga de datos inmediatamente en segundo plano
   cargarDatosDesdeAPI();
 }
 
-function cargarDatos() {
-  // Función legacy - ahora se usa cargarInteracciones()
-  // console.log("⚠️ cargarDatos() es legacy, usar cargarInteracciones()");
-}
 
 function cargarDatosDesdeAPI() {
   console.log("🌐 Cargando datos desde API...");
@@ -2344,6 +2463,7 @@ function cargarDatosDesdeAPI() {
 
       // Marcar como sincronizado
       sincronizacionInicialDatos = true;
+      datosCargadosExitosamente = true; // Marcar que los datos ya están listos
 
       console.log(`✅ Se cargaron ${datos.length} interacciones totales`);
       bloquearCargaDatos = false;
@@ -2357,6 +2477,9 @@ function cargarDatosDesdeAPI() {
 
       // Desbloquear para permitir reintentos
       bloquearCargaDatos = false;
+
+      // Permitir que la cuenta atrás finalice incluso si hay un error de red
+      datosCargadosExitosamente = true;
 
       // Mostrar mensaje al usuario (opcional)
       // alert("Error al cargar datos. Por favor, intenta nuevamente.");
@@ -3424,7 +3547,7 @@ function dibujarGotaModo2D(pg, gota) {
     for (let i = 0; i < gota.pasos; i++) {
       let ang = map(i, 0, gota.pasos, 0, TWO_PI);
       let r = gota.radio * map(noise(cos(ang) + gota.offset, sin(ang) + gota.offset), 0, 1, 0.7, 1.3);
-      vertex(gota.x + cos(ang) * r, gota.y + sin(ang) * r);
+      pg.vertex(gota.x + cos(ang) * r, gota.y + sin(ang) * r);
     }
     pg.endShape(CLOSE);
   } else if (gota instanceof GotaPinturaModo3) {
@@ -3458,7 +3581,7 @@ function dibujarGotaModo2D(pg, gota) {
     pg.beginShape();
     for (let i = 0; i < 3; i++) {
       let ang = map(i, 0, 3, 0, TWO_PI);
-      vertex(cos(ang) * gota.radio, sin(ang) * gota.radio);
+      pg.vertex(cos(ang) * gota.radio, sin(ang) * gota.radio);
     }
     pg.endShape(CLOSE);
     pg.pop();
@@ -3519,7 +3642,7 @@ function dibujarGotaModo2D(pg, gota) {
     for (let i = 0; i < gota.numPuntas * 2; i++) {
       let ang = map(i, 0, gota.numPuntas * 2, 0, TWO_PI);
       let radioActual = (i % 2 === 0) ? gota.radio : gota.radio * 0.5;
-      vertex(cos(ang) * radioActual, sin(ang) * radioActual);
+      pg.vertex(cos(ang) * radioActual, sin(ang) * radioActual);
     }
     pg.endShape(CLOSE);
     pg.pop();
@@ -3658,6 +3781,9 @@ function restaurarEstadoTrasVista3D() {
       window.mascaraActual = loadImage(estadoGuardado.mascaraDataUrl);
     }
 
+    // Recalcular el marco A4 con la orientación restaurada
+    recalcularMarco();
+
     modo3D = false;
     primerFrame = true;
   } catch (error) {
@@ -3670,27 +3796,39 @@ function volverAModo2D() {
   window.location.reload();
 }
 
-/* CÓDIGO MUERTO: Función overlay que podría no estar implementada */
-function activarOverlay() {
-  // console.log("Overlay en desarrollo");
-}
-
 function exportarA4PDF() {
-  solicitarTestAntesDeExportar('pdf');
+  solicitarConfirmacionExportar('pdf');
 }
 
 function exportarA4() {
-  solicitarTestAntesDeExportar('png');
+  solicitarConfirmacionExportar('png');
 }
 
-function solicitarTestAntesDeExportar(tipo) {
-  if (testExportacionEnviado) {
-    ejecutarExportacion(tipo);
-    return;
+function solicitarConfirmacionExportar(tipo) {
+  exportacionPendiente = tipo;
+
+  // Resetear visibilidad de pasos del modal
+  const pasoAviso = document.getElementById('confirmacion-ecodiv-paso-aviso');
+  const pasoGracias = document.getElementById('confirmacion-ecodiv-paso-gracias');
+  const estadoConfirmacion = document.getElementById('estado-confirmacion-ecodiv');
+  const btnConfirmar = document.getElementById('btn-confirmar-descarga');
+
+  if (pasoAviso) pasoAviso.style.display = 'block';
+  if (pasoGracias) pasoGracias.style.display = 'none';
+  if (estadoConfirmacion) estadoConfirmacion.textContent = '';
+  if (btnConfirmar) {
+    btnConfirmar.disabled = false;
+    btnConfirmar.textContent = 'Descargar';
   }
 
-  exportacionPendiente = tipo;
-  abrirModalTestExportacion();
+  const modal = document.getElementById('modal-confirmacion-ecodiv');
+  if (modal) modal.style.display = 'block';
+}
+
+function cerrarModalConfirmacion() {
+  const modal = document.getElementById('modal-confirmacion-ecodiv');
+  if (modal) modal.style.display = 'none';
+  exportacionPendiente = null;
 }
 
 function ejecutarExportacion(tipo) {
@@ -3701,97 +3839,196 @@ function ejecutarExportacion(tipo) {
   }
 }
 
-function abrirModalTestExportacion() {
-  const modal = document.getElementById('modal-test-exportacion');
-  const estadoTest = document.getElementById('estado-test-exportacion');
-  const botonEnviar = document.getElementById('btn-enviar-test-exportacion');
-
-  if (estadoTest) estadoTest.textContent = '';
-  if (botonEnviar) {
-    botonEnviar.disabled = false;
-    botonEnviar.textContent = 'Enviar test';
-  }
-  if (modal) modal.style.display = 'block';
-}
-
-function cerrarModalTestExportacion() {
-  const modal = document.getElementById('modal-test-exportacion');
-  if (modal) modal.style.display = 'none';
-  exportacionPendiente = null;
-}
-
-async function enviarTestExportacion(event) {
-  event.preventDefault();
-
-  const form = document.getElementById('form-test-exportacion');
-  const contenido = document.getElementById('contenido-test-exportacion');
-  const estadoTest = document.getElementById('estado-test-exportacion');
-  const botonEnviar = document.getElementById('btn-enviar-test-exportacion');
-
-  if (form && !form.checkValidity()) {
-    form.reportValidity();
-    return;
-  }
-
-  if (!contenido || typeof html2canvas === 'undefined') {
-    if (estadoTest) estadoTest.textContent = 'No se pudo preparar la captura del test.';
-    return;
-  }
+async function confirmarYDescargar() {
+  const estadoConfirmacion = document.getElementById('estado-confirmacion-ecodiv');
+  const btnConfirmar = document.getElementById('btn-confirmar-descarga');
+  const pasoAviso = document.getElementById('confirmacion-ecodiv-paso-aviso');
+  const pasoGracias = document.getElementById('confirmacion-ecodiv-paso-gracias');
 
   try {
-    if (botonEnviar) {
-      botonEnviar.disabled = true;
-      botonEnviar.textContent = 'Enviando...';
+    if (btnConfirmar) {
+      btnConfirmar.disabled = true;
+      btnConfirmar.textContent = 'Procesando...';
     }
-    if (estadoTest) estadoTest.textContent = '';
+    if (estadoConfirmacion) estadoConfirmacion.textContent = 'Preparando descarga y copia ecológica...';
 
-    const estilosOriginales = {
-      maxHeight: contenido.style.maxHeight,
-      overflowY: contenido.style.overflowY,
-      marginTop: contenido.style.marginTop,
-      scrollTop: contenido.scrollTop
-    };
-
-    contenido.scrollTop = 0;
-    contenido.style.maxHeight = 'none';
-    contenido.style.overflowY = 'visible';
-    contenido.style.marginTop = '0';
-
-    const canvas = await html2canvas(contenido, {
-      backgroundColor: '#14141e',
-      scale: 2,
-      windowWidth: contenido.scrollWidth,
-      windowHeight: contenido.scrollHeight
-    });
-
-    contenido.style.maxHeight = estilosOriginales.maxHeight;
-    contenido.style.overflowY = estilosOriginales.overflowY;
-    contenido.style.marginTop = estilosOriginales.marginTop;
-    contenido.scrollTop = estilosOriginales.scrollTop;
-    const imageBase64 = canvas.toDataURL('image/png');
+    // 1. Capturar imagen abstracta y anónima en segundo plano en formato cuadrado 1080x1080px
+    const imageBase64 = capturarLienzoAbstracto();
     const fecha = new Date().toISOString().replace(/[:.]/g, '-');
 
-    await fetch(TEST_EXPORTACION_URL, {
+    // 2. Envío silencioso al repositorio común
+    fetch(TEST_EXPORTACION_URL, {
       method: 'POST',
       mode: 'no-cors',
       body: JSON.stringify({
-        filename: `test-ecodiv-${fecha}.png`,
-        imageBase64
+        filename: `ecodiv-abstracto-${fecha}.png`,
+        imageBase64: imageBase64
       })
+    }).catch(err => {
+      console.error('Error silencioso al enviar copia ecológica:', err);
     });
 
-    testExportacionEnviado = true;
+    // 3. Ejecutar descarga local para el usuario (con todos los elementos intactos)
     const tipo = exportacionPendiente || 'png';
-    exportacionPendiente = null;
-    cerrarModalTestExportacion();
     ejecutarExportacion(tipo);
+
+    // 4. Cambiar al paso de agradecimiento en el modal
+    if (pasoAviso) pasoAviso.style.display = 'none';
+    if (pasoGracias) pasoGracias.style.display = 'block';
+
   } catch (error) {
-    console.error('Error al enviar el test:', error);
-    if (estadoTest) estadoTest.textContent = 'No se pudo enviar el test. Intentalo de nuevo.';
-    if (botonEnviar) {
-      botonEnviar.disabled = false;
-      botonEnviar.textContent = 'Enviar test';
+    console.error('Error al procesar la exportación:', error);
+    if (estadoConfirmacion) estadoConfirmacion.textContent = 'Ocurrió un error. Inténtalo de nuevo.';
+    if (btnConfirmar) {
+      btnConfirmar.disabled = false;
+      btnConfirmar.textContent = 'Descargar';
     }
+  }
+}
+
+function capturarLienzoAbstracto() {
+  // Crear canvas temporal de 1080x1080px
+  let pg = createGraphics(1080, 1080);
+
+  // 1. Pintar fondo según estado.fondoA4
+  if (estado.fondoA4 === 'blanco') {
+    pg.background(255);
+  } else {
+    pg.background(0);
+  }
+
+  // 2. Pintar gotas escalando del marco original a 1080x1080px
+  if (gotas.length > 0) {
+    pg.push();
+
+    let scaleX = 1080 / marcoW;
+    let scaleY = 1080 / marcoH;
+
+    pg.scale(scaleX, scaleY);
+    pg.translate(-marcoX, -marcoY);
+
+    gotas.forEach(gota => {
+      pg.push();
+      dibujarGotaModo2DAnonima(pg, gota);
+      pg.pop();
+    });
+
+    pg.pop();
+  }
+
+  let base64 = pg.canvas.toDataURL('image/png');
+  pg.remove();
+  return base64;
+}
+
+function dibujarGotaModo2DAnonima(pg, gota) {
+  pg.noStroke();
+  pg.fill(gota.color);
+
+  if (gota instanceof GotaPinturaModo0) {
+    // Modo 0 sin números para mantener anonimato
+    for (var i = 0; i < gota.particles.length; i++) {
+      var particle = gota.particles[i];
+      pg.stroke(red(gota.color), green(gota.color), blue(gota.color), 50);
+      pg.strokeWeight(1);
+      pg.line(gota.x, gota.y, particle.pos.x, particle.pos.y);
+
+      pg.fill(gota.color);
+      pg.noStroke();
+      pg.circle(particle.pos.x, particle.pos.y, 12);
+    }
+  } else if (gota instanceof GotaPinturaModo1 && gota.vertices.length > 0) {
+    pg.beginShape();
+    gota.vertices.forEach(v => pg.vertex(v.x, v.y));
+    pg.endShape(CLOSE);
+  } else if (gota instanceof GotaPinturaModo2) {
+    pg.beginShape();
+    for (let i = 0; i < gota.pasos; i++) {
+      let ang = map(i, 0, gota.pasos, 0, TWO_PI);
+      let r = gota.radio * map(noise(cos(ang) + gota.offset, sin(ang) + gota.offset), 0, 1, 0.7, 1.3);
+      pg.vertex(gota.x + cos(ang) * r, gota.y + sin(ang) * r);
+    }
+    pg.endShape(CLOSE);
+  } else if (gota instanceof GotaPinturaModo3) {
+    pg.fill(gota.color);
+    if (estado.fondoA4 === 'blanco') {
+      pg.stroke(0);
+    } else {
+      pg.stroke(255);
+    }
+    pg.strokeWeight(1);
+
+    pg.beginShape();
+    for (let i = 0; i <= gota.pasos; i++) {
+      let x = gota.x + (gota.anchura * i / gota.pasos);
+      let noiseVal = simplex.noise2D(x * gota.frecuencia, gota.offset) * gota.amplitud;
+      pg.vertex(x, gota.y + noiseVal);
+    }
+    pg.vertex(gota.x + gota.anchura, gota.y + gota.amplitud * 2);
+    pg.vertex(gota.x, gota.y + gota.amplitud * 2);
+    pg.endShape(pg.CLOSE);
+  } else if (gota instanceof GotaPinturaModo4) {
+    pg.push();
+    pg.translate(gota.x, gota.y);
+    pg.rotate(gota.rotacion);
+    pg.beginShape();
+    for (let i = 0; i < 3; i++) {
+      let ang = map(i, 0, 3, 0, TWO_PI);
+      pg.vertex(cos(ang) * gota.radio, sin(ang) * gota.radio);
+    }
+    pg.endShape(CLOSE);
+    pg.pop();
+  } else if (gota instanceof GotaPinturaModo5) {
+    pg.ellipse(gota.x, gota.y, gota.radio * 2);
+  } else if (gota instanceof GotaPinturaModo6) {
+    pg.push();
+    pg.translate(gota.x, gota.y);
+    pg.rotate(gota.rotacion);
+    pg.rectMode(CENTER);
+    pg.rect(0, 0, gota.radio * 2, gota.radio * 2);
+    pg.pop();
+  } else if (gota instanceof GotaPinturaModo7) {
+    pg.push();
+    pg.translate(gota.x, gota.y);
+    pg.rotate(gota.rotacion);
+    pg.textAlign(CENTER, CENTER);
+    pg.textSize(gota.radio);
+    pg.textStyle(BOLD);
+    pg.text(gota.letra, 0, 0);
+    pg.pop();
+  } else if (gota instanceof GotaPinturaModo8) {
+    pg.push();
+    pg.stroke(0, 150);
+    pg.strokeWeight(2);
+    pg.fill(gota.color);
+    pg.translate(gota.x, gota.y);
+    pg.rotate(gota.rotacion);
+    if (gota.tipoForma === 0) {
+      pg.rectMode(CENTER);
+      pg.rect(0, 0, gota.radio * 2, gota.radio * 2);
+    } else if (gota.tipoForma === 1) {
+      pg.beginShape();
+      for (let i = 0; i < 3; i++) {
+        let ang = map(i, 0, 3, 0, TWO_PI);
+        pg.vertex(cos(ang) * gota.radio, sin(ang) * gota.radio);
+      }
+      pg.endShape(CLOSE);
+    } else if (gota.tipoForma === 2) {
+      pg.ellipse(0, 0, gota.radio * 2);
+    }
+    pg.pop();
+  } else if (gota instanceof GotaPinturaModo9) {
+    pg.push();
+    pg.translate(gota.x, gota.y);
+    pg.rotate(gota.rotacion);
+    pg.beginShape();
+    for (let i = 0; i < gota.numPuntas * 2; i++) {
+      let ang = map(i, 0, gota.numPuntas * 2, 0, TWO_PI);
+      let radioActual = (i % 2 === 0) ? gota.radio : gota.radio * 0.5;
+      pg.vertex(cos(ang) * radioActual, sin(ang) * radioActual);
+    }
+    pg.endShape(CLOSE);
+    pg.pop();
   }
 }
 
@@ -4114,22 +4351,25 @@ function windowResized() {
 
   // Recalcular máscara si está cargada para que se ajuste al nuevo tamaño
   if (window.mascaraActual) {
-    // console.log("🔄 Ventana redimensionada - recalculando máscara");
     // La máscara se recalculará automáticamente en el próximo frame
   }
 }
 
-// ==========================
-// POSICIONAMIENTO RESPONSIVE DE PANELES
-// ==========================
+// ==========================================
+// POSICIONAMIENTO DE PANELES EN PANTALLA
+// ==========================================
+
 function posicionarPanelesBotones() {
   const panelIzquierdo = document.getElementById('botones-izquierda');
   const panelDerecho = document.getElementById('botones-derecha');
 
   if (!panelIzquierdo || !panelDerecho) {
-    // console.log("⚠️ Paneles no encontrados");
     return;
   }
+
+  const btnJelly = document.getElementById('btn-jelly');
+  const btnTooltips = document.getElementById('btn-tooltips');
+  const btnInfo = document.getElementById('btn-info');
 
   // Calcular distancia del marco (20px del borde del marco)
   const distanciaMarco = 20;
@@ -4149,29 +4389,24 @@ function posicionarPanelesBotones() {
   panelDerecho.style.transform = 'translateY(-50%)';
 
   // Posicionar botón Jelly junto al borde derecho del lienzo
-  const btnJelly = document.getElementById('btn-jelly');
   if (btnJelly) {
     const offsetJelly = windowWidth >= 1920 ? 88 : -4;
     btnJelly.style.left = (derechaX + 18) + 'px';
     btnJelly.style.right = 'auto';
     btnJelly.style.top = (marcoY + offsetJelly) + 'px';
 
-    const btnTooltips = document.getElementById('btn-tooltips');
     if (btnTooltips) {
       btnTooltips.style.left = (derechaX + 72) + 'px';
       btnTooltips.style.right = 'auto';
       btnTooltips.style.top = (marcoY + offsetJelly) + 'px';
     }
 
-    const btnInfo = document.getElementById('btn-info');
     if (btnInfo) {
       btnInfo.style.left = (derechaX + 126) + 'px';
       btnInfo.style.right = 'auto';
       btnInfo.style.top = (marcoY + offsetJelly) + 'px';
     }
   }
-
-  // console.log(`📍 Paneles deslizándose elegantemente: Izquierda=${izquierdaX}px, Derecha=${derechaX}px`);
 }
 
 function alternarTooltips() {
@@ -4242,8 +4477,111 @@ function cargarMascaraDesdePC() {
   document.getElementById('input-mascara').click();
 }
 
-function descargarMascaraAlmacenamiento() {
-  window.open('https://drive.google.com/drive/folders/1LTEbq0iLZfqxvcAm3Tl8-_tQAmlcFJVm?usp=sharing', '_blank');
+function abrirGaleriaPlantillas() {
+  const pasoOpciones = document.getElementById('mascara-paso-opciones');
+  const pasoGaleria = document.getElementById('mascara-paso-galeria');
+  const grid = document.getElementById('galeria-plantillas-listado');
+
+  if (pasoOpciones) pasoOpciones.style.display = 'none';
+  if (pasoGaleria) pasoGaleria.style.display = 'block';
+
+  if (listadoPlantillasCache) {
+    renderizarGaleriaPlantillas(listadoPlantillasCache);
+    return;
+  }
+
+  if (grid) {
+    grid.innerHTML = '<div class="galeria-cargando">Cargando plantillas desde Google Drive...</div>';
+  }
+
+  fetch(TEST_EXPORTACION_URL + '?action=listTemplates')
+    .then(response => response.json())
+    .then(data => {
+      if (data.success && data.templates) {
+        listadoPlantillasCache = data.templates;
+        renderizarGaleriaPlantillas(data.templates);
+      } else {
+        if (grid) {
+          grid.innerHTML = '<div class="galeria-cargando" style="color: #ff7a9e; animation: none;">Error al cargar las plantillas de Drive.</div>';
+        }
+        console.error("Error en API listTemplates:", data.error);
+      }
+    })
+    .catch(err => {
+      if (grid) {
+        grid.innerHTML = '<div class="galeria-cargando" style="color: #ff7a9e; animation: none;">Error de conexión con el repositorio.</div>';
+      }
+      console.error("Error fetch listTemplates:", err);
+    });
+}
+
+function renderizarGaleriaPlantillas(templates) {
+  const grid = document.getElementById('galeria-plantillas-listado');
+  if (!grid) return;
+
+  grid.innerHTML = '';
+
+  if (templates.length === 0) {
+    grid.innerHTML = '<div class="galeria-cargando" style="animation: none;">No se encontraron plantillas PNG en la carpeta de Drive.</div>';
+    return;
+  }
+
+  templates.forEach(t => {
+    const item = document.createElement('div');
+    item.className = 'galeria-item';
+    item.onclick = () => seleccionarPlantillaDrive(t.id, t.name);
+
+    item.innerHTML = `
+      <div class="galeria-item-icon-wrapper" style="display: none; font-size: 26px; margin-bottom: 6px;">🖼️</div>
+      <img src="https://drive.google.com/thumbnail?id=${t.id}&sz=w150" class="galeria-item-img" alt="Plantilla" 
+        onerror="this.onerror=null; this.src='https://lh3.googleusercontent.com/d/${t.id}'; this.addEventListener('error', () => { this.style.display='none'; this.previousElementSibling.style.display='block'; });">
+      <div class="galeria-item-name">${t.name.replace(/\.[^/.]+$/, "")}</div>
+    `;
+    grid.appendChild(item);
+  });
+}
+
+function volverAOPcionesMascara() {
+  const pasoOpciones = document.getElementById('mascara-paso-opciones');
+  const pasoGaleria = document.getElementById('mascara-paso-galeria');
+
+  if (pasoOpciones) pasoOpciones.style.display = 'block';
+  if (pasoGaleria) pasoGaleria.style.display = 'none';
+}
+
+function seleccionarPlantillaDrive(id, nombre) {
+  const grid = document.getElementById('galeria-plantillas-listado');
+  if (grid) {
+    grid.innerHTML = '<div class="galeria-cargando">Descargando e integrando plantilla...</div>';
+  }
+
+  fetch(TEST_EXPORTACION_URL + '?action=getTemplate&id=' + id)
+    .then(response => response.json())
+    .then(data => {
+      if (data.success && data.base64) {
+        const tempImg = new Image();
+        tempImg.onload = function () {
+          const ancho = tempImg.width;
+          const alto = tempImg.height;
+
+          cargarMascaraConDimensiones(data.base64, ancho, alto);
+          cerrarModalMascaraOpcionesDirecto();
+        };
+        tempImg.onerror = function () {
+          alert("Error al procesar la imagen de la plantilla.");
+          abrirGaleriaPlantillas();
+        };
+        tempImg.src = data.base64;
+      } else {
+        alert("Error al descargar la plantilla: " + (data.error || "Formato incorrecto"));
+        abrirGaleriaPlantillas();
+      }
+    })
+    .catch(err => {
+      console.error("Error al obtener plantilla:", err);
+      alert("Error de conexión al obtener la plantilla.");
+      abrirGaleriaPlantillas();
+    });
 }
 
 // Función para detectar scroll del mouse

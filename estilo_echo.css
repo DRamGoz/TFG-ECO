@@ -1,4 +1,4 @@
-﻿/* =============================================
+/* =============================================
    ECHO  ·  Arte Digital Interactivo
    Estilo premium — dark glassmorphism
    ============================================= */
@@ -306,11 +306,6 @@ body {
   /* Forzar visibilidad completa */
 }
 
-/* Transparencia para iconos cuando modo guía está activo */
-/*.modo-guia-activo #botones-izquierda button:not(#btn-nuevo-documento):not(#btn-modo-guia),
-.modo-guia-activo #botones-derecha button:not(#btn-nuevo-documento):not(#btn-modo-guia) {
-  opacity: 0.1;
-}*/
 
 /* ---------- PANEL HEADER ---------- */
 .panel-header {
@@ -795,6 +790,133 @@ body {
   text-align: left;
 }
 
+.galeria-plantillas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 12px;
+  max-height: 250px;
+  overflow-y: auto;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 10px;
+}
+
+.galeria-item {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80px;
+}
+
+.galeria-item:hover {
+  background: rgba(0, 229, 255, 0.12);
+  border-color: rgba(0, 229, 255, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 229, 255, 0.15);
+}
+
+.galeria-item-img {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  margin-bottom: 6px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 2px;
+}
+
+.galeria-item-name {
+  font-size: 11px;
+  font-family: 'Poppins', sans-serif;
+  color: rgba(255, 255, 255, 0.9);
+  word-break: break-all;
+  line-height: 1.3;
+}
+
+.galeria-cargando {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 30px;
+  font-size: 13px;
+  color: rgba(0, 229, 255, 0.85);
+  font-family: 'Poppins', sans-serif;
+  animation: pulsoCarga 1.5s infinite;
+}
+
+@keyframes pulsoCarga {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+.modal-ecodiv-content {
+  max-width: 600px;
+  text-align: left;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-ecodiv-content h3 {
+  text-align: center;
+  margin-top: 5px;
+}
+
+.aviso-texto {
+  color: rgba(255, 255, 255, 0.88);
+  font-family: 'Poppins', sans-serif;
+  font-size: 13.5px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.aviso-texto p {
+  margin: 12px 0;
+}
+
+.aviso-texto strong {
+  color: rgba(0, 229, 255, 0.95);
+  font-weight: 600;
+}
+
+.galeria-enlace-container {
+  text-align: center;
+  margin: 25px 0;
+}
+
+.galeria-link {
+  display: inline-block;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, rgba(0, 229, 255, 0.2), rgba(124, 77, 255, 0.2));
+  border: 1px solid rgba(0, 229, 255, 0.5);
+  border-radius: 8px;
+  color: #00e5ff;
+  text-decoration: none;
+  font-weight: bold;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
+}
+
+.galeria-link:hover {
+  background: linear-gradient(135deg, rgba(0, 229, 255, 0.4), rgba(124, 77, 255, 0.4));
+  border-color: rgba(0, 229, 255, 0.8);
+  box-shadow: 0 0 25px rgba(0, 229, 255, 0.5);
+  transform: translateY(-2px);
+  color: #fff;
+}
+
 .modal-test-content {
   max-width: 620px;
   max-height: 88vh;
@@ -1045,7 +1167,7 @@ body {
     margin: 0;
   }
 
-  mas pequeño body {
+  body {
     background: white;
   }
 
@@ -1069,3 +1191,417 @@ body {
     display: none !important;
   }
 }
+
+/* ==========================================================================
+   PANTALLA DE BLOQUEO PARA DISPOSITIVOS MÓVILES (ECODIV)
+   ========================================================================== */
+
+#mobile-block-overlay {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  #mobile-block-overlay {
+    display: flex;
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: #05050a;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    font-family: 'Poppins', 'Inter', sans-serif;
+  }
+
+  .mobile-block-card {
+    background: linear-gradient(135deg, rgba(20, 20, 35, 0.85), rgba(10, 10, 20, 0.95));
+    border: 2px solid rgba(0, 229, 255, 0.5);
+    border-radius: 20px;
+    padding: 40px 24px;
+    max-width: 440px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 
+      0 20px 50px rgba(0, 0, 0, 0.8),
+      0 0 30px rgba(0, 229, 255, 0.25),
+      inset 0 0 15px rgba(0, 229, 255, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .mobile-block-logo {
+    margin-bottom: 24px;
+  }
+
+  .mobile-block-logo img {
+    width: 160px;
+    height: auto;
+    opacity: 0.9;
+    filter: drop-shadow(0 0 10px rgba(0, 229, 255, 0.3));
+  }
+
+  .mobile-block-card h3 {
+    font-size: 19px;
+    font-weight: 700;
+    color: #00e5ff;
+    margin: 0 0 16px 0;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+  }
+
+  .mobile-block-card p {
+    font-size: 13.5px;
+    color: #b0b0c5;
+    line-height: 1.6;
+    margin: 0 0 14px 0;
+  }
+
+  .mobile-block-highlight {
+    color: #e040fb !important;
+    font-weight: 600;
+    font-size: 14.5px !important;
+    margin: 24px 0 !important;
+    text-shadow: 0 0 10px rgba(224, 64, 251, 0.3);
+  }
+
+  .mobile-block-footer {
+    font-size: 11px !important;
+    color: #606075 !important;
+    margin: 28px 0 0 0 !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 18px;
+  }
+
+  /* Ocultar elementos de la interfaz de edición en móviles/tablets */
+  #botones-izquierda,
+  #botones-derecha,
+  #a4-container,
+  #btn-jelly,
+  #btn-tooltips,
+  #btn-info,
+  #logo-pantalla,
+  #footer-ecodiv,
+  #jelly-chat-widget {
+    display: none !important;
+  }
+}
+
+/* ---------- RESET COMPLEMENTARIO PARA BOTON JELLY ---------- */
+button#btn-jelly {
+  padding: 0;
+  outline: none;
+}
+
+/* ---------- CHATBOT JELLY WIDGET (Glassmorphism) ---------- */
+.jelly-chat-container {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 350px;
+  height: 480px;
+  z-index: 120;
+  display: flex;
+  flex-direction: column;
+  background: rgba(12, 12, 20, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 229, 255, 0.25);
+  border-radius: 16px;
+  box-shadow: 
+    0 15px 45px rgba(0, 0, 0, 0.6),
+    0 0 25px rgba(0, 229, 255, 0.08);
+  overflow: hidden;
+  font-family: 'Inter', -apple-system, sans-serif;
+  transition: opacity 0.3s ease;
+
+  /* Habilitar redimensionado responsivo con ratón */
+  resize: both;
+  min-width: 300px;
+  min-height: 380px;
+  max-width: 600px;
+  max-height: 750px;
+}
+
+/* Animación de entrada */
+.chat-slide-in {
+  animation: chatSlideIn 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes chatSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Cabecera del Chat */
+.jelly-chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: linear-gradient(90deg, rgba(16, 16, 28, 0.8), rgba(30, 20, 45, 0.8));
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.jelly-chat-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.jelly-chat-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(0, 229, 255, 0.1);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.jelly-chat-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Animación Gelatina/Hablando */
+.jelly-chat-avatar.hablando {
+  animation: jellyHablandoPulse 0.5s infinite ease-in-out alternate;
+}
+
+@keyframes jellyHablandoPulse {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.1, 0.9);
+    border-color: var(--accent-magenta);
+    box-shadow: 0 0 10px rgba(224, 64, 251, 0.5);
+  }
+}
+
+.jelly-chat-header-info h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.jelly-chat-header-info span {
+  font-size: 11px;
+  color: #00e5ff;
+  display: block;
+  margin-top: 1px;
+}
+
+.jelly-chat-close {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.jelly-chat-close:hover {
+  color: #ff5577;
+}
+
+/* Mensajes */
+.jelly-chat-messages {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  min-height: 0; /* Evita que flexbox estire el contenedor e invalide el scrollbar */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Estilo del Scroll */
+.jelly-chat-messages::-webkit-scrollbar {
+  width: 6px;
+}
+.jelly-chat-messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+.jelly-chat-messages::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+.jelly-chat-messages::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Burbujas de mensaje */
+.mensaje {
+  max-width: 85%;
+  display: flex;
+  gap: 8px;
+  animation: mensajeFadeIn 0.3s ease forwards;
+}
+
+@keyframes mensajeFadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.mensaje.jelly {
+  align-self: flex-start;
+}
+
+.mensaje.usuario {
+  align-self: flex-end;
+  justify-content: flex-end;
+}
+
+.mensaje .msg-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.mensaje .msg-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mensaje .msg-texto {
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.mensaje.jelly .msg-texto {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+  border-top-left-radius: 2px;
+}
+
+.mensaje.usuario .msg-texto {
+  background: linear-gradient(135deg, rgba(0, 229, 255, 0.2), rgba(124, 77, 255, 0.2));
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  color: #fff;
+  border-top-right-radius: 2px;
+}
+
+/* Estilo de Markdown en chat */
+.mensaje .msg-texto strong {
+  color: #00e5ff;
+}
+
+/* Indicador de pensando/cargando */
+.mensaje.pensando .punto {
+  animation: puntoPulse 1.2s infinite alternate;
+  font-weight: bold;
+  font-size: 16px;
+  display: inline-block;
+}
+.mensaje.pensando .punto:nth-child(2) { animation-delay: 0.2s; }
+.mensaje.pensando .punto:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes puntoPulse {
+  0% { opacity: 0.2; transform: translateY(0); }
+  100% { opacity: 1; transform: translateY(-2px); }
+}
+
+/* Sugerencias de botones rápidos */
+.jelly-chat-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 10px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  background: rgba(0, 0, 0, 0.15);
+  max-height: 100px;
+  overflow-y: auto;
+}
+
+.btn-sugerencia {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(0, 229, 255, 0.25);
+  color: var(--text-primary);
+  border-radius: 12px;
+  padding: 6px 10px;
+  font-size: 11px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-sugerencia:hover {
+  background: rgba(0, 229, 255, 0.12);
+  border-color: rgba(0, 229, 255, 0.6);
+  transform: translateY(-1px);
+}
+
+/* Formulario inferior */
+#jelly-chat-form {
+  display: flex;
+  padding: 12px 16px;
+  background: rgba(16, 16, 28, 0.95);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+#jelly-chat-input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 10px 16px;
+  color: #fff;
+  font-size: 13px;
+  outline: none;
+  transition: all 0.25s ease;
+}
+
+#jelly-chat-input:focus {
+  border-color: rgba(0, 229, 255, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.15);
+}
+
+#jelly-chat-send {
+  background: none;
+  border: none;
+  width: 36px;
+  height: 36px;
+  margin-left: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #00e5ff;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+#jelly-chat-send:hover {
+  transform: scale(1.1);
+  color: #e040fb;
+}
+
+#jelly-chat-send svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
